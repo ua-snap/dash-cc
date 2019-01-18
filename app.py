@@ -1,5 +1,6 @@
 import dash
 from dash.dependencies import Input, Output
+#from IPython.display import clear_output, Image, display
 import dash_core_components as dcc
 import dash_html_components as html
 
@@ -14,7 +15,8 @@ server.secret_key = os.environ.get('secret_key', 'secret')
 #df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/hello-world-stock.csv')
 df = pd.read_csv('communities.csv')
 
-app = dash.Dash('app', server=server)
+#app = dash.Dash('app', server=server)
+app = dash.Dash(__name__)
 
 app.scripts.config.serve_locally = False
 dcc._js_dist[0]['external_url'] = 'https://cdn.plot.ly/plotly-basic-latest.min.js'
