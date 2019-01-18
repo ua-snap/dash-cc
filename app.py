@@ -14,6 +14,11 @@ server.secret_key = os.environ.get('secret_key', 'secret')
 
 #df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/hello-world-stock.csv')
 df = pd.read_csv('communities.csv')
+variable = 'temperature'
+units = 'standard'
+rcp = '6.5'
+baseline = 'cru'
+intermodal = 'off'
 
 #app = dash.Dash('app', server=server)
 app = dash.Dash(__name__)
@@ -32,6 +37,8 @@ app.layout = html.Div([
         ],
         value='Anchorage'
     ),
+    html.Button('Temperature', id='temperature'),
+    html.Button('Precipitation', id='precipitation'),
     dcc.Graph(id='my-graph')
 ], className="container")
 
@@ -61,7 +68,12 @@ def update_graph(selected_dropdown_value):
             'marker': {
                 'color': '#fecc5c'
             },
-            'name': '2010-2019'
+            'name': '2010-2019',
+            'error_y': {
+                'type': 'data',
+                'array': df10s.Error,
+                'visible': 'true'
+            }
         },{
             'x': df40s.Month,
             'y': df40s.Temp,
@@ -69,7 +81,12 @@ def update_graph(selected_dropdown_value):
             'marker': {
                 'color': '#fd8d3c'
             },
-            'name': '2040-2049'
+            'name': '2040-2049',
+            'error_y': {
+                'type': 'data',
+                'array': df40s.Error,
+                'visible': 'true'
+            }
         },{
             'x': df60s.Month,
             'y': df60s.Temp,
@@ -77,7 +94,12 @@ def update_graph(selected_dropdown_value):
             'marker': {
                 'color': '#f03b20'
             },
-            'name': '2060-2069'
+            'name': '2060-2069',
+            'error_y': {
+                'type': 'data',
+                'array': df60s.Error,
+                'visible': 'true'
+            }
         },{
             'x': df90s.Month,
             'y': df90s.Temp,
@@ -85,10 +107,16 @@ def update_graph(selected_dropdown_value):
             'marker': {
                 'color': '#bd0026'
             },
-            'name': '2090-2099'
+            'name': '2090-2099',
+            'error_y': {
+                'type': 'data',
+                'array': df90s.Error,
+                'visible': 'true'
+            }
         }],
         'layout': {
             'barmode': 'grouped',
+            'zeroline': 'true',
             'margin': {
                 'l': 30,
                 'r': 20,
