@@ -55,16 +55,18 @@ def update_graph(selected_dropdown_value):
     return {
         'data': [{
             'x': dfhist.Month,
-            'y': dfhist.Temp,
+            'y': dfhist.Temp - 32,
             'type': 'bar',
+            'base': 32,
             'marker': {
                 'color': '#999999'
             },
             'name': 'Historical'
         },{
             'x': df10s.Month,
-            'y': df10s.Temp,
+            'y': df10s.Temp - 32,
             'type': 'bar',
+            'base': 32,
             'marker': {
                 'color': '#fecc5c'
             },
@@ -76,8 +78,9 @@ def update_graph(selected_dropdown_value):
             }
         },{
             'x': df40s.Month,
-            'y': df40s.Temp,
+            'y': df40s.Temp - 32,
             'type': 'bar',
+            'base': 32,
             'marker': {
                 'color': '#fd8d3c'
             },
@@ -89,8 +92,9 @@ def update_graph(selected_dropdown_value):
             }
         },{
             'x': df60s.Month,
-            'y': df60s.Temp,
+            'y': df60s.Temp - 32,
             'type': 'bar',
+            'base': 32,
             'marker': {
                 'color': '#f03b20'
             },
@@ -102,8 +106,9 @@ def update_graph(selected_dropdown_value):
             }
         },{
             'x': df90s.Month,
-            'y': df90s.Temp,
+            'y': df90s.Temp - 32,
             'type': 'bar',
+            'base': 32,
             'marker': {
                 'color': '#bd0026'
             },
@@ -116,13 +121,22 @@ def update_graph(selected_dropdown_value):
         }],
         'layout': {
             'barmode': 'grouped',
-            'zeroline': 'true',
+            'zeroline': 'false',
+            'yaxis': {
+                'zeroline': 'false',
+            },
             'margin': {
                 'l': 30,
                 'r': 20,
                 'b': 30,
                 't': 20
-            }
+            },
+            'shapes': [{
+                'type': 'line', 
+                'x0': 0, 'x1': 1, 'xref': 'paper',
+                'y0': 32, 'y1': 32, 'yref': 'y',
+                'line': { 'width': 1 }
+            }]
         }
     }
 if __name__ == '__main__':
