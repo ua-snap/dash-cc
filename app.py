@@ -38,38 +38,38 @@ app.layout = html.Div([
         value='Anchorage'
     ),
     html.Div(dcc.Markdown('xyz',id='div1')),
-    html.Button('Temperature', id='temperature', n_clicks_timestamp='0'),
-    html.Button('Precipitation', id='precipitation', n_clicks_timestamp='0'),
+    html.Button('Temperature', id='temperature', n_clicks_timestamp=0),
+    html.Button('Precipitation', id='precipitation', n_clicks_timestamp=0),
     html.Div(dcc.Markdown('Units',id='div1.5')),
-    html.Button('Imperial', id='units_im', n_clicks_timestamp='0'),
-    html.Button('Metric', id='units_m', n_clicks_timestamp='0'),
+    html.Button('Imperial', id='units_im', n_clicks_timestamp=0),
+    html.Button('Metric', id='units_m', n_clicks_timestamp=0),
     html.Div(dcc.Markdown('abcd',id='div2')),
-    html.Button('RCP45', id='rcp45', n_clicks_timestamp='0'),
-    html.Button('RCP60', id='rcp60', n_clicks_timestamp='0'),
-    html.Button('RCP85', id='rcp85', n_clicks_timestamp='0'),
+    html.Button('RCP45', id='rcp45', n_clicks_timestamp=0),
+    html.Button('RCP60', id='rcp60', n_clicks_timestamp=0),
+    html.Button('RCP85', id='rcp85', n_clicks_timestamp=0),
     html.Div(dcc.Markdown('Historical Baseline',id='div3')),
-    html.Button('Off', id='base_cru', n_clicks_timestamp='0'),
-    html.Button('On', id='base_prism', n_clicks_timestamp='0'),
+    html.Button('Off', id='base_cru', n_clicks_timestamp=0),
+    html.Button('On', id='base_prism', n_clicks_timestamp=0),
     html.Div(dcc.Markdown('Intermodel Variability',id='div4')),
-    html.Button('Off', id='vari_off', n_clicks_timestamp='0'),
-    html.Button('On', id='vari_on', n_clicks_timestamp='0'),
+    html.Button('Off', id='vari_off', n_clicks_timestamp=0),
+    html.Button('On', id='vari_on', n_clicks_timestamp=0),
     dcc.Graph(id='ccharts')
 ], className="container")
 
-@app.callback(Output('div1', 'children'),
+@app.callback(dash.dependencies.Output('div1', 'children'),
     inputs=[
-      Input('temperature', 'n_clicks_timestamp'),
-      Input('precipitation', 'n_clicks_timestamp')])
+      dash.dependencies.Input('temperature', 'n_clicks_timestamp'),
+      dash.dependencies.Input('precipitation', 'n_clicks_timestamp')])
 def update_div1(temp, precip):
     if (precip > temp):
         return "Precip CLICKED"
     else:
         return "Temp CLICKED"
-@app.callback(Output('div2', 'children'),
+@app.callback(dash.dependencies.Output('div2', 'children'),
     inputs=[
-      Input('rcp45', 'n_clicks_timestamp'),
-      Input('rcp60', 'n_clicks_timestamp'),
-      Input('rcp85', 'n_clicks_timestamp')])
+      dash.dependencies.Input('rcp45', 'n_clicks_timestamp'),
+      dash.dependencies.Input('rcp60', 'n_clicks_timestamp'),
+      dash.dependencies.Input('rcp85', 'n_clicks_timestamp')])
 def update_div2(rcp45, rcp60, rcp85):
     if (rcp45 > rcp60 and rcp45 > rcp85):
         return "RCP45 CLICKED"
@@ -77,10 +77,10 @@ def update_div2(rcp45, rcp60, rcp85):
         return "RCP60 CLICKED"
     else:
         return "RCP85 CLICKED"
-@app.callback(Output('div4', 'children'),
+@app.callback(dash.dependencies.Output('div4', 'children'),
     inputs=[
-      Input('vari_on', 'n_clicks_timestamp'),
-      Input('vari_off', 'n_clicks_timestamp')])
+      dash.dependencies.Input('vari_on', 'n_clicks_timestamp'),
+      dash.dependencies.Input('vari_off', 'n_clicks_timestamp')])
 def update_div4(von,voff):
     if (von > voff):
         variability = True
@@ -89,16 +89,16 @@ def update_div4(von,voff):
         variability = False
         return 'Off'
 
-@app.callback(Output('ccharts', 'figure'),
+@app.callback(dash.dependencies.Output('ccharts', 'figure'),
     inputs=[
-      Input('community', 'value'), 
-      Input('temperature', 'n_clicks_timestamp'), 
-      Input('precipitation', 'n_clicks_timestamp'),
-      Input('rcp45', 'n_clicks_timestamp'),
-      Input('rcp60', 'n_clicks_timestamp'),
-      Input('rcp85', 'n_clicks_timestamp'),
-      Input('vari_on', 'n_clicks_timestamp'),
-      Input('vari_off', 'n_clicks_timestamp')
+      dash.dependencies.Input('community', 'value'), 
+      dash.dependencies.Input('temperature', 'n_clicks_timestamp'), 
+      dash.dependencies.Input('precipitation', 'n_clicks_timestamp'),
+      dash.dependencies.Input('rcp45', 'n_clicks_timestamp'),
+      dash.dependencies.Input('rcp60', 'n_clicks_timestamp'),
+      dash.dependencies.Input('rcp85', 'n_clicks_timestamp'),
+      dash.dependencies.Input('vari_on', 'n_clicks_timestamp'),
+      dash.dependencies.Input('vari_off', 'n_clicks_timestamp')
     ])
 def update_graph(selected_dropdown_value, temp, precip, rcp45, rcp60, rcp85, von, voff):
     if (von > voff):
