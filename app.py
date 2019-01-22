@@ -14,10 +14,11 @@ server.secret_key = os.environ.get('secret_key', 'secret')
 
 #df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/hello-world-stock.csv')
 df = pd.read_csv('communities.csv')
-units = 'standard'
+units = 'imperial'
 rcp = '6.5'
 baseline = 'cru'
 intermodal = 'off'
+variability = True
 
 #app = dash.Dash('app', server=server)
 app = dash.Dash(__name__)
@@ -39,10 +40,19 @@ app.layout = html.Div([
     html.Div(dcc.Markdown('xyz',id='div1')),
     html.Button('Temperature', id='temperature'),
     html.Button('Precipitation', id='precipitation'),
+    html.Div(dcc.Markdown('Units',id='div1.5')),
+    html.Button('Imperial', id='units_im'),
+    html.Button('Metric', id='units_m'),
     html.Div(dcc.Markdown('abcd',id='div2')),
     html.Button('RCP45', id='rcp45'),
     html.Button('RCP60', id='rcp60'),
     html.Button('RCP85', id='rcp85'),
+    html.Div(dcc.Markdown('Historical Baseline',id='div3')),
+    html.Button('Off', id='base_cru'),
+    html.Button('On', id='base_prism'),
+    html.Div(dcc.Markdown('Intermodel Variability',id='div4')),
+    html.Button('Off', id='vari_off'),
+    html.Button('On', id='vari_on'),
     dcc.Graph(id='ccharts')
 ], className="container")
 
@@ -67,6 +77,19 @@ def update_div2(rcp45, rcp60, rcp85):
         return "RCP60 CLICKED"
     else:
         return "RCP85 CLICKED"
+@app.callback(Output('div4', 'children'),
+    inputs=[
+      Input('vari_on', 'n_clicks_timestamp'),
+      Input('vari_off', 'n_clicks_timestamp')])
+def update_div4(von,voff):
+    if (von > voff):
+        variability = True
+        print 'On'
+        return 'On'
+    else:
+        variability = False
+        print 'Off'
+        return 'Off'
 
 @app.callback(Output('ccharts', 'figure'),
     inputs=[
@@ -75,9 +98,15 @@ def update_div2(rcp45, rcp60, rcp85):
       Input('precipitation', 'n_clicks_timestamp'),
       Input('rcp45', 'n_clicks_timestamp'),
       Input('rcp60', 'n_clicks_timestamp'),
-      Input('rcp85', 'n_clicks_timestamp')
+      Input('rcp85', 'n_clicks_timestamp'),
+      Input('vari_on', 'n_clicks_timestamp'),
+      Input('vari_off', 'n_clicks_timestamp')
     ])
-def update_graph(selected_dropdown_value, temp, precip, rcp45, rcp60, rcp85):
+def update_graph(selected_dropdown_value, temp, precip, rcp45, rcp60, rcp85, von, voff):
+    if (von > voff):
+        variability = True
+    else:
+        variability = False
     dff = df[df['Community'] == selected_dropdown_value]
     df0 = dff;
     if (rcp45 > rcp60 and rcp45 > rcp85):
@@ -114,7 +143,7 @@ def update_graph(selected_dropdown_value, temp, precip, rcp45, rcp60, rcp85):
                 'error_y': {
                     'type': 'data',
                     'array': df10s.TError,
-                    'visible': 'true'
+                    'visible': variability
                 }
             },{
                 'x': df40s.Month,
@@ -128,7 +157,7 @@ def update_graph(selected_dropdown_value, temp, precip, rcp45, rcp60, rcp85):
                 'error_y': {
                     'type': 'data',
                     'array': df40s.TError,
-                    'visible': 'true'
+                    'visible': variability
                 }
             },{
                 'x': df60s.Month,
@@ -142,7 +171,7 @@ def update_graph(selected_dropdown_value, temp, precip, rcp45, rcp60, rcp85):
                 'error_y': {
                     'type': 'data',
                     'array': df60s.TError,
-                    'visible': 'true'
+                    'visible': variability
                 }
             },{
                 'x': df90s.Month,
@@ -156,7 +185,7 @@ def update_graph(selected_dropdown_value, temp, precip, rcp45, rcp60, rcp85):
                 'error_y': {
                     'type': 'data',
                     'array': df90s.TError,
-                    'visible': 'true'
+                    'visible': variability
                 }
             }],
             'layout': {
@@ -201,7 +230,7 @@ def update_graph(selected_dropdown_value, temp, precip, rcp45, rcp60, rcp85):
                 'error_y': {
                     'type': 'data',
                     'array': df10s.PError,
-                    'visible': 'true'
+                    'visible': variability
                 }
             },{
                 'x': df40s.Month,
@@ -214,7 +243,7 @@ def update_graph(selected_dropdown_value, temp, precip, rcp45, rcp60, rcp85):
                 'error_y': {
                     'type': 'data',
                     'array': df40s.PError,
-                    'visible': 'true'
+                    'visible': variability
                 }
             },{
                 'x': df60s.Month,
@@ -227,7 +256,7 @@ def update_graph(selected_dropdown_value, temp, precip, rcp45, rcp60, rcp85):
                 'error_y': {
                     'type': 'data',
                     'array': df60s.PError,
-                    'visible': 'true'
+                    'visible': variability
                 }
             },{
                 'x': df90s.Month,
@@ -240,28 +269,17 @@ def update_graph(selected_dropdown_value, temp, precip, rcp45, rcp60, rcp85):
                 'error_y': {
                     'type': 'data',
                     'array': df90s.PError,
-                    'visible': 'true'
+                    'visible': variability
                 }
             }],
             'layout': {
                 'barmode': 'grouped',
-                'yaxis': {
-                    'zeroline': 'false',
-                    'zerolinecolor': '#efefef',
-                    'zerolinewidth': 0.5
-                },
                 'margin': {
                     'l': 30,
                     'r': 20,
                     'b': 30,
                     't': 20
-                },
-                'shapes': [{
-                    'type': 'line', 
-                    'x0': 0, 'x1': 1, 'xref': 'paper',
-                    'y0': 32, 'y1': 32, 'yref': 'y',
-                    'line': { 'width': 1 }
-                }]
+                }
             }
         }
 
