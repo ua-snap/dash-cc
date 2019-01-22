@@ -56,7 +56,7 @@ app.layout = html.Div([
     dcc.Graph(id='ccharts')
 ], className="container")
 
-@app.callback(Output('div1', 'children'),
+@app.callback(Output('div1', 'className'),
     inputs=[
       Input('temperature', 'n_clicks_timestamp'),
       Input('precipitation', 'n_clicks_timestamp')])
