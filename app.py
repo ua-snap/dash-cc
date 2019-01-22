@@ -84,11 +84,9 @@ def update_div2(rcp45, rcp60, rcp85):
 def update_div4(von,voff):
     if (von > voff):
         variability = True
-        print 'On'
         return 'On'
     else:
         variability = False
-        print 'Off'
         return 'Off'
 
 @app.callback(Output('ccharts', 'figure'),
