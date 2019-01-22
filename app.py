@@ -38,25 +38,25 @@ app.layout = html.Div([
         value='Anchorage'
     ),
     html.Div(dcc.Markdown('xyz',id='div1')),
-    html.Button('Temperature', id='temperature'),
-    html.Button('Precipitation', id='precipitation'),
+    html.Button('Temperature', id='temperature', n_clicks_timestamp='0'),
+    html.Button('Precipitation', id='precipitation', n_clicks_timestamp='0'),
     html.Div(dcc.Markdown('Units',id='div1.5')),
-    html.Button('Imperial', id='units_im'),
-    html.Button('Metric', id='units_m'),
+    html.Button('Imperial', id='units_im', n_clicks_timestamp='0'),
+    html.Button('Metric', id='units_m', n_clicks_timestamp='0'),
     html.Div(dcc.Markdown('abcd',id='div2')),
-    html.Button('RCP45', id='rcp45'),
-    html.Button('RCP60', id='rcp60'),
-    html.Button('RCP85', id='rcp85'),
+    html.Button('RCP45', id='rcp45', n_clicks_timestamp='0'),
+    html.Button('RCP60', id='rcp60', n_clicks_timestamp='0'),
+    html.Button('RCP85', id='rcp85', n_clicks_timestamp='0'),
     html.Div(dcc.Markdown('Historical Baseline',id='div3')),
-    html.Button('Off', id='base_cru'),
-    html.Button('On', id='base_prism'),
+    html.Button('Off', id='base_cru', n_clicks_timestamp='0'),
+    html.Button('On', id='base_prism', n_clicks_timestamp='0'),
     html.Div(dcc.Markdown('Intermodel Variability',id='div4')),
-    html.Button('Off', id='vari_off'),
-    html.Button('On', id='vari_on'),
+    html.Button('Off', id='vari_off', n_clicks_timestamp='0'),
+    html.Button('On', id='vari_on', n_clicks_timestamp='0'),
     dcc.Graph(id='ccharts')
 ], className="container")
 
-@app.callback(Output('div1', 'className'),
+@app.callback(Output('div1', 'children'),
     inputs=[
       Input('temperature', 'n_clicks_timestamp'),
       Input('precipitation', 'n_clicks_timestamp')])
