@@ -15,9 +15,6 @@ server.secret_key = os.environ.get('secret_key', 'secret')
 #df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/hello-world-stock.csv')
 df = pd.read_csv('communities.csv')
 units = 'imperial'
-rcp = '6.5'
-baseline = 'cru'
-intermodal = 'off'
 variability = True
 
 #app = dash.Dash('app', server=server)
