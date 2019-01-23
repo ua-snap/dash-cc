@@ -132,7 +132,7 @@ def update_graph(selected_dropdown_value, temp, precip, rcp45, rcp60, rcp85, von
                 'type': 'bar',
                 'base': 32,
                 'marker': {
-                    'color': '#bae4bc'
+                    'color': '#fecc5c'
                 },
                 'name': '2010-2019',
                 'error_y': {
@@ -146,7 +146,7 @@ def update_graph(selected_dropdown_value, temp, precip, rcp45, rcp60, rcp85, von
                 'type': 'bar',
                 'base': 32,
                 'marker': {
-                    'color': '#7bccc4'
+                    'color': '#fd8d3c'
                 },
                 'name': '2040-2049',
                 'error_y': {
@@ -160,7 +160,7 @@ def update_graph(selected_dropdown_value, temp, precip, rcp45, rcp60, rcp85, von
                 'type': 'bar',
                 'base': 32,
                 'marker': {
-                    'color': '#43a2ca'
+                    'color': '#f03b20'
                 },
                 'name': '2060-2069',
                 'error_y': {
@@ -174,7 +174,7 @@ def update_graph(selected_dropdown_value, temp, precip, rcp45, rcp60, rcp85, von
                 'type': 'bar',
                 'base': 32,
                 'marker': {
-                    'color': '#0868ac'
+                    'color': '#bd0026'
                 },
                 'name': '2090-2099',
                 'error_y': {
@@ -204,7 +204,7 @@ def update_graph(selected_dropdown_value, temp, precip, rcp45, rcp60, rcp85, von
                 }]
             }
         }
-    else:
+    elif(precip > temp):
         return {
             'data': [{
                 'x': dfhist.Month,
@@ -219,7 +219,7 @@ def update_graph(selected_dropdown_value, temp, precip, rcp45, rcp60, rcp85, von
                 'y': df10s.Precip,
                 'type': 'bar',
                 'marker': {
-                    'color': '#fecc5c'
+                    'color': '#bae4bc'
                 },
                 'name': '2010-2019',
                 'error_y': {
@@ -232,7 +232,7 @@ def update_graph(selected_dropdown_value, temp, precip, rcp45, rcp60, rcp85, von
                 'y': df40s.Precip,
                 'type': 'bar',
                 'marker': {
-                    'color': '#fd8d3c'
+                    'color': '#7bccc4'
                 },
                 'name': '2040-2049',
                 'error_y': {
@@ -245,7 +245,7 @@ def update_graph(selected_dropdown_value, temp, precip, rcp45, rcp60, rcp85, von
                 'y': df60s.Precip,
                 'type': 'bar',
                 'marker': {
-                    'color': '#f03b20'
+                    'color': '#43a2ca'
                 },
                 'name': '2060-2069',
                 'error_y': {
@@ -258,7 +258,7 @@ def update_graph(selected_dropdown_value, temp, precip, rcp45, rcp60, rcp85, von
                 'y': df90s.Precip,
                 'type': 'bar',
                 'marker': {
-                    'color': '#bd0026'
+                    'color': '#0868ac'
                 },
                 'name': '2090-2099',
                 'error_y': {
