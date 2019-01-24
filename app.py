@@ -45,8 +45,8 @@ app.layout = html.Div([
     html.Button('RCP60', id='rcp60', n_clicks_timestamp=0),
     html.Button('RCP85', id='rcp85', n_clicks_timestamp=0),
     html.Div(dcc.Markdown('Historical Baseline',id='div3')),
-    html.Button('Off', id='base_cru', n_clicks_timestamp=0),
-    html.Button('On', id='base_prism', n_clicks_timestamp=0),
+    html.Button('CRU', id='base_cru', n_clicks_timestamp=0),
+    html.Button('PRISM', id='base_prism', n_clicks_timestamp=0),
     html.Div(dcc.Markdown('Intermodel Variability',id='div4')),
     html.Button('Off', id='vari_off', n_clicks_timestamp=0),
     html.Button('On', id='vari_on', n_clicks_timestamp=0),
@@ -103,34 +103,38 @@ def update_graph(selected_dropdown_value, temp, precip, rcp45, rcp60, rcp85, von
     else:
         variability = False
     dff = df[df['Community'] == selected_dropdown_value]
-    df0 = dff;
+    df0 = [];
     if (rcp45 > rcp60 and rcp45 > rcp85):
-        df0 = df[dff['Scenario'] == '4.5']
+        df0 = dff[dff['Scenario'] == 'rcp45']
     elif (rcp60 > rcp45 and rcp60 > rcp85):
-        df0 = df[dff['Scenario'] == '6.0']
+        df0 = dff[dff['Scenario'] == 'rcp60']
     else:
-        df0 = df[dff['Scenario'] == '8.5']
-    dfhist = df[dff['Decades'] == '1961-1990']
+        df0 = dff[dff['Scenario'] == 'rcp85']
+    dfhist = dff[dff['Decades'] == '1961-1990']
     df10s = df0[dff['Decades'] == '2010-2019']
     df40s = df0[dff['Decades'] == '2090-2099']
     df60s = df0[dff['Decades'] == '2060-2069']
     df90s = df0[dff['Decades'] == '2090-2099']
+    tMod = 32;
+    tMod = 0;
+    pMod = 0.0393701;
+    pMod = 1;
     if (temp > precip or temp == precip):
         return {
             'data': [{
                 'x': dfhist.Month,
-                'y': dfhist.Temp - 32,
+                'y': dfhist.Temp - tMod,
                 'type': 'bar',
-                'base': 32,
+                'base': tMod,
                 'marker': {
                     'color': '#999999'
                 },
                 'name': 'Historical'
             },{
                 'x': df10s.Month,
-                'y': df10s.Temp - 32,
+                'y': df10s.Temp - tMod,
                 'type': 'bar',
-                'base': 32,
+                'base': tMod,
                 'marker': {
                     'color': '#fecc5c'
                 },
@@ -142,9 +146,9 @@ def update_graph(selected_dropdown_value, temp, precip, rcp45, rcp60, rcp85, von
                 }
             },{
                 'x': df40s.Month,
-                'y': df40s.Temp - 32,
+                'y': df40s.Temp - tMod,
                 'type': 'bar',
-                'base': 32,
+                'base': tMod,
                 'marker': {
                     'color': '#fd8d3c'
                 },
@@ -156,9 +160,9 @@ def update_graph(selected_dropdown_value, temp, precip, rcp45, rcp60, rcp85, von
                 }
             },{
                 'x': df60s.Month,
-                'y': df60s.Temp - 32,
+                'y': df60s.Temp - tMod,
                 'type': 'bar',
-                'base': 32,
+                'base': tMod,
                 'marker': {
                     'color': '#f03b20'
                 },
@@ -170,9 +174,9 @@ def update_graph(selected_dropdown_value, temp, precip, rcp45, rcp60, rcp85, von
                 }
             },{
                 'x': df90s.Month,
-                'y': df90s.Temp - 32,
+                'y': df90s.Temp - tMod,
                 'type': 'bar',
-                'base': 32,
+                'base': tMod,
                 'marker': {
                     'color': '#bd0026'
                 },
@@ -199,7 +203,7 @@ def update_graph(selected_dropdown_value, temp, precip, rcp45, rcp60, rcp85, von
                 'shapes': [{
                     'type': 'line', 
                     'x0': 0, 'x1': 1, 'xref': 'paper',
-                    'y0': 32, 'y1': 32, 'yref': 'y',
+                    'y0': tMod, 'y1': tMod, 'yref': 'y',
                     'line': { 'width': 1 }
                 }]
             }
@@ -208,7 +212,7 @@ def update_graph(selected_dropdown_value, temp, precip, rcp45, rcp60, rcp85, von
         return {
             'data': [{
                 'x': dfhist.Month,
-                'y': dfhist.Precip,
+                'y': dfhist.Precip * pMod,
                 'type': 'bar',
                 'marker': {
                     'color': '#999999'
@@ -216,7 +220,7 @@ def update_graph(selected_dropdown_value, temp, precip, rcp45, rcp60, rcp85, von
                 'name': 'Historical'
             },{
                 'x': df10s.Month,
-                'y': df10s.Precip,
+                'y': df10s.Precip * pMod,
                 'type': 'bar',
                 'marker': {
                     'color': '#bae4bc'
@@ -229,7 +233,7 @@ def update_graph(selected_dropdown_value, temp, precip, rcp45, rcp60, rcp85, von
                 }
             },{
                 'x': df40s.Month,
-                'y': df40s.Precip,
+                'y': df40s.Precip * pMod,
                 'type': 'bar',
                 'marker': {
                     'color': '#7bccc4'
@@ -242,7 +246,7 @@ def update_graph(selected_dropdown_value, temp, precip, rcp45, rcp60, rcp85, von
                 }
             },{
                 'x': df60s.Month,
-                'y': df60s.Precip,
+                'y': df60s.Precip * pMod,
                 'type': 'bar',
                 'marker': {
                     'color': '#43a2ca'
@@ -255,7 +259,7 @@ def update_graph(selected_dropdown_value, temp, precip, rcp45, rcp60, rcp85, von
                 }
             },{
                 'x': df90s.Month,
-                'y': df90s.Precip,
+                'y': df90s.Precip * pMod,
                 'type': 'bar',
                 'marker': {
                     'color': '#0868ac'
