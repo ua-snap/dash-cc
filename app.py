@@ -34,92 +34,82 @@ app.layout = html.Div([
         ],
         value='Anchorage'
     ),
-    html.Div(dcc.Markdown('xyz',id='div1')),
-    html.Button('Temperature', id='temperature', n_clicks_timestamp=0),
-    html.Button('Precipitation', id='precipitation', n_clicks_timestamp=0),
-    html.Div(dcc.Markdown('Units',id='div1.5')),
-    html.Button('Imperial', id='units_im', n_clicks_timestamp=0),
-    html.Button('Metric', id='units_m', n_clicks_timestamp=0),
-    html.Div(dcc.Markdown('abcd',id='div2')),
-    html.Button('RCP45', id='rcp45', n_clicks_timestamp=0),
-    html.Button('RCP60', id='rcp60', n_clicks_timestamp=0),
-    html.Button('RCP85', id='rcp85', n_clicks_timestamp=0),
-    html.Div(dcc.Markdown('Historical Baseline',id='div3')),
-    html.Button('CRU', id='base_cru', n_clicks_timestamp=0),
-    html.Button('PRISM', id='base_prism', n_clicks_timestamp=0),
-    html.Div(dcc.Markdown('Intermodel Variability',id='div4')),
-    html.Button('Off', id='vari_off', n_clicks_timestamp=0),
-    html.Button('On', id='vari_on', n_clicks_timestamp=0),
+    html.Label('Temperature or precipitation?'),
+    dcc.RadioItems(
+        options=[
+            {'label': 'Temperature', 'value': 'temp'},
+            {'label': 'Precipitation', 'value': 'precip'}
+        ],
+        id='variable',
+        value='temp'
+    ),
+    html.Label('Units'),
+    dcc.RadioItems(
+        options=[
+            {'label': 'Imperial', 'value': 'imperial'},
+            {'label': 'Metric', 'value': 'metric'}
+        ],
+        id='units',
+        value='imperial'
+    ),
+    html.Label('Scenario'),
+    dcc.RadioItems(
+        options=[
+            {'label': 'RCP4.5', 'value': 'rcp45'},
+            {'label': 'RCP6.0', 'value': 'rcp60'},
+            {'label': 'RCP8.5', 'value': 'rcp85'}
+        ],
+        id='scenario',
+        value='rcp60'
+    ),
+    html.Label('Historical Baseline'),
+    dcc.RadioItems(
+        options=[
+            {'label': 'CRU', 'value': 'cru'},
+            {'label': 'PRISM', 'value': 'prism'}
+        ],
+        id='baseline',
+        value='cru'
+    ),
+    html.Label('Intermodel Variability'),
+    dcc.RadioItems(
+        options=[
+            {'label': 'On', 'value': 'on'},
+            {'label': 'Off', 'value': 'off'}
+        ],
+        id='variability',
+        value='off'
+    ),
     dcc.Graph(id='ccharts')
 ], className="container")
 
-@app.callback(dash.dependencies.Output('div1', 'children'),
+@app.callback(
+    Output('ccharts', 'figure'),
     inputs=[
-      dash.dependencies.Input('temperature', 'n_clicks_timestamp'),
-      dash.dependencies.Input('precipitation', 'n_clicks_timestamp')])
-def update_div1(temp, precip):
-    if (precip > temp):
-        return "Precip CLICKED"
-    else:
-        return "Temp CLICKED"
-@app.callback(dash.dependencies.Output('div2', 'children'),
-    inputs=[
-      dash.dependencies.Input('rcp45', 'n_clicks_timestamp'),
-      dash.dependencies.Input('rcp60', 'n_clicks_timestamp'),
-      dash.dependencies.Input('rcp85', 'n_clicks_timestamp')])
-def update_div2(rcp45, rcp60, rcp85):
-    if (rcp45 > rcp60 and rcp45 > rcp85):
-        return "RCP45 CLICKED"
-    elif (rcp60 > rcp45 and rcp60 > rcp85):
-        return "RCP60 CLICKED"
-    else:
-        return "RCP85 CLICKED"
-@app.callback(dash.dependencies.Output('div4', 'children'),
-    inputs=[
-      dash.dependencies.Input('vari_on', 'n_clicks_timestamp'),
-      dash.dependencies.Input('vari_off', 'n_clicks_timestamp')])
-def update_div4(von,voff):
-    if (von > voff):
-        variability = True
-        return 'On'
-    else:
-        variability = False
-        return 'Off'
+        Input('community', 'value'),
+        Input('variable', 'value'),
+        Input('scenario', 'value'),
+        Input('variability', 'value')
+    ]
+)
+def update_graph(community, variable, scenario, variability):
+    """ Update the graph from user input """
 
-@app.callback(dash.dependencies.Output('ccharts', 'figure'),
-    inputs=[
-      dash.dependencies.Input('community', 'value'), 
-      dash.dependencies.Input('temperature', 'n_clicks_timestamp'), 
-      dash.dependencies.Input('precipitation', 'n_clicks_timestamp'),
-      dash.dependencies.Input('rcp45', 'n_clicks_timestamp'),
-      dash.dependencies.Input('rcp60', 'n_clicks_timestamp'),
-      dash.dependencies.Input('rcp85', 'n_clicks_timestamp'),
-      dash.dependencies.Input('vari_on', 'n_clicks_timestamp'),
-      dash.dependencies.Input('vari_off', 'n_clicks_timestamp')
-    ])
-def update_graph(selected_dropdown_value, temp, precip, rcp45, rcp60, rcp85, von, voff):
-    if (von > voff):
-        variability = True
-    else:
-        variability = False
-    dff = df[df['Community'] == selected_dropdown_value]
-    df0 = [];
-    if (rcp45 > rcp60 and rcp45 > rcp85):
-        df0 = dff[dff['Scenario'] == 'rcp45']
-    elif (rcp60 > rcp45 and rcp60 > rcp85):
-        df0 = dff[dff['Scenario'] == 'rcp60']
-    else:
-        df0 = dff[dff['Scenario'] == 'rcp85']
+    variability = variability == 'on'  # convert to boolean for use in configuring graph
+
+    dff = df[df['Community'] == community]
+    df0 = dff[dff['Scenario'] == scenario]
+
     dfhist = dff[dff['Decades'] == '1961-1990']
     df10s = df0[dff['Decades'] == '2010-2019']
-    df40s = df0[dff['Decades'] == '2090-2099']
+    df40s = df0[dff['Decades'] == '2090-2099']  # ??? those are not the 40s :)
     df60s = df0[dff['Decades'] == '2060-2069']
     df90s = df0[dff['Decades'] == '2090-2099']
-    tMod = 32;
-    tMod = 0;
-    pMod = 0.0393701;
-    pMod = 1;
-    if (temp > precip or temp == precip):
+    tMod = 32
+    tMod = 0
+    pMod = 0.0393701
+    pMod = 1
+    if (variable == 'temp'):
         return {
             'data': [{
                 'x': dfhist.Month,
@@ -201,14 +191,14 @@ def update_graph(selected_dropdown_value, temp, precip, rcp45, rcp60, rcp85, von
                     't': 20
                 },
                 'shapes': [{
-                    'type': 'line', 
+                    'type': 'line',
                     'x0': 0, 'x1': 1, 'xref': 'paper',
                     'y0': tMod, 'y1': tMod, 'yref': 'y',
                     'line': { 'width': 1 }
                 }]
             }
         }
-    elif(precip > temp):
+    else:
         return {
             'data': [{
                 'x': dfhist.Month,
