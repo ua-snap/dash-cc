@@ -74,8 +74,8 @@ app.layout = html.Div([
     html.Label('Intermodel Variability'),
     dcc.RadioItems(
         options=[
-            {'label': 'On', 'value': 'on'},
-            {'label': 'Off', 'value': 'off'}
+            {'label': 'Off', 'value': 'off'},
+            {'label': 'On', 'value': 'on'}
         ],
         id='variability',
         value='off'
@@ -89,31 +89,43 @@ app.layout = html.Div([
         Input('community', 'value'),
         Input('variable', 'value'),
         Input('scenario', 'value'),
-        Input('variability', 'value')
+        Input('variability', 'value'),
+        Input('units', 'value')
     ]
 )
-def update_graph(community, variable, scenario, variability):
+def update_graph(community, variable, scenario, variability, units):
     """ Update the graph from user input """
 
     variability = variability == 'on'  # convert to boolean for use in configuring graph
 
     dff = df[df['Community'] == community]
     df0 = dff[dff['Scenario'] == scenario]
-
     dfhist = dff[dff['Decades'] == '1961-1990']
     df10s = df0[dff['Decades'] == '2010-2019']
-    df40s = df0[dff['Decades'] == '2090-2099']  # ??? those are not the 40s :)
+    df40s = df0[dff['Decades'] == '2040-2049']
     df60s = df0[dff['Decades'] == '2060-2069']
     df90s = df0[dff['Decades'] == '2090-2099']
-    tMod = 32
+
     tMod = 0
-    pMod = 0.0393701
     pMod = 1
+    if (units  == 'imperial'):
+        dfhist.Temp = dfhist.Temp.multiply(1.8) + 32
+        df10s.Temp = df10s.Temp.multiply(1.8) + 32
+        df40s.Temp = df40s.Temp.multiply(1.8) + 32
+        df60s.Temp = df60s.Temp.multiply(1.8) + 32
+        df90s.Temp = df90s.Temp.multiply(1.8) + 32
+        dfhist.Precip = dfhist.Precip * 0.0393701
+        df10s.Precip = df10s.Precip * 0.0393701
+        df40s.Precip = df40s.Precip * 0.0393701
+        df60s.Precip = df60s.Precip * 0.0393701
+        df90s.Precip = df90s.Precip * 0.0393701
+        tMod = 32
+
     if (variable == 'temp'):
         return {
             'data': [{
                 'x': dfhist.Month,
-                'y': dfhist.Temp - tMod,
+                'y': dfhist.Temp,
                 'type': 'bar',
                 'base': tMod,
                 'marker': {
@@ -122,7 +134,7 @@ def update_graph(community, variable, scenario, variability):
                 'name': 'Historical'
             },{
                 'x': df10s.Month,
-                'y': df10s.Temp - tMod,
+                'y': df10s.Temp,
                 'type': 'bar',
                 'base': tMod,
                 'marker': {
@@ -136,7 +148,7 @@ def update_graph(community, variable, scenario, variability):
                 }
             },{
                 'x': df40s.Month,
-                'y': df40s.Temp - tMod,
+                'y': df40s.Temp,
                 'type': 'bar',
                 'base': tMod,
                 'marker': {
@@ -150,7 +162,7 @@ def update_graph(community, variable, scenario, variability):
                 }
             },{
                 'x': df60s.Month,
-                'y': df60s.Temp - tMod,
+                'y': df60s.Temp,
                 'type': 'bar',
                 'base': tMod,
                 'marker': {
@@ -164,7 +176,7 @@ def update_graph(community, variable, scenario, variability):
                 }
             },{
                 'x': df90s.Month,
-                'y': df90s.Temp - tMod,
+                'y': df90s.Temp,
                 'type': 'bar',
                 'base': tMod,
                 'marker': {
@@ -202,7 +214,7 @@ def update_graph(community, variable, scenario, variability):
         return {
             'data': [{
                 'x': dfhist.Month,
-                'y': dfhist.Precip * pMod,
+                'y': dfhist.Precip,
                 'type': 'bar',
                 'marker': {
                     'color': '#999999'
@@ -210,7 +222,7 @@ def update_graph(community, variable, scenario, variability):
                 'name': 'Historical'
             },{
                 'x': df10s.Month,
-                'y': df10s.Precip * pMod,
+                'y': df10s.Precip,
                 'type': 'bar',
                 'marker': {
                     'color': '#bae4bc'
@@ -223,7 +235,7 @@ def update_graph(community, variable, scenario, variability):
                 }
             },{
                 'x': df40s.Month,
-                'y': df40s.Precip * pMod,
+                'y': df40s.Precip,
                 'type': 'bar',
                 'marker': {
                     'color': '#7bccc4'
@@ -236,7 +248,7 @@ def update_graph(community, variable, scenario, variability):
                 }
             },{
                 'x': df60s.Month,
-                'y': df60s.Precip * pMod,
+                'y': df60s.Precip,
                 'type': 'bar',
                 'marker': {
                     'color': '#43a2ca'
@@ -249,7 +261,7 @@ def update_graph(community, variable, scenario, variability):
                 }
             },{
                 'x': df90s.Month,
-                'y': df90s.Precip * pMod,
+                'y': df90s.Precip,
                 'type': 'bar',
                 'marker': {
                     'color': '#0868ac'
