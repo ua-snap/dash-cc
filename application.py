@@ -1,16 +1,11 @@
 import dash
 from dash.dependencies import Input, Output
-#from IPython.display import clear_output, Image, display
 import dash_core_components as dcc
 import dash_html_components as html
 
-import flask
 import pandas as pd
 import time
 import os
-
-server = flask.Flask('app')
-server.secret_key = os.environ.get('secret_key', 'secret')
 
 df = []
 co = pd.read_json('CommunityNames.json')
@@ -19,6 +14,10 @@ units = 'imperial'
 variability = True
 
 app = dash.Dash(__name__)
+# AWS Elastic Beanstalk looks for application by default,
+# if this variable (application) isn't set you will get a WSGI error.
+application = app.server
+
 Months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 mean_cols = []
 
@@ -94,8 +93,12 @@ app.layout = html.Div([
 def update_graph(community, variable, scenario, variability, units, baseline):
     """ Update the graph from user input """
 
+    # Default!
+    if community is None:
+        community = 'Fairbanks'
+
     variability = variability == 'on'  # convert to boolean for use in configuring graph
-    comm_file = './communities_csvs/' + community + '_SNAP_comm_charts_export.csv'
+    comm_file = './data/' + community + '_SNAP_comm_charts_export.csv'
     df = pd.read_csv(comm_file)
     dff = df[df['community'] == community]
     df2 = dff[dff['resolution'] == '2km']
@@ -297,5 +300,6 @@ def update_graph(community, variable, scenario, variability, units, baseline):
         }
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run_server(debug=True, host='0.0.0.0', port=port)
+    port = int(os.environ.get('PORT', 8080))
+    debug = os.environ.get('DEBUG', False)
+    app.run_server(debug=debug, port=port)
