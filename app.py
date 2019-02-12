@@ -12,15 +12,12 @@ import os
 server = flask.Flask('app')
 server.secret_key = os.environ.get('secret_key', 'secret')
 
-#df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/hello-world-stock.csv')
 df = []
-#df = pd.read_csv('communities.csv')
 co = pd.read_json('CommunityNames.json')
 names = list(co.community)
 units = 'imperial'
 variability = True
 
-#app = dash.Dash('app', server=server)
 app = dash.Dash(__name__)
 Months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 mean_cols = []
