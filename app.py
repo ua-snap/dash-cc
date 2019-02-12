@@ -13,12 +13,17 @@ server = flask.Flask('app')
 server.secret_key = os.environ.get('secret_key', 'secret')
 
 #df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/hello-world-stock.csv')
-df = pd.read_csv('communities.csv')
+df = []
+#df = pd.read_csv('communities.csv')
+co = pd.read_json('CommunityNames.json')
+names = list(co.community)
 units = 'imperial'
 variability = True
 
 #app = dash.Dash('app', server=server)
 app = dash.Dash(__name__)
+Months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+mean_cols = []
 
 app.scripts.config.serve_locally = False
 dcc._js_dist[0]['external_url'] = 'https://cdn.plot.ly/plotly-basic-latest.min.js'
@@ -27,12 +32,7 @@ app.layout = html.Div([
     html.H1('Community Charts'),
     dcc.Dropdown(
         id='community',
-        options=[
-            {'label': 'Anchorage', 'value': 'Anchorage'},
-            {'label': 'Fairbanks', 'value': 'Fairbanks'},
-            {'label': 'Juneau', 'value': 'Juneau'}
-        ],
-        value='Anchorage'
+        options=[{'label':name, 'value':name} for name in names]
     ),
     html.Label('Temperature or precipitation?'),
     dcc.RadioItems(
@@ -65,11 +65,11 @@ app.layout = html.Div([
     html.Label('Historical Baseline'),
     dcc.RadioItems(
         options=[
-            {'label': 'CRU', 'value': 'cru'},
+            {'label': 'CRU', 'value': 'cru32'},
             {'label': 'PRISM', 'value': 'prism'}
         ],
         id='baseline',
-        value='cru'
+        value='cru32'
     ),
     html.Label('Intermodel Variability'),
     dcc.RadioItems(
@@ -90,24 +90,40 @@ app.layout = html.Div([
         Input('variable', 'value'),
         Input('scenario', 'value'),
         Input('variability', 'value'),
-        Input('units', 'value')
+        Input('units', 'value'),
+        Input('baseline', 'value')
     ]
 )
-def update_graph(community, variable, scenario, variability, units):
+def update_graph(community, variable, scenario, variability, units, baseline):
     """ Update the graph from user input """
 
     variability = variability == 'on'  # convert to boolean for use in configuring graph
+    comm_file = './communities_csvs/' + community + '_SNAP_comm_charts_export.csv'
+    df = pd.read_csv(comm_file)
+    dff = df[df['community'] == community]
+    df2 = dff[dff['resolution'] == '2km']
+    if (variable == 'temp'):
+        df0 = df2[df2['type'] == 'Temperature']
+    else:
+        df0 = df2[df2['type'] == 'Precipitation']
 
-    dff = df[df['Community'] == community]
-    df0 = dff[dff['Scenario'] == scenario]
-    dfhist = dff[dff['Decades'] == '1961-1990']
-    df10s = df0[dff['Decades'] == '2010-2019']
-    df40s = df0[dff['Decades'] == '2040-2049']
-    df60s = df0[dff['Decades'] == '2060-2069']
-    df90s = df0[dff['Decades'] == '2090-2099']
+    df1 = df0[df0['scenario'] == scenario]
+    df3 = df0[df0['scenario'] == baseline]
+
+    mean_cols = [col for col in df.columns if 'Mean' in col]
+    sd_cols = [col for col in df.columns if 'Sd' in col]
+    min_cols = [col for col in df.columns if 'Min' in col]
+    max_cols = [col for col in df.columns if 'Max' in col]
+
+    dfhist = df3[df3['daterange'] == 'Historical']
+    df10s = df1[df1['daterange'] == '2010-2019']
+    df40s = df1[df1['daterange'] == '2040-2049']
+    df60s = df1[df1['daterange'] == '2060-2069']
+    df90s = df1[df1['daterange'] == '2090-2099']
 
     tMod = 0
     pMod = 1
+    units = 'standard'
     if (units  == 'imperial'):
         dfhist.Temp = dfhist.Temp.multiply(1.8) + 32
         df10s.Temp = df10s.Temp.multiply(1.8) + 32
@@ -120,12 +136,11 @@ def update_graph(community, variable, scenario, variability, units):
         df60s.Precip = df60s.Precip * 0.0393701
         df90s.Precip = df90s.Precip * 0.0393701
         tMod = 32
-
     if (variable == 'temp'):
         return {
             'data': [{
-                'x': dfhist.Month,
-                'y': dfhist.Temp,
+                'x': Months,
+                'y': dfhist[mean_cols].T.iloc[:,0],
                 'type': 'bar',
                 'base': tMod,
                 'marker': {
@@ -133,8 +148,8 @@ def update_graph(community, variable, scenario, variability, units):
                 },
                 'name': 'Historical'
             },{
-                'x': df10s.Month,
-                'y': df10s.Temp,
+                'x': Months,
+                'y': df10s[mean_cols].T.iloc[:,0],
                 'type': 'bar',
                 'base': tMod,
                 'marker': {
@@ -143,12 +158,12 @@ def update_graph(community, variable, scenario, variability, units):
                 'name': '2010-2019',
                 'error_y': {
                     'type': 'data',
-                    'array': df10s.TError,
+                    'array': df10s[sd_cols].T.iloc[:,0],
                     'visible': variability
                 }
             },{
-                'x': df40s.Month,
-                'y': df40s.Temp,
+                'x': Months,
+                'y': df40s[mean_cols].T.iloc[:,0],
                 'type': 'bar',
                 'base': tMod,
                 'marker': {
@@ -157,12 +172,12 @@ def update_graph(community, variable, scenario, variability, units):
                 'name': '2040-2049',
                 'error_y': {
                     'type': 'data',
-                    'array': df40s.TError,
+                    'array': df40s[sd_cols].T.iloc[:,0],
                     'visible': variability
                 }
             },{
-                'x': df60s.Month,
-                'y': df60s.Temp,
+                'x': Months,
+                'y': df60s[mean_cols].T.iloc[:,0],
                 'type': 'bar',
                 'base': tMod,
                 'marker': {
@@ -171,12 +186,12 @@ def update_graph(community, variable, scenario, variability, units):
                 'name': '2060-2069',
                 'error_y': {
                     'type': 'data',
-                    'array': df60s.TError,
+                    'array': df60s[sd_cols].T.iloc[:,0],
                     'visible': variability
                 }
             },{
-                'x': df90s.Month,
-                'y': df90s.Temp,
+                'x': Months,
+                'y': df90s[mean_cols].T.iloc[:,0],
                 'type': 'bar',
                 'base': tMod,
                 'marker': {
@@ -185,7 +200,7 @@ def update_graph(community, variable, scenario, variability, units):
                 'name': '2090-2099',
                 'error_y': {
                     'type': 'data',
-                    'array': df90s.TError,
+                    'array': df90s[sd_cols].T.iloc[:,0],
                     'visible': variability
                 }
             }],
@@ -213,16 +228,16 @@ def update_graph(community, variable, scenario, variability, units):
     else:
         return {
             'data': [{
-                'x': dfhist.Month,
-                'y': dfhist.Precip,
+                'x': Months,
+                'y': dfhist[mean_cols].T.iloc[:,0],
                 'type': 'bar',
                 'marker': {
                     'color': '#999999'
                 },
                 'name': 'Historical'
             },{
-                'x': df10s.Month,
-                'y': df10s.Precip,
+                'x': Months,
+                'y': df10s[mean_cols].T.iloc[:,0],
                 'type': 'bar',
                 'marker': {
                     'color': '#bae4bc'
@@ -230,12 +245,12 @@ def update_graph(community, variable, scenario, variability, units):
                 'name': '2010-2019',
                 'error_y': {
                     'type': 'data',
-                    'array': df10s.PError,
+                    'array': df10s[sd_cols].T.iloc[:,0],
                     'visible': variability
                 }
             },{
-                'x': df40s.Month,
-                'y': df40s.Precip,
+                'x': Months,
+                'y': df40s[mean_cols].T.iloc[:,0],
                 'type': 'bar',
                 'marker': {
                     'color': '#7bccc4'
@@ -243,12 +258,12 @@ def update_graph(community, variable, scenario, variability, units):
                 'name': '2040-2049',
                 'error_y': {
                     'type': 'data',
-                    'array': df40s.PError,
+                    'array': df40s[sd_cols].T.iloc[:,0],
                     'visible': variability
                 }
             },{
-                'x': df60s.Month,
-                'y': df60s.Precip,
+                'x': Months,
+                'y': df60s[mean_cols].T.iloc[:,0],
                 'type': 'bar',
                 'marker': {
                     'color': '#43a2ca'
@@ -256,12 +271,12 @@ def update_graph(community, variable, scenario, variability, units):
                 'name': '2060-2069',
                 'error_y': {
                     'type': 'data',
-                    'array': df60s.PError,
+                    'array': df60s[sd_cols].T.iloc[:,0],
                     'visible': variability
                 }
             },{
-                'x': df90s.Month,
-                'y': df90s.Precip,
+                'x': Months,
+                'y': df90s[mean_cols].T.iloc[:,0],
                 'type': 'bar',
                 'marker': {
                     'color': '#0868ac'
@@ -269,7 +284,7 @@ def update_graph(community, variable, scenario, variability, units):
                 'name': '2090-2099',
                 'error_y': {
                     'type': 'data',
-                    'array': df90s.PError,
+                    'array': df90s[sd_cols].T.iloc[:,0],
                     'visible': variability
                 }
             }],
