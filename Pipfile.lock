@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "aba1a2604562289a8ee736a34be34846bbb3f96805a60f10d2437bbf3250201f"
+            "sha256": "2cebb329ab58ec88c21547399ac123298fcc01c1cfab7a05a4baf7b0d5d6e3e2"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -39,31 +39,37 @@
         },
         "dash": {
             "hashes": [
-                "sha256:1414157e4161d246066d2fa4b322d61871e38cb8d808705ea2694c3ab074ccf2"
+                "sha256:4be018bf509c4411a9bdbf5f1f2e760cae5918e29cada4ccabd520bf45258c5d"
             ],
             "index": "pypi",
-            "version": "==0.17.7"
+            "version": "==0.37.0"
         },
         "dash-core-components": {
             "hashes": [
-                "sha256:36001323869ccad5fc8b11f823d89b429f6ac530a5d9b5c216a0a86962a2522f"
+                "sha256:dbd2a4b760b4905d3eb6ec0afa7d0cbb3205e85f898a4731f45f54877d2301f3"
             ],
             "index": "pypi",
-            "version": "==0.5.3"
+            "version": "==0.43.1"
         },
         "dash-html-components": {
             "hashes": [
-                "sha256:9c8be2773d878cd4bdeb71a4918c77578bb19aff6198447eb1aa9640e855be73"
+                "sha256:54c69401ebd7ca350d842c634c1c10c4d4b5a3c7e77da25e0f189632358bf04a"
             ],
             "index": "pypi",
-            "version": "==0.6.2"
+            "version": "==0.13.5"
         },
         "dash-renderer": {
             "hashes": [
-                "sha256:4c3247fe18cf99d4c66218822f501a6cf617c88d0b8b13da537ea255628095cc"
+                "sha256:4b606cc66243f9e57198fa5bacb727dfcf4ad97255bbfd3662656a3f59474fbb"
             ],
             "index": "pypi",
-            "version": "==0.7.3"
+            "version": "==0.18.0"
+        },
+        "dash-table": {
+            "hashes": [
+                "sha256:e54d824162189d0866fa40a2c7e67a4b5927f7282b1bc7ccd1a1ef1f0b378cdf"
+            ],
+            "version": "==3.4.0"
         },
         "decorator": {
             "hashes": [
@@ -84,12 +90,6 @@
                 "sha256:468693f4ddd11ac6a41bca4eb5f94b071b763256d54136f77957cfee635badb3"
             ],
             "version": "==1.4.0"
-        },
-        "flask-seasurf": {
-            "hashes": [
-                "sha256:c57918c17e9afd988bdc30d8dcb7bfb833741dee38b06c1bbd17821d6fa2b6cf"
-            ],
-            "version": "==0.2.2"
         },
         "idna": {
             "hashes": [

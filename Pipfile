@@ -2,8 +2,8 @@
 python_version = "3.6"
 
 [packages]
-dash = "==0.17.7"
-dash_renderer = "==0.7.3"
-dash-html-components = "==0.6.2"
-dash-core-components = "==0.5.3"
+dash = "*"
+dash_renderer = "*"
+dash-html-components = "*"
+dash-core-components = "*"
 pandas = "*"

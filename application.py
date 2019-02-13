@@ -1,3 +1,7 @@
+"""
+SNAP Community Charts / Community Climate Outlooks
+"""
+
 import dash
 from dash.dependencies import Input, Output
 import dash_core_components as dcc
@@ -21,62 +25,301 @@ application = app.server
 Months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 mean_cols = []
 
-app.scripts.config.serve_locally = False
-dcc._js_dist[0]['external_url'] = 'https://cdn.plot.ly/plotly-basic-latest.min.js'
+header_layout = html.Div(
+    className='container',
+    children=[
+        html.Div(
+            className='columns',
+            children=[
+                html.Div(
+                    className='column',
+                    children=[
+                        html.A(
+                            href='https://snap.uaf.edu',
+                            children=[
+                                html.Img(src='assets/SNAP_acronym_color.svg')
+                            ]
+                        ),
+                        html.H1(
+                            'Community Charts',
+                            className='title is-3'
+                        ),
+                        html.H2(
+                            """
+Explore temperature and precipitation projections for communities across Alaska and Canada shown here.
+    """,
+                            className='subtitle is-5'
+                        ),
+                        html.Div(
+                            className='buttons',
+                            children=[
+                                html.A(
+                                    'Download all Community Charts data',
+                                    className='button is-info'
+                                ),
+                                html.A(
+                                    'Go to SNAP home page',
+                                    className='button is-link'
+                                )
+                            ]
+                        )
+                    ]
+                ),
+                html.Div(
+                    className='column',
+                    children=[
+                        html.Img(src='assets/akcanada_extent.png')
+                    ]
+                )
+            ]
+
+        )
+    ]
+)
+
+community_selector = html.Div(
+    className='field',
+    children=[
+        html.Label('Type the name of a community in the box below to get started.', className='label'),
+        html.Div(
+            className='control',
+            children=[
+                dcc.Dropdown(
+                    id='community',
+                    options=[{'label':name, 'value':name} for name in names]
+                )
+            ]
+        )
+    ]
+)
+
+dataset_radio = html.Div(
+    className='field',
+    children=[
+        html.Label('Dataset', className='label'),
+        html.Div(
+            className='control',
+            children=[
+                dcc.RadioItems(
+                    labelClassName='radio',
+                    options=[
+                        {'label': ' Temperature', 'value': 'temp'},
+                        {'label': ' Precipitation', 'value': 'precip'}
+                    ],
+                    id='variable',
+                    value='temp'
+                )
+            ]
+        )
+    ]
+)
+
+units_radio = html.Div(
+    className='field',
+    children=[
+        html.Label('Units', className='label'),
+        html.Div(
+            className='control',
+            children=[
+                dcc.RadioItems(
+                    labelClassName='radio',
+                    options=[
+                        {'label': ' Imperial', 'value': 'imperial'},
+                        {'label': ' Metric', 'value': 'metric'}
+                    ],
+                    id='units',
+                    value='imperial'
+                )
+            ]
+        )
+    ]
+)
+
+baseline_radio = html.Div(
+    className='field',
+    children=[
+        html.Label('Historical Baseline', className='label'),
+        html.Div(
+            className='control',
+            children=[
+                dcc.RadioItems(
+                    labelClassName='radio',
+                    options=[
+                        {'label': ' CRU', 'value': 'cru32'},
+                        {'label': ' PRISM', 'value': 'prism'}
+                    ],
+                    id='baseline',
+                    value='cru32'
+                )
+            ]
+        ),
+        html.P("""
+* Northwest Territories communities only available for CRU 3.2 baseline choice. 
+""",
+            className='help'
+        )
+    ]
+)
+
+rcp_radio = html.Div(
+    className='field',
+    children=[
+        html.Label('Representative Concentration Pathways', className='label'),
+        html.Div(
+            className='control',
+            children=[
+                dcc.RadioItems(
+                    labelClassName='radio',
+                    options=[
+                        {'label': ' Low (RCP4.5)', 'value': 'rcp45'},
+                        {'label': ' Medium (RCP6.0)', 'value': 'rcp60'},
+                        {'label': ' High (RCP8.5)', 'value': 'rcp85'}
+                    ],
+                    id='scenario',
+                    value='rcp60'
+                )
+            ]
+        )
+    ]
+)
+
+variability_radio = html.Div(
+    className='field',
+    children=[
+        html.Label('Inter-model Variability', className='label'),
+        html.Div(
+            className='control',
+            children=[
+                dcc.RadioItems(
+                    labelClassName='radio',
+                    options=[
+                        {'label': ' Off', 'value': 'off'},
+                        {'label': ' On', 'value': 'on'}
+                    ],
+                    id='variability',
+                    value='off'
+                )
+            ]
+        )
+    ]
+)
+
+form_layout = html.Div(
+    className='container',
+    children=[
+        community_selector,
+        html.Div(
+            className='columns',
+            children=[
+                html.Div(
+                    className='column',
+                    children=[
+                        dataset_radio,
+                        units_radio,
+                        baseline_radio
+                    ]
+                ),
+                html.Div(
+                    className='column',
+                    children=[
+                        rcp_radio,
+                        variability_radio
+                    ]
+                )
+            ]
+        )
+    ]
+)
+
+graph_layout = html.Div(
+    className='container',
+    children=[
+        dcc.Graph(id='ccharts')
+    ]
+)
+
+explanations = html.Div(
+    className='container',
+    children=[
+        dcc.Markdown("""
+Due to variability among climate models and among years in a natural climate system, these graphs are useful for examining trends over time, rather than for precisely predicting monthly or yearly values.
+
+### How to interpret climate outlooks for your community
+
+You can examine SNAP community outlooks for certain key changes and threshold values—for example, higher mean monthly temperatures in the spring and fall may be of particular interest. This could signify any or all of these conditions:
+
+* a longer growing season
+* a loss of ice and/or frozen ground needed for travel or food storage
+* a shift in precipitation from snow to rain, which impacts water storage capacity and surface water availability
+
+Note: Precipitation may occur as either rain or snow, but is reported for all months in terms of rainwater equivalent.
+
+Warmer, drier spring weather may also be an indicator for increased fire risk. In many locations, winter temperatures are projected to increase dramatically. Warmer winters may favor growth of species that are less cold-hardy (including desirable crops and invasive species), or it may decrease snowpack and increase the frequency of rain-on-snow events that impact wildlife. Higher temperatures across all seasons will likely impact permafrost and land-fast ice.
+""",
+            className='is-size-5 content'
+        ),
+        html.A(
+            'Learn more about how we derived the community climate outlooks',
+            id='button-show-about-derivation-modal',
+            className='button is-info'
+        )
+    ]
+)
+
+footer = html.Footer('Footer content goes here', className='footer')
+
+about_derivation_modal = html.Div(
+    id='about-derivation-modal',
+    className='modal',
+    children=[
+        html.Div(className='modal-background'),
+        html.Div(className='modal-card', children=[
+            html.Header(className='modal-card-head', children=[
+                html.P(
+                    'Community climate outlooks: core statistics and methods',
+                    className='modal-card-title'
+                ),
+                html.Button(className='delete')
+            ]),
+            html.Section(className='modal-card-body', children=[
+                dcc.Markdown(
+"""
+**Data sources**: Historical PRISM and CRU TS 3.2 climatology data (1961-1990) and downscaled outputs averaged from five GCMs.  [Learn more about how we downscale climate data from global to regional scales](https://www.snap.uaf.edu/methods/downscaling).
+
+**We averaged results to smooth out short-term variability**. Results are averaged across decades to lessen the influence of normal year-to-year climate variability on projected values. Averaging also tends to make overall projection trends clearer. Uncertainty is associated with each of these graphed values, and stems from:
+
+* modeling of atmospheric and oceanic movements used to create GCMs
+* the downscaling process
+* the assumptions made regarding greenhouse gas levels for each emissions scenario
+* [Learn more about uncertainty in SNAP's climate research work](https://www.snap.uaf.edu/methods/uncertainty).
+
+**Generally, precipitation is more uncertain than temperature**. And, although our models project increases in precipitation, water availability may decrease in some areas due to longer growing seasons and warmer weather.
+
+""",
+                    className='content'
+                )
+            ]),
+            html.Footer(
+                className='modal-card-foot',
+                children=[
+                    html.Button('Close', className='button is-primary')
+                ]
+            )
+        ])
+    ]
+)
+
+def section(content):
+    """ Convenince function: Wrap content in a section div """
+    return html.Div(className='section', children=[content])
 
 app.layout = html.Div([
-    html.H1('Community Charts'),
-    dcc.Dropdown(
-        id='community',
-        options=[{'label':name, 'value':name} for name in names]
-    ),
-    html.Label('Temperature or precipitation?'),
-    dcc.RadioItems(
-        options=[
-            {'label': 'Temperature', 'value': 'temp'},
-            {'label': 'Precipitation', 'value': 'precip'}
-        ],
-        id='variable',
-        value='temp'
-    ),
-    html.Label('Units'),
-    dcc.RadioItems(
-        options=[
-            {'label': 'Imperial', 'value': 'imperial'},
-            {'label': 'Metric', 'value': 'metric'}
-        ],
-        id='units',
-        value='imperial'
-    ),
-    html.Label('Scenario'),
-    dcc.RadioItems(
-        options=[
-            {'label': 'RCP4.5', 'value': 'rcp45'},
-            {'label': 'RCP6.0', 'value': 'rcp60'},
-            {'label': 'RCP8.5', 'value': 'rcp85'}
-        ],
-        id='scenario',
-        value='rcp60'
-    ),
-    html.Label('Historical Baseline'),
-    dcc.RadioItems(
-        options=[
-            {'label': 'CRU', 'value': 'cru32'},
-            {'label': 'PRISM', 'value': 'prism'}
-        ],
-        id='baseline',
-        value='cru32'
-    ),
-    html.Label('Intermodel Variability'),
-    dcc.RadioItems(
-        options=[
-            {'label': 'Off', 'value': 'off'},
-            {'label': 'On', 'value': 'on'}
-        ],
-        id='variability',
-        value='off'
-    ),
-    dcc.Graph(id='ccharts')
+    section(header_layout),
+    section(form_layout),
+    section(graph_layout),
+    section(explanations),
+    footer,
+    about_derivation_modal
 ], className="container")
 
 @app.callback(
