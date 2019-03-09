@@ -463,16 +463,17 @@ def update_graph(community, variable, scenario, variability, units, baseline):
     df90s = df1[df1['daterange'] == '2090-2099']
 
     tMod = 0
-    pMod = 1
-
     if (variable == 'temp'):
         if (units  == 'imperial'):
-            dfhist[mean_cols] = dfhist[mean_cols].multiply(1.8) + 32
-            df10s[mean_cols] = df10s[mean_cols].multiply(1.8) + 32
-            df40s[mean_cols] = df40s[mean_cols].multiply(1.8) + 32
-            df60s[mean_cols] = df60s[mean_cols].multiply(1.8) + 32
-            df90s[mean_cols] = df90s[mean_cols].multiply(1.8) + 32
-            tMod = 32
+            tMod = 32 
+            # 32 is not added here, as it is set in the 'base' 
+            # variable to offset the freezing line
+            dfhist[mean_cols] = dfhist[mean_cols] * 1.8
+            df10s[mean_cols] = df10s[mean_cols] * 1.8
+            df40s[mean_cols] = df40s[mean_cols] * 1.8
+            df60s[mean_cols] = df60s[mean_cols] * 1.8
+            df90s[mean_cols] = df90s[mean_cols] * 1.8
+
         return {
             'data': [{
                 'x': Months,
