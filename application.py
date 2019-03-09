@@ -473,6 +473,11 @@ def update_graph(community, variable, scenario, variability, units, baseline):
             df40s[mean_cols] = df40s[mean_cols] * 1.8
             df60s[mean_cols] = df60s[mean_cols] * 1.8
             df90s[mean_cols] = df90s[mean_cols] * 1.8
+            dfhist[sd_cols] = dfhist[sd_cols] * 1.8
+            df10s[sd_cols] = df10s[sd_cols] * 1.8
+            df40s[sd_cols] = df40s[sd_cols] * 1.8
+            df60s[sd_cols] = df60s[sd_cols] * 1.8
+            df90s[sd_cols] = df90s[sd_cols] * 1.8
 
         return {
             'data': [{
@@ -569,6 +574,11 @@ def update_graph(community, variable, scenario, variability, units, baseline):
             df40s[mean_cols] = df40s[mean_cols] * 0.0393701
             df60s[mean_cols] = df60s[mean_cols] * 0.0393701
             df90s[mean_cols] = df90s[mean_cols] * 0.0393701
+            dfhist[sd_cols] = dfhist[sd_cols] * 0.0393701
+            df10s[sd_cols] = df10s[sd_cols] * 0.0393701
+            df40s[sd_cols] = df40s[sd_cols] * 0.0393701
+            df60s[sd_cols] = df60s[sd_cols] * 0.0393701
+            df90s[sd_cols] = df90s[sd_cols] * 0.0393701
         return {
             'data': [{
                 'x': Months,
