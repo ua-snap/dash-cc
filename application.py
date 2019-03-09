@@ -20,8 +20,6 @@ import os
 df = None
 co = pd.read_json('CommunityNames.json')
 names = list(co.community)
-units = 'imperial'
-variability = True
 
 app = dash.Dash(__name__)
 # AWS Elastic Beanstalk looks for application by default,
@@ -466,20 +464,15 @@ def update_graph(community, variable, scenario, variability, units, baseline):
 
     tMod = 0
     pMod = 1
-    units = 'standard'
-    if (units  == 'imperial'):
-        dfhist.Temp = dfhist.Temp.multiply(1.8) + 32
-        df10s.Temp = df10s.Temp.multiply(1.8) + 32
-        df40s.Temp = df40s.Temp.multiply(1.8) + 32
-        df60s.Temp = df60s.Temp.multiply(1.8) + 32
-        df90s.Temp = df90s.Temp.multiply(1.8) + 32
-        dfhist.Precip = dfhist.Precip * 0.0393701
-        df10s.Precip = df10s.Precip * 0.0393701
-        df40s.Precip = df40s.Precip * 0.0393701
-        df60s.Precip = df60s.Precip * 0.0393701
-        df90s.Precip = df90s.Precip * 0.0393701
-        tMod = 32
+
     if (variable == 'temp'):
+        if (units  == 'imperial'):
+            dfhist[mean_cols] = dfhist[mean_cols].multiply(1.8) + 32
+            df10s[mean_cols] = df10s[mean_cols].multiply(1.8) + 32
+            df40s[mean_cols] = df40s[mean_cols].multiply(1.8) + 32
+            df60s[mean_cols] = df60s[mean_cols].multiply(1.8) + 32
+            df90s[mean_cols] = df90s[mean_cols].multiply(1.8) + 32
+            tMod = 32
         return {
             'data': [{
                 'x': Months,
@@ -569,6 +562,12 @@ def update_graph(community, variable, scenario, variability, units, baseline):
             }
         }
     else:
+        if (units  == 'imperial'):
+            dfhist[mean_cols] = dfhist[mean_cols] * 0.0393701
+            df10s[mean_cols] = df10s[mean_cols] * 0.0393701
+            df40s[mean_cols] = df40s[mean_cols] * 0.0393701
+            df60s[mean_cols] = df60s[mean_cols] * 0.0393701
+            df90s[mean_cols] = df90s[mean_cols] * 0.0393701
         return {
             'data': [{
                 'x': Months,
