@@ -31,6 +31,22 @@ application = app.server
 Months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 mean_cols = []
 
+community_selector = html.Div(
+    className='field',
+    children=[
+        html.Label('Type the name of a community in the box below to get started.', className='label'),
+        html.Div(
+            className='control',
+            children=[
+                dcc.Dropdown(
+                    id='community',
+                    options=[{'label':name, 'value':name} for name in names]
+                )
+            ]
+        )
+    ]
+)
+
 header_layout = html.Div(
     className='container',
     children=[
@@ -48,28 +64,19 @@ header_layout = html.Div(
                         ),
                         html.Hr(),
                         html.H1(
-                            'Community Charts',
+                            'Community Climate Outlook Charts',
                             className='title is-3'
                         ),
                         html.H2(
                             """
-Explore temperature and precipitation projections for communities across Alaska and Canada shown here.
+Explore temperature and precipitation projections for selected communities
+across Alaska and central and northwestern Canada. Because natural climate
+systems and models are variable, these graphs are best for studying trends,
+rather than for precisely predicting monthly or yearly values.
     """,
                             className='subtitle is-5'
                         ),
-                        html.Div(
-                            className='buttons',
-                            children=[
-                                html.A(
-                                    'Download all Community Charts data',
-                                    className='button is-info'
-                                ),
-                                html.A(
-                                    'Go to SNAP home page',
-                                    className='button is-link'
-                                )
-                            ]
-                        )
+                        community_selector
                     ]
                 ),
                 html.Div(
@@ -84,21 +91,7 @@ Explore temperature and precipitation projections for communities across Alaska 
     ]
 )
 
-community_selector = html.Div(
-    className='field',
-    children=[
-        html.Label('Type the name of a community in the box below to get started.', className='label'),
-        html.Div(
-            className='control',
-            children=[
-                dcc.Dropdown(
-                    id='community',
-                    options=[{'label':name, 'value':name} for name in names]
-                )
-            ]
-        )
-    ]
-)
+
 
 dataset_radio = html.Div(
     className='field',
@@ -247,7 +240,7 @@ download_all_csv = html.Div(
 form_layout = html.Div(
     className='container',
     children=[
-        community_selector,
+        #community_selector,
         html.Div(
             className='columns',
             children=[
@@ -313,13 +306,60 @@ You can examine SNAP community outlooks for certain key changes and threshold va
 Note: Precipitation may occur as either rain or snow, but is reported for all months in terms of rainwater equivalent.
 
 Warmer, drier spring weather may also be an indicator for increased fire risk. In many locations, winter temperatures are projected to increase dramatically. Warmer winters may favor growth of species that are less cold-hardy (including desirable crops and invasive species), or it may decrease snowpack and increase the frequency of rain-on-snow events that impact wildlife. Higher temperatures across all seasons will likely impact permafrost and land-fast ice.
+
+### Representative Concentration Pathways
+
+The four different Representative Concentration Pathways (RCPs) adopted by the IPCC as of its fifth Assessment Report (AR5) in 2014 depict a range of possible future atmospheric greenhouse gas concentrations. These pathways represent four climate futures, extrapolated out to the year 2100, based on a range of possible future human behaviors. Their numerical values (2.6, 4.5, 6.0, and 8.5) measure radiative forcing values (W/m2) relative to pre-industrial values. For example, RPC 6.0 projects that in 2100 the concentration of greenhouse gases will be such that the solar energy absorbed by each square meter of Earth (rather than radiated back into space) will be, on average, six watts per meter squared greater than it was in 1750.
+
+* RCP 4.5 (low)
+This pathway assumes that emissions peak around 2040, and that radiative forcing is stabilized shortly after 2100. SNAP terms this the “low” scenario. It was developed at the Pacific Northwest National Laboratory’s Joint Global Change Research Institute in the United States.
+
+* RCP 6.0 (medium)
+This RCP assumes that a range of technologies and strategies for reducing greenhouse gas emissions are developed, allowing emissions to peak around 2080, then decline, with total radiative forcing stabilized shortly after 2100. This is SNAP’s “medium” scenario. It was developed at the National Institute for Environmental Studies in Japan.
+
+* RCP 8.5 (high)
+This potential future is characterized by increasing greenhouse gas emissions continuing through the 21st century. SNAP uses this as its “high” scenario. It was developed at the International Institute for Applied Systems Analysis, Austria.
+
+Note: An additional set of projections, RCP 2.6, posits that greenhouse gas emissions peak between 2010 and 2020 and decline substantially thereafter. It was developed by at the PBL Netherlands Environmental Assessment Agency. Because its premises are unrealistic in light of current global emissions, SNAP does not use this pathway for modeling purposes.
+
+### Historical Baseline
+
+Climate Research Unit (CRU) and Parameter elevation Regression on Independent Slopes Model (PRISM) refer to two different models used by different research groups to create gridded climate datasets from available historical information.
+
+Historical climate information is available from only a limited number of climate stations across Alaska and western Canada. These climate stations are not only few and far between, but also tend to be located in low-lying towns and cities, rather than in inaccessible locations such as mountain ranges. Thus, estimating historical (baseline) data for regularly spaced intervals on a map (gridded data) poses a challenge for modelers.
+
+Most of SNAP's downscaled modeling relies on PRISM as a baseline, as described here: Downscaling Methods. PRISM creates fine-scale climate grids using not only climate station data but also the location of each grid point relative to nearby climate stations, and its elevation, slope, direction of slope, proximity to coastlines, and other features. Baseline historical PRISM data and future projections downscaled using two-kilometer PRISM baseline grids represent one of the choices available in this chart tool.
+
+CRU grids rely on similar, but not identical, modeling techniques. Thus, comparing PRISM-downscaled data to CRU-downscaled data offers a perspective on model uncertainty related to the challenges of creating gridded climate data from limited historical data. CRU data are coarser, but cover a broader area, including Canada's Northwest Territories, for which PRISM data are not currently available. Baseline CRU data and future projections downscaled using CRU grids at 10' latitude and longitude (about 18 km) represent the other choice available in this chart tool.
+
+### Variability Among Models
+
+SNAP uses five different global circulation models (GCMs) as a basis for our down-scaled climate projections, as explained on this website under "Methods". Slight variations between these models allow us to consider a range of possible future climate conditions. This chart tool offers users a way to visualize this variability.
+
+If you click on "Range", you will see a bar graph for your selected community with black lines extending above and below each bar. The colored bars represent the average (mean) values from all five models, and the black lines show the lowest and highest values among the five models used. Baseline years have no range values, because they are derived directly from climate station data, rather than from the five models.
+
+If you click on "Off", the bar chart will show the five-model average with no black lines indicating range.
+
+### Community Climate Outlooks: Core Statistics and Methods
+
+Data sources: Historical PRISM and CRU TS 3.2 climatology data (1961-1990) and downscaled outputs averaged from five GCMs. Learn more about how we downscale climate data from global to regional scales.
+
+We averaged results to smooth out short-term variability. Results are averaged across decades to lessen the influence of normal year-to-year climate variability on projected values. Averaging also tends to make overall projection trends clearer. Uncertainty is associated with each of these graphed values, and stems from:
+
+* modeling of atmospheric and oceanic movements used to create GCMs
+* the downscaling process
+* the assumptions made regarding greenhouse gas levels for each emissions scenario
+
+Learn more about uncertainty in SNAP’s climate research work.
+Generally, precipitation is more uncertain than temperature. And, although our models project increases in precipitation, water availability may decrease in some areas due to longer growing seasons and warmer weather.
 """,
             className='is-size-5 content'
         ),
         html.A(
             'Learn more about how we derived the community climate outlooks',
             id='button-show-about-derivation-modal',
-            className='button is-info'
+            className='button is-info',
+            href='https://www.snap.uaf.edu/methods/uncertainty'
         )
     ]
 )
