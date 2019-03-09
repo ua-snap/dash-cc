@@ -6,10 +6,12 @@ import dash
 from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import dash_html_components as html
+import html as h
 import urllib
 from flask import send_file
 import flask
 import io
+import re
 
 import pandas as pd
 import time
@@ -398,6 +400,7 @@ def update_graph(community, variable, scenario, variability, units, baseline):
         community = 'Fairbanks'
 
     variability = variability == 'on'  # convert to boolean for use in configuring graph
+    community = re.sub('[^A-Za-z0-9]+', '', community)
     comm_file = './data/' + community + '_SNAP_comm_charts_export.csv'
     df = pd.read_csv(comm_file)
     dff = df[df['community'] == community]
@@ -608,6 +611,8 @@ def update_download_link(comm):
 @app.server.route('/dash/urlToDownload') 
 def download_csv():
     value = flask.request.args.get('value')
+    value = h.unescape(value)
+    value = re.sub('[^A-Za-z0-9]+', '', value)
     return send_file('./data/' + value + '_SNAP_comm_charts_export.csv',
                      mimetype='text/csv',
                      attachment_filename=value + '_charts.csv',
