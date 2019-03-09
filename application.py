@@ -3,15 +3,19 @@ SNAP Community Charts / Community Climate Outlooks
 """
 
 import dash
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import dash_html_components as html
+import urllib
+from flask import send_file
+import flask
+import io
 
 import pandas as pd
 import time
 import os
 
-df = []
+df = None
 co = pd.read_json('CommunityNames.json')
 names = list(co.community)
 units = 'imperial'
@@ -40,6 +44,7 @@ header_layout = html.Div(
                                 html.Img(src='assets/SNAP_acronym_color.svg')
                             ]
                         ),
+                        html.Hr(),
                         html.H1(
                             'Community Charts',
                             className='title is-3'
@@ -68,7 +73,7 @@ Explore temperature and precipitation projections for communities across Alaska 
                 html.Div(
                     className='column',
                     children=[
-                        html.Img(src='assets/akcanada_extent.png')
+                        html.Img(src='assets/akcanada.svg')
                     ]
                 )
             ]
@@ -203,6 +208,39 @@ variability_radio = html.Div(
         )
     ]
 )
+download_single_csv = html.Div(
+    className='download',
+    children=[
+        html.Div(
+            className='control',
+            children=[
+                html.A(
+                    'Download Single Community (CSV)',
+                    className='button is-success',
+                    id='download_single',
+                    href=''
+                )
+            ]
+        )
+    ]
+)
+download_all_csv = html.Div(
+    className='download',
+    children=[
+        html.Div(
+            className='control',
+            children=[
+                html.A(
+                    'Dowload All Community Data (CSV)',
+                    className='button is-success',
+                    id='download_all',
+                    href='http://data.snap.uaf.edu/data/Base/Other/Community_charts_tool_database/SNAP_comm_charts_export_20160926_fix_021119.csv'
+                )
+            ]
+        )
+    ]
+)
+
 
 form_layout = html.Div(
     className='container',
@@ -223,7 +261,25 @@ form_layout = html.Div(
                     className='column',
                     children=[
                         rcp_radio,
-                        variability_radio
+                        variability_radio,
+                        html.Div(
+                            className='columns is-1',
+                            children=[
+                                html.Div(
+                                    className='column is-half',
+                                    children=[
+                                        download_single_csv
+                                    ]
+                                ),
+                                html.Div(
+                                    className='column is-half',
+                                    children=[
+                                        download_all_csv
+                                    ]
+                                )
+
+                            ]
+                        )
                     ]
                 )
             ]
@@ -321,6 +377,7 @@ app.layout = html.Div([
     footer,
     about_derivation_modal
 ], className="container")
+
 
 @app.callback(
     Output('ccharts', 'figure'),
@@ -541,6 +598,20 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                 }
             }
         }
+@app.callback(
+    dash.dependencies.Output('download_single', 'href'),
+    [dash.dependencies.Input('community', 'value')])
+
+def update_download_link(comm):
+    return '/dash/urlToDownload?value={}'.format(comm)
+
+@app.server.route('/dash/urlToDownload') 
+def download_csv():
+    value = flask.request.args.get('value')
+    return send_file('./data/' + value + '_SNAP_comm_charts_export.csv',
+                     mimetype='text/csv',
+                     attachment_filename=value + '_charts.csv',
+                     as_attachment=True)
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8080))
