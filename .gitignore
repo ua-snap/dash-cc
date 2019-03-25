@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 
 # data files / directories
+data/*
 communities_csvs/*
 
 # C extensions

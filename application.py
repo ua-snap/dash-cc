@@ -6,6 +6,8 @@ import dash
 from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import dash_html_components as html
+import plotly
+import plotly.io as pio
 import html as h
 import urllib
 from flask import send_file
@@ -201,6 +203,38 @@ variability_radio = html.Div(
         )
     ]
 )
+download_svg = html.Div(
+    className='download',
+    children=[
+        html.Div(
+            className='control',
+            children=[
+                html.A(
+                    'Download SVG',
+                    className='button is-info',
+                    id='download_svg',
+                    href=''
+                )
+            ]
+        )
+    ]
+)
+download_png = html.Div(
+    className='download',
+    children=[
+        html.Div(
+            className='control',
+            children=[
+                html.A(
+                    'Download PNG',
+                    className='button is-info',
+                    id='download_png',
+                    href=''
+                )
+            ]
+        )
+    ]
+)
 download_single_csv = html.Div(
     className='download',
     children=[
@@ -279,11 +313,31 @@ form_layout = html.Div(
         )
     ]
 )
+config = {
+    'toImageButtonOptions': {
+        'title': 'Export to SVG',
+        'format': 'svg',
+        'filename': 'custom_image',
+        'height': 600,
+        'width': 1600,
+        'scale': 1
+    },
+    'modeBarButtonsToRemove': [
+        'zoom2d',
+        'sendToCloud',
+        'pan2d',
+        'select2d',
+        'lasso2d',
+        'toggleSpikeLines'
+    ]
+}
 
 graph_layout = html.Div(
     className='container',
     children=[
-        dcc.Graph(id='ccharts')
+        dcc.Graph(id='ccharts', config=config),
+        download_svg,
+        download_png
     ]
 )
 
@@ -448,8 +502,26 @@ def update_graph(community, variable, scenario, variability, units, baseline):
     else:
         df0 = df2[df2['type'] == 'Precipitation']
 
+    emission_label = ''
+    if (scenario == 'rcp45'):
+        emission_label = 'Low-Range Emissions (RCP 4.5)'
+    elif (scenario == 'rcp60'):
+        emission_label = 'Mid-Range Emissions (RCP 6.0)'
+    elif (scenario == 'rcp85'):
+        emission_label = 'High-Range Emissions (RCP 8.5)'
+
+    baseline_label = ''
+    if (baseline == 'cru32'):
+        baseline_label = 'CRU 3.2'
+    elif (baseline == 'prism'):
+        baseline_label = 'Prism'
+
+    
+
     df1 = df0[df0['scenario'] == scenario]
     df3 = df0[df0['scenario'] == baseline]
+
+    region_label = df0['region'].iloc[0]
 
     mean_cols = [col for col in df.columns if 'Mean' in col]
     sd_cols = [col for col in df.columns if 'Sd' in col]
@@ -478,8 +550,8 @@ def update_graph(community, variable, scenario, variability, units, baseline):
             df40s[sd_cols] = df40s[sd_cols] * 1.8
             df60s[sd_cols] = df60s[sd_cols] * 1.8
             df90s[sd_cols] = df90s[sd_cols] * 1.8
-
-        return {
+        figure = {
+        #return {
             'data': [{
                 'x': Months,
                 'y': dfhist[mean_cols].T.iloc[:,0],
@@ -547,17 +619,31 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                 }
             }],
             'layout': {
-                'barmode': 'grouped',
+                'barmode': 'group',
+                'title': '<b>Average Monthly Temperature for ' + community + ', ' + region_label + '</b><br>Historical ' + baseline_label + ' and 5-Model Projected Average at 2km resolution, ' + emission_label + ' Scenario &nbsp;',
+                'titlefont': {
+                    'size': 20,
+                    'family': 'serif'
+                },
+                'annotations': [{
+                    'x': 0.5004254919715793,
+                    'y': -0.16191064079952971,
+                    'xref': 'paper',
+                    'yref': 'paper',
+                    'showarrow': False,
+                    'text': 'Due to variability among climate models and among years in a natural climate system, these graphs are useful for examining trends over time, rather than for precisely predicting monthly or yearly values.'
+                }],
                 'yaxis': {
                     'zeroline': 'false',
                     'zerolinecolor': '#efefef',
-                    'zerolinewidth': 0.5
+                    'zerolinewidth': 0.5,
+                    'title': 'Temperature'
                 },
                 'margin': {
-                    'l': 30,
-                    'r': 20,
-                    'b': 30,
-                    't': 20
+                    'l': 50,
+                    'r': 50,
+                    'b': 100,
+                    't': 50
                 },
                 'shapes': [{
                     'type': 'line',
@@ -565,8 +651,17 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                     'y0': tMod, 'y1': tMod, 'yref': 'y',
                     'line': { 'width': 1 }
                 }]
+
             }
         }
+
+        
+        figure['layout']['yaxis']['zeroline'] = False
+        #img_bytes = pio.to_image(figure, format='svg')
+        #pio.write_image(figure, 'images/fig1.png', width=1600, height=600, scale=2)
+        figure['layout']['yaxis']['zeroline'] = 'false'
+        figure['layout']['barmode'] = 'grouped'
+        return figure
     else:
         if (units  == 'imperial'):
             dfhist[mean_cols] = dfhist[mean_cols] * 0.0393701
@@ -579,7 +674,8 @@ def update_graph(community, variable, scenario, variability, units, baseline):
             df40s[sd_cols] = df40s[sd_cols] * 0.0393701
             df60s[sd_cols] = df60s[sd_cols] * 0.0393701
             df90s[sd_cols] = df90s[sd_cols] * 0.0393701
-        return {
+        figure = {
+        #return {
             'data': [{
                 'x': Months,
                 'y': dfhist[mean_cols].T.iloc[:,0],
@@ -642,23 +738,40 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                 }
             }],
             'layout': {
-                'barmode': 'grouped',
+                'barmode': 'group',
+                'title': '<b>Average Monthly Precipitation for ' + community + ', ' + region_label + '</b><br>Historical ' + baseline_label + ' and 5-Model Projected Average at 2km resolution, ' + emission_label + ' Scenario &nbsp;',
+                'titlefont': {
+                    'size': 20,
+                    'family': 'serif'
+                },
+                'annotations': [{
+                    'x': 0.5004254919715793,
+                    'y': -0.16191064079952971,
+                    'xref': 'paper',
+                    'yref': 'paper',
+                    'showarrow': False,
+                    'text': 'Due to variability among climate models and among years in a natural climate system, these graphs are useful for examining trends over time, rather than for precisely predicting monthly or yearly values.'
+                }],
+                'yaxis': {
+                    'title': 'Precipitation'
+                },
                 'margin': {
-                    'l': 30,
-                    'r': 20,
-                    'b': 30,
-                    't': 20
+                    'l': 50,
+                    'r': 50,
+                    'b': 100,
+                    't': 50
                 }
             }
         }
+        return figure
 @app.callback(
-    dash.dependencies.Output('download_single', 'href'),
-    [dash.dependencies.Input('community', 'value')])
+    Output('download_single', 'href'),
+    [Input('community', 'value')])
 
 def update_download_link(comm):
-    return '/dash/urlToDownload?value={}'.format(comm)
+    return '/dash/dlCSV?value={}'.format(comm)
 
-@app.server.route('/dash/urlToDownload') 
+@app.server.route('/dash/dlCSV') 
 def download_csv():
     value = flask.request.args.get('value')
     value = h.unescape(value)
