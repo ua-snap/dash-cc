@@ -24,6 +24,7 @@ co = pd.read_json('CommunityNames.json')
 names = list(co.community)
 
 app = dash.Dash(__name__)
+app.title = 'SNAP Community Climate Outlook Charts'
 # AWS Elastic Beanstalk looks for application by default,
 # if this variable (application) isn't set you will get a WSGI error.
 application = app.server
@@ -336,8 +337,8 @@ graph_layout = html.Div(
     className='container',
     children=[
         dcc.Graph(id='ccharts', config=config),
-        download_svg,
-        download_png
+        #download_svg,
+        #download_png
     ]
 )
 
@@ -495,12 +496,30 @@ def update_graph(community, variable, scenario, variability, units, baseline):
     community = re.sub('[^A-Za-z0-9]+', '', community)
     comm_file = './data/' + community + '_SNAP_comm_charts_export.csv'
     df = pd.read_csv(comm_file)
+    mean_cols = [col for col in df.columns if 'Mean' in col]
+    sd_cols = [col for col in df.columns if 'Sd' in col]
+    min_cols = [col for col in df.columns if 'Min' in col]
+    max_cols = [col for col in df.columns if 'Max' in col]
+
     dff = df[df['community'] == community]
     df2 = dff[dff['resolution'] == '2km']
+    df0 = []
     if (variable == 'temp'):
-        df0 = df2[df2['type'] == 'Temperature']
+        if (units == 'imperial'):
+            df0 = df2[df2['type'] == 'Temperature']
+            df0[mean_cols] = df0[mean_cols].multiply(1.8)
+            if (variability == True):
+                df0[sd_cols] = df0[sd_cols].multiply(1.8)
+        else:
+            df0 = df2[df2['type'] == 'Temperature']
     else:
-        df0 = df2[df2['type'] == 'Precipitation']
+        if (units == 'imperial'):
+            df0 = df2[df2['type'] == 'Precipitation']
+            df0[mean_cols] = df0[mean_cols].multiply(0.0393701)
+            if (variability == True):
+                df0[sd_cols] = df0[sd_cols].multiply(0.0393701)
+        else:
+            df0 = df2[df2['type'] == 'Precipitation']
 
     emission_label = ''
     if (scenario == 'rcp45'):
@@ -523,10 +542,7 @@ def update_graph(community, variable, scenario, variability, units, baseline):
 
     region_label = df0['region'].iloc[0]
 
-    mean_cols = [col for col in df.columns if 'Mean' in col]
-    sd_cols = [col for col in df.columns if 'Sd' in col]
-    min_cols = [col for col in df.columns if 'Min' in col]
-    max_cols = [col for col in df.columns if 'Max' in col]
+
 
     dfhist = df3[df3['daterange'] == 'Historical']
     df10s = df1[df1['daterange'] == '2010-2019']
@@ -538,18 +554,6 @@ def update_graph(community, variable, scenario, variability, units, baseline):
     if (variable == 'temp'):
         if (units  == 'imperial'):
             tMod = 32 
-            # 32 is not added here, as it is set in the 'base' 
-            # variable to offset the freezing line
-            dfhist[mean_cols] = dfhist[mean_cols] * 1.8
-            df10s[mean_cols] = df10s[mean_cols] * 1.8
-            df40s[mean_cols] = df40s[mean_cols] * 1.8
-            df60s[mean_cols] = df60s[mean_cols] * 1.8
-            df90s[mean_cols] = df90s[mean_cols] * 1.8
-            dfhist[sd_cols] = dfhist[sd_cols] * 1.8
-            df10s[sd_cols] = df10s[sd_cols] * 1.8
-            df40s[sd_cols] = df40s[sd_cols] * 1.8
-            df60s[sd_cols] = df60s[sd_cols] * 1.8
-            df90s[sd_cols] = df90s[sd_cols] * 1.8
         figure = {
         #return {
             'data': [{
@@ -663,17 +667,6 @@ def update_graph(community, variable, scenario, variability, units, baseline):
         figure['layout']['barmode'] = 'grouped'
         return figure
     else:
-        if (units  == 'imperial'):
-            dfhist[mean_cols] = dfhist[mean_cols] * 0.0393701
-            df10s[mean_cols] = df10s[mean_cols] * 0.0393701
-            df40s[mean_cols] = df40s[mean_cols] * 0.0393701
-            df60s[mean_cols] = df60s[mean_cols] * 0.0393701
-            df90s[mean_cols] = df90s[mean_cols] * 0.0393701
-            dfhist[sd_cols] = dfhist[sd_cols] * 0.0393701
-            df10s[sd_cols] = df10s[sd_cols] * 0.0393701
-            df40s[sd_cols] = df40s[sd_cols] * 0.0393701
-            df60s[sd_cols] = df60s[sd_cols] * 0.0393701
-            df90s[sd_cols] = df90s[sd_cols] * 0.0393701
         figure = {
         #return {
             'data': [{
