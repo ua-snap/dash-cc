@@ -497,69 +497,60 @@ def update_graph(community, variable, scenario, variability, units, baseline):
     community = re.sub('[^A-Za-z0-9]+', '', community)
     comm_file = './data/' + community + '_SNAP_comm_charts_export.csv'
     df = pd.read_csv(comm_file)
+
+    # [ML] maybe hardwire these? Not a huge time sink, but it could be made cleaner
     mean_cols = [col for col in df.columns if 'Mean' in col]
     sd_cols = [col for col in df.columns if 'Sd' in col]
     min_cols = [col for col in df.columns if 'Min' in col]
     max_cols = [col for col in df.columns if 'Max' in col]
 
-    dff = df[df['community'] == community]
-    df2 = dff[dff['resolution'] == '2km']
-    df0 = []
-    if (variable == 'temp'):
-        if (units == 'imperial'):
-            df0 = df2[df2['type'] == 'Temperature']
-            df0[mean_cols] = df0[mean_cols].multiply(1.8)
-            if (variability == True):
-                df0[sd_cols] = df0[sd_cols].multiply(1.8)
-        else:
-            df0 = df2[df2['type'] == 'Temperature']
-    else:
-        if (units == 'imperial'):
-            df0 = df2[df2['type'] == 'Precipitation']
-            df0[mean_cols] = df0[mean_cols].multiply(0.0393701)
-            if (variability == True):
-                df0[sd_cols] = df0[sd_cols].multiply(0.0393701)
-        else:
-            df0 = df2[df2['type'] == 'Precipitation']
+    variable_lu = {'temp':'Temperature', 'precip':'Precipitation'}
 
-    emission_label = ''
-    if (scenario == 'rcp45'):
-        emission_label = 'Low-Range Emissions (RCP 4.5)'
-    elif (scenario == 'rcp60'):
-        emission_label = 'Mid-Range Emissions (RCP 6.0)'
-    elif (scenario == 'rcp85'):
-        emission_label = 'High-Range Emissions (RCP 8.5)'
+    # subset to the data we want to display using the callback variables
+    dff = df[(df['community'] == community) & (df['resolution'] == '2km') & \
+            (df['type'] == variable_lu[variable]) & (df['scenario'] == scenario) ]
+    cols = mean_cols+sd_cols+['daterange','region'] # fun with list appending! 
+    dff = dff[cols] # grab just the cols we need
+    baseline_df = df[(df['community'] == community) & (df['resolution'] == '2km') &\
+                     (df['type'] == variable_lu[variable]) & (df['scenario'] == baseline.lower()) ]
+    baseline_df = baseline_df[mean_cols] # grab just the cols we need
 
-    baseline_label = ''
-    if (baseline == 'cru32'):
-        baseline_label = 'CRU 3.2'
-    elif (baseline == 'prism'):
-        baseline_label = 'Prism'
+    # handle units conversion if needed:
+    imperial_conversion_lu = {'temp':1.8,'precip':0.0393701}
+    if units == 'imperial':
+        # make things F/inches
+        dff[mean_cols+sd_cols] = dff[mean_cols+sd_cols] * imperial_conversion_lu[variable]
+        baseline_df[mean_cols] = baseline_df[mean_cols]* imperial_conversion_lu[variable]
 
-    
+    # scenario lookup
+    scenario_lu = {'rcp45':'Low-Range Emissions (RCP 4.5)', 
+                'rcp60':'Mid-Range Emissions (RCP 6.0)', 
+                'rcp85':'High-Range Emissions (RCP 8.5)'}
+    emission_label = scenario_lu[scenario]
 
-    df1 = df0[df0['scenario'] == scenario]
-    df3 = df0[df0['scenario'] == baseline]
+    # baseline lookup
+    baseline_lu = {'cru32':'CRU 3.2','prism':'Prism'}
+    baseline_label = baseline_lu[baseline]
 
-    region_label = df0['region'].iloc[0]
+    region_label = dff['region'].iloc[0]
 
+    # subset to some dataframes for plotting. This can be improved.
+    df10s = dff[dff['daterange'] == '2010-2019']
+    df40s = dff[dff['daterange'] == '2040-2049']
+    df60s = dff[dff['daterange'] == '2060-2069']
+    df90s = dff[dff['daterange'] == '2090-2099']
 
-
-    dfhist = df3[df3['daterange'] == 'Historical']
-    df10s = df1[df1['daterange'] == '2010-2019']
-    df40s = df1[df1['daterange'] == '2040-2049']
-    df60s = df1[df1['daterange'] == '2060-2069']
-    df90s = df1[df1['daterange'] == '2090-2099']
-
+    # set the freezing line for TEMPERATURE based on imperial or metric
     tMod = 0
-    if (variable == 'temp'):
-        if (units  == 'imperial'):
-            tMod = 32 
+    if variable == 'temp':
+        if units == 'imperial':
+            tMod = 32
+
         figure = {
         #return {
             'data': [{
                 'x': Months,
-                'y': dfhist[mean_cols].T.iloc[:,0],
+                'y': baseline_df[mean_cols].iloc[0],
                 'type': 'bar',
                 'base': tMod,
                 'marker': {
@@ -568,7 +559,7 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                 'name': 'Historical'
             },{
                 'x': Months,
-                'y': df10s[mean_cols].T.iloc[:,0],
+                'y': df10s[mean_cols].iloc[0],
                 'type': 'bar',
                 'base': tMod,
                 'marker': {
@@ -577,12 +568,12 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                 'name': '2010-2019',
                 'error_y': {
                     'type': 'data',
-                    'array': df10s[sd_cols].T.iloc[:,0],
+                    'array': df10s[sd_cols].iloc[0],
                     'visible': variability
                 }
             },{
                 'x': Months,
-                'y': df40s[mean_cols].T.iloc[:,0],
+                'y': df40s[mean_cols].iloc[0],
                 'type': 'bar',
                 'base': tMod,
                 'marker': {
@@ -591,12 +582,12 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                 'name': '2040-2049',
                 'error_y': {
                     'type': 'data',
-                    'array': df40s[sd_cols].T.iloc[:,0],
+                    'array': df40s[sd_cols].iloc[0],
                     'visible': variability
                 }
             },{
                 'x': Months,
-                'y': df60s[mean_cols].T.iloc[:,0],
+                'y': df60s[mean_cols].iloc[0],
                 'type': 'bar',
                 'base': tMod,
                 'marker': {
@@ -605,12 +596,12 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                 'name': '2060-2069',
                 'error_y': {
                     'type': 'data',
-                    'array': df60s[sd_cols].T.iloc[:,0],
+                    'array': df60s[sd_cols].iloc[0],
                     'visible': variability
                 }
             },{
                 'x': Months,
-                'y': df90s[mean_cols].T.iloc[:,0],
+                'y': df90s[mean_cols].iloc[0],
                 'type': 'bar',
                 'base': tMod,
                 'marker': {
@@ -619,7 +610,7 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                 'name': '2090-2099',
                 'error_y': {
                     'type': 'data',
-                    'array': df90s[sd_cols].T.iloc[:,0],
+                    'array': df90s[sd_cols].iloc[0],
                     'visible': variability
                 }
             }],
@@ -672,7 +663,7 @@ def update_graph(community, variable, scenario, variability, units, baseline):
         #return {
             'data': [{
                 'x': Months,
-                'y': dfhist[mean_cols].T.iloc[:,0],
+                'y': baseline_df[mean_cols].iloc[0],
                 'type': 'bar',
                 'marker': {
                     'color': '#999999'
@@ -680,7 +671,7 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                 'name': 'Historical'
             },{
                 'x': Months,
-                'y': df10s[mean_cols].T.iloc[:,0],
+                'y': df10s[mean_cols].iloc[0],
                 'type': 'bar',
                 'marker': {
                     'color': '#bae4bc'
@@ -688,12 +679,12 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                 'name': '2010-2019',
                 'error_y': {
                     'type': 'data',
-                    'array': df10s[sd_cols].T.iloc[:,0],
+                    'array': df10s[sd_cols].iloc[0],
                     'visible': variability
                 }
             },{
                 'x': Months,
-                'y': df40s[mean_cols].T.iloc[:,0],
+                'y': df40s[mean_cols].iloc[0],
                 'type': 'bar',
                 'marker': {
                     'color': '#7bccc4'
@@ -701,12 +692,12 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                 'name': '2040-2049',
                 'error_y': {
                     'type': 'data',
-                    'array': df40s[sd_cols].T.iloc[:,0],
+                    'array': df40s[sd_cols].iloc[0],
                     'visible': variability
                 }
             },{
                 'x': Months,
-                'y': df60s[mean_cols].T.iloc[:,0],
+                'y': df60s[mean_cols].iloc[0],
                 'type': 'bar',
                 'marker': {
                     'color': '#43a2ca'
@@ -714,12 +705,12 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                 'name': '2060-2069',
                 'error_y': {
                     'type': 'data',
-                    'array': df60s[sd_cols].T.iloc[:,0],
+                    'array': df60s[sd_cols].iloc[0],
                     'visible': variability
                 }
             },{
                 'x': Months,
-                'y': df90s[mean_cols].T.iloc[:,0],
+                'y': df90s[mean_cols].iloc[0],
                 'type': 'bar',
                 'marker': {
                     'color': '#0868ac'
@@ -727,7 +718,7 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                 'name': '2090-2099',
                 'error_y': {
                     'type': 'data',
-                    'array': df90s[sd_cols].T.iloc[:,0],
+                    'array': df90s[sd_cols].iloc[0],
                     'visible': variability
                 }
             }],
