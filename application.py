@@ -41,7 +41,8 @@ community_selector = html.Div(
             children=[
                 dcc.Dropdown(
                     id='community',
-                    options=[{'label':name, 'value':name} for name in names]
+                    options=[{'label':name, 'value':name} for name in names],
+                    value='Fairbanks'
                 )
             ]
         )
