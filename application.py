@@ -1,5 +1,5 @@
 """
-SNAP Community Charts / Community Climate Outlooks
+SNAP Community Charts / Community Climate
 """
 
 import dash
@@ -24,7 +24,7 @@ co = pd.read_json('CommunityNames.json')
 names = list(co.community)
 
 app = dash.Dash(__name__)
-app.title = 'SNAP Community Climate Outlook Charts'
+app.title = 'SNAP Community Climate Charts'
 # AWS Elastic Beanstalk looks for application by default,
 # if this variable (application) isn't set you will get a WSGI error.
 application = app.server
@@ -50,47 +50,22 @@ community_selector = html.Div(
 )
 
 header_layout = html.Div(
-    className='container',
-    children=[
+  #  className='container',
+  #  children=[
         html.Div(
             className='columns',
             children=[
                 html.Div(
-                    className='column',
+                    className='column is-three-fifths',
                     children=[
-                        html.A(
-                            href='https://snap.uaf.edu',
-                            children=[
-                                html.Img(src='assets/SNAP_acronym_color.svg')
-                            ]
-                        ),
-                        html.Hr(),
-                        html.H1(
-                            'Community Climate Outlook Charts',
-                            className='title is-3'
-                        ),
-                        html.H2(
-                            """
-Explore temperature and precipitation projections for selected communities
-across Alaska and central and northwestern Canada. Because natural climate
-systems and models are variable, these graphs are best for studying trends,
-rather than for precisely predicting monthly or yearly values.
-    """,
-                            className='subtitle is-5'
-                        ),
                         community_selector
                     ]
-                ),
-                html.Div(
-                    className='column',
-                    children=[
-                        html.Img(src='assets/akcanada.svg')
-                    ]
+
                 )
             ]
 
         )
-    ]
+  #  ]
 )
 
 
@@ -260,7 +235,7 @@ download_all_csv = html.Div(
             className='control',
             children=[
                 html.A(
-                    'Dowload All Community Data (CSV)',
+                    'Download All Data and View Metadata',
                     className='button is-success',
                     id='download_all',
                     #href='http://data.snap.uaf.edu/data/Base/Other/Community_charts_tool_database/SNAP_comm_charts_export_20160926_fix_021119.csv'
@@ -406,7 +381,54 @@ This tool offers users a way to hide and show this variability:
     ]
 )
 
-footer = html.Footer('Footer content goes here', className='footer')
+footer = html.Footer(
+    className='footer has-text-centered',
+    children=[
+        html.Div(
+            children=[
+                html.A(
+                    href='https://snap.uaf.edu',
+                    target='_blank',
+                    className='level-item',
+                    children=[
+                        html.Img(
+                            src='assets/SNAP.svg'
+                        )
+                    ]
+                ),
+                html.A(
+                    href='https://uaf.edu/uaf/',
+                    target='_blank',
+                    className='level-item',
+                    children=[
+                        html.Img(
+                            src='assets/UAF.svg'
+                        )
+                    ]
+                ),
+                html.A(
+                    href='https://www.gov.nt.ca/',
+                    target='_blank',
+                    className='level-item',
+                    children=[
+                        html.Img(
+                            src='assets/NWT.svg'
+                        )
+                    ]
+                )
+            ]
+        ),
+        dcc.Markdown(
+            """
+This tool is part of an ongoing collaboration between SNAP and the Government of Northwest Territories. We are working to make a wide range of downscaled climate products that are easily accessible, flexibly usable, and fully interpreted and understandable to users in the Northwest Territories, while making these products relevant at a broad geographic scale.
+
+UA is an AA/EO employer and educational institution and prohibits illegal discrimination against any individual. [Statement of Nondiscrimination](https://www.alaska.edu/nondiscrimination/)
+            """,
+            className='content is-size-5'
+        )
+    ]
+)
+
 
 about_derivation_modal = html.Div(
     id='about-derivation-modal',
@@ -453,14 +475,75 @@ def section(content):
     """ Convenince function: Wrap content in a section div """
     return html.Div(className='section', children=[content])
 
-app.layout = html.Div([
-    section(header_layout),
-    section(form_layout),
-    section(graph_layout),
-    section(explanations),
-    footer,
-    about_derivation_modal
-], className="container")
+header_section = html.Div(
+    className='header',
+    children=[
+        html.Div(
+            className='container',
+            children=[
+                html.Div(
+                    className='section',
+                    children=[
+                        html.Div(
+                            className='header--logo',
+                            children=[
+                                html.A(
+                                    className='header--snap-link',
+                                    children=[
+                                        html.Img(src='assets/SNAP.svg')
+                                    ]
+                                )
+                            ]
+                        ),
+                        html.Div(
+                            className='header--map',
+                            children=[
+                                html.Div(
+                                    children=[
+                                        html.Img(src='assets/akcanada.svg')
+                                    ]
+                                )
+                            ]
+                        ),
+                        html.Div(
+                            className='header--titles',
+                            children=[
+                                html.H1(
+                                    'Community Climate Charts',
+                                    className='title is-2'
+                                ),
+                                html.H2(
+                                    'Explore temperature and precipitation projections for selected communities across Alaska and central and northwestern Canada.',
+                                    className='subtitle is-4'
+                                )
+                            ]
+
+                        )
+                    ]
+                )
+            ]
+        )
+    ]
+)
+
+main_layout = html.Div(
+    className='container',
+            children=[
+                header_layout,
+                form_layout,
+                graph_layout,
+                explanations
+            ]
+)
+
+app.layout = html.Div(
+    children=[
+        header_section,
+        main_layout,
+        footer
+    ]
+)
+
 
 
 @app.callback(
@@ -515,6 +598,17 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                 'rcp60':'Mid-Range Emissions (RCP 6.0)', 
                 'rcp85':'High-Range Emissions (RCP 8.5)'}
     emission_label = scenario_lu[scenario]
+
+    unit_conversion_lu = {
+        'temp': {
+            'imperial': '&deg;F',
+            'metric': '&deg;C'
+        },
+        'precip': {
+            'imperial': 'in',
+            'metric': 'mm'
+        }
+    }
 
     # baseline lookup
     baseline_lu = {'cru32':'CRU 3.2','prism':'Prism'}
@@ -606,8 +700,7 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                 'barmode': 'group',
                 'title': '<b>Average Monthly Temperature for ' + community + ', ' + region_label + '</b><br>Historical ' + baseline_label + ' and 5-Model Projected Average at 2km resolution, ' + emission_label + ' Scenario &nbsp;',
                 'titlefont': {
-                    'size': 20,
-                    'family': 'serif'
+                    'family': 'sans'
                 },
                 'annotations': [{
                     'x': 0.5004254919715793,
@@ -621,13 +714,13 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                     'zeroline': 'false',
                     'zerolinecolor': '#efefef',
                     'zerolinewidth': 0.5,
-                    'title': 'Temperature'
+                    'title': 'Temperature (' + unit_conversion_lu['temp'][units] + ')'
                 },
                 'margin': {
                     'l': 50,
                     'r': 50,
                     'b': 100,
-                    't': 50
+                    't': 100
                 },
                 'shapes': [{
                     'type': 'line',
@@ -714,8 +807,7 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                 'barmode': 'group',
                 'title': '<b>Average Monthly Precipitation for ' + community + ', ' + region_label + '</b><br>Historical ' + baseline_label + ' and 5-Model Projected Average at 2km resolution, ' + emission_label + ' Scenario &nbsp;',
                 'titlefont': {
-                    'size': 20,
-                    'family': 'serif'
+                    'family': 'sans'
                 },
                 'annotations': [{
                     'x': 0.5004254919715793,
@@ -726,13 +818,13 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                     'text': 'Due to variability among climate models and among years in a natural climate system, these graphs are useful for examining trends over time, rather than for precisely predicting monthly or yearly values.'
                 }],
                 'yaxis': {
-                    'title': 'Precipitation'
+                    'title': 'Precipitation (' + unit_conversion_lu['precip'][units] +')'
                 },
                 'margin': {
                     'l': 50,
                     'r': 50,
                     'b': 100,
-                    't': 50
+                    't': 100
                 }
             }
         }
