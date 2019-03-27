@@ -220,7 +220,7 @@ download_single_csv = html.Div(
             children=[
                 html.A(
                     'Download Single Community (CSV)',
-                    className='button is-success',
+                    className='button is-info',
                     id='download_single',
                     href=''
                 )
@@ -236,7 +236,7 @@ download_all_csv = html.Div(
             children=[
                 html.A(
                     'Download All Data and View Metadata',
-                    className='button is-success',
+                    className='button is-info',
                     id='download_all',
                     #href='http://data.snap.uaf.edu/data/Base/Other/Community_charts_tool_database/SNAP_comm_charts_export_20160926_fix_021119.csv'
                     href='http://ckan.snap.uaf.edu/dataset/community-charts-temperature-and-precipitation'
@@ -323,9 +323,11 @@ explanations = html.Div(
     className='container',
     children=[
         dcc.Markdown("""
+### Learn more about the variables used in this tool
+
 Due to variability among climate models and among years in a natural climate system, these graphs are useful for examining trends over time, rather than for precisely predicting monthly or yearly values.
 
-### How to interpret climate outlooks for your community
+#### How to interpret climate outlooks for your community
 
 You can examine SNAP community outlooks for certain key changes and threshold values—for example, higher mean monthly temperatures in the spring and fall may be of particular interest. This could signify any or all of these conditions:
 
@@ -337,18 +339,18 @@ Note: Precipitation may occur as either rain or snow, but is reported for all mo
 
 Warmer, drier spring weather may also be an indicator for increased fire risk. In many locations, winter temperatures are projected to increase dramatically. Warmer winters may favor growth of species that are less cold-hardy (including desirable crops and invasive species), or it may decrease snowpack and increase the frequency of rain-on-snow events that impact wildlife. Higher temperatures across all seasons will likely impact permafrost and land-fast ice.
 
-### Representative Concentration Pathways
+#### Representative Concentration Pathways
 
 RCPs describe paths to future climates based on atmospheric greenhouse gas concentrations. They represent four climate futures—scenarios—extrapolated out to the year 2100, based on a range of possible future human behaviors. RCPs provide a basis for comparison and a “common language” for modelers to share their work.
 
 The four RCP values of 2.6, 4.5, 6.0, and 8.5 indicate projected radiative forcing values—the difference between solar energy absorbed by Earth vs. energy radiated back to space— measured in watts per square meter. RCP X projects that in 2100 the concentration of greenhouse gases will be such that each square meter of Earth will absorb X times more solar energy than it did in 1750.
 
-* RCP 2.6—SNAP does not consider this pathway (emissions peak 2010–2020 and then decline) because it is unrealistic in light of current global emissions.
-* RCP 4.5—SNAP’s “low” scenario. Assumes that emissions peak in 2040 and radiative forcing stabilizes after 2100. 
-* RCP 6.0—SNAP’s “medium” scenario. Assumes that new technologies and socioeconomic strategies cause emissions to peak in 2080 and radiative forcing to stabilize after 2100.
-* RCP 8.5—SNAP’s “high” scenario. Emissions increase through the 21st century.
+* RCP 2.6 — SNAP does not consider this pathway (emissions peak 2010–2020 and then decline) because it is unrealistic in light of current global emissions.
+* RCP 4.5 — “low” scenario. Assumes that new technologies and socioeconomic strategies cause emissions to peak in 2040 and radiative forcing stabilizes after 2100. 
+* RCP 6.0 — “medium” scenario. Assumes that emissions peak in 2080 and radiative forcing to stabilize after 2100.
+* RCP 8.5 — “high” scenario. Emissions increase through the 21st century.
 
-### Historical Baseline
+#### Historical Baseline
 
 Making climate projections requires use of historical data as a starting point, or baseline. It’s challenging to estimate historical data across a map grid because these data are only available from a few climate stations across Alaska and western Canada. Also, stations are often clustered in low-lying communities rather than across remote locations such as mountain ranges. Ideally, estimates should be made at regular intervals, or on a grid.  
 
@@ -360,18 +362,19 @@ For comparison and a look at model uncertainty related to the challenges of crea
 * Baseline PRISM data and future projections downscaled using 2km PRISM grids
 * Baseline CRU data and future projections downscaled using ~18km CRU grids
 
-#### More details
+###### More details
 * [SNAP data sources](https://www.snap.uaf.edu/methods/data-sources)
 * [SNAP’s downscaling process](https://www.snap.uaf.edu/methods/downscaling)
 
-### Variability Among Models
+#### Variability Among Models
 
 A Global Climate Model (GCM) is a type of General Circulation Model that focuses on projections of climate change by simulating how Earth’s physical processes respond to increasing greenhouse gas concentrations. Slight variations between these models allow us to consider a range of possible future climate conditions. SNAP projections use 5 GCMs that perform best in the Arctic, as well as an average of the 5 selected models. 
 
 This tool offers users a way to hide and show this variability: 
 * Click "Range" to see a bar graph for your selected community. Notice the black lines extending above and below each bar. The bars represent the average (mean) values from all 5 models, and the black lines show the lowest and highest values among the 5 models used. Baseline years have no range values because they are derived directly from climate station data, rather than from the 5 models.
 * Click "Off" to hide range values and show only the 5-model average.
-#### More details
+
+###### More details
 * [SNAP’s model evaluation and selection process](https://www.snap.uaf.edu/methods/model-selection)
 * [General Circulation Models and Global Climate Models](https://www.sciencedaily.com/terms/global_climate_model.htm)
 
@@ -446,6 +449,8 @@ about_derivation_modal = html.Div(
             html.Section(className='modal-card-body', children=[
                 dcc.Markdown(
 """
+#### Learn more about the variables used in this tool
+
 **Data sources**: Historical PRISM and CRU TS 3.2 climatology data (1961-1990) and downscaled outputs averaged from five GCMs.  [Learn more about how we downscale climate data from global to regional scales](https://www.snap.uaf.edu/methods/downscaling).
 
 **We averaged results to smooth out short-term variability**. Results are averaged across decades to lessen the influence of normal year-to-year climate variability on projected values. Averaging also tends to make overall projection trends clearer. Uncertainty is associated with each of these graphed values, and stems from:
