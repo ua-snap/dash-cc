@@ -343,9 +343,8 @@ Warmer, drier spring weather may also be an indicator for increased fire risk. I
 
 RCPs describe paths to future climates based on atmospheric greenhouse gas concentrations. They represent four climate futures—scenarios—extrapolated out to the year 2100, based on a range of possible future human behaviors. RCPs provide a basis for comparison and a “common language” for modelers to share their work.
 
-The four RCP values of 2.6, 4.5, 6.0, and 8.5 indicate projected radiative forcing values—the difference between solar energy absorbed by Earth vs. energy radiated back to space— measured in watts per square meter. RCP X projects that in 2100 the concentration of greenhouse gases will be such that each square meter of Earth will absorb X times more solar energy than it did in 1750.
+The four RCP values of 4.5, 6.0, and 8.5 indicate projected radiative forcing values—the difference between solar energy absorbed by Earth vs. energy radiated back to space— measured in watts per square meter. RCP X projects that in 2100 the concentration of greenhouse gases will be such that each square meter of Earth will absorb X times more solar energy than it did in 1750.
 
-* RCP 2.6 — SNAP does not consider this pathway (emissions peak 2010–2020 and then decline) because it is unrealistic in light of current global emissions.
 * RCP 4.5 — “low” scenario. Assumes that new technologies and socioeconomic strategies cause emissions to peak in 2040 and radiative forcing stabilizes after 2100. 
 * RCP 6.0 — “medium” scenario. Assumes that emissions peak in 2080 and radiative forcing to stabilize after 2100.
 * RCP 8.5 — “high” scenario. Emissions increase through the 21st century.
@@ -643,7 +642,7 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                 'marker': {
                     'color': '#999999'
                 },
-                'name': 'Historical'
+                'name': 'Historical '
             },{
                 'x': Months,
                 'y': df10s[mean_cols].iloc[0],
@@ -652,7 +651,7 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                 'marker': {
                     'color': '#fecc5c'
                 },
-                'name': '2010-2019',
+                'name': '2010-2019 ',
                 'error_y': {
                     'type': 'data',
                     'array': df10s[sd_cols].iloc[0],
@@ -666,7 +665,7 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                 'marker': {
                     'color': '#fd8d3c'
                 },
-                'name': '2040-2049',
+                'name': '2040-2049 ',
                 'error_y': {
                     'type': 'data',
                     'array': df40s[sd_cols].iloc[0],
@@ -680,7 +679,7 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                 'marker': {
                     'color': '#f03b20'
                 },
-                'name': '2060-2069',
+                'name': '2060-2069 ',
                 'error_y': {
                     'type': 'data',
                     'array': df60s[sd_cols].iloc[0],
@@ -694,7 +693,7 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                 'marker': {
                     'color': '#bd0026'
                 },
-                'name': '2090-2099',
+                'name': '2090-2099 ',
                 'error_y': {
                     'type': 'data',
                     'array': df90s[sd_cols].iloc[0],
@@ -707,13 +706,22 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                 'titlefont': {
                     'family': 'sans'
                 },
-                'annotations': [{
-                    'x': 0.5004254919715793,
-                    'y': -0.16191064079952971,
+                'annotations': [
+                {
+                    'x': 0.5,
+                    'y': -0.20,
                     'xref': 'paper',
                     'yref': 'paper',
                     'showarrow': False,
-                    'text': 'Due to variability among climate models and among years in a natural climate system, these graphs are useful for examining trends over time, rather than for precisely predicting monthly or yearly values.'
+                    'text': 'These plots are useful for examining possible trends over time, rather than for precisely predicting values.'
+                },
+                {
+                    'x': 0.5,
+                    'y': -0.26,
+                    'xref': 'paper',
+                    'yref': 'paper',
+                    'showarrow': False,
+                    'text': 'Credit: Scenarios Network for Alaska + Arctic Planning, University of Alaska Fairbanks.'
                 }],
                 'yaxis': {
                     'zeroline': 'false',
@@ -724,7 +732,7 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                 'margin': {
                     'l': 50,
                     'r': 50,
-                    'b': 100,
+                    'b': 130,
                     't': 100
                 },
                 'shapes': [{
@@ -754,7 +762,7 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                 'marker': {
                     'color': '#999999'
                 },
-                'name': 'Historical'
+                'name': 'Historical '
             },{
                 'x': Months,
                 'y': df10s[mean_cols].iloc[0],
@@ -762,7 +770,7 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                 'marker': {
                     'color': '#bae4bc'
                 },
-                'name': '2010-2019',
+                'name': '2010-2019 ',
                 'error_y': {
                     'type': 'data',
                     'array': df10s[sd_cols].iloc[0],
@@ -775,7 +783,7 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                 'marker': {
                     'color': '#7bccc4'
                 },
-                'name': '2040-2049',
+                'name': '2040-2049 ',
                 'error_y': {
                     'type': 'data',
                     'array': df40s[sd_cols].iloc[0],
@@ -788,7 +796,7 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                 'marker': {
                     'color': '#43a2ca'
                 },
-                'name': '2060-2069',
+                'name': '2060-2069 ',
                 'error_y': {
                     'type': 'data',
                     'array': df60s[sd_cols].iloc[0],
@@ -801,7 +809,7 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                 'marker': {
                     'color': '#0868ac'
                 },
-                'name': '2090-2099',
+                'name': '2090-2099 ',
                 'error_y': {
                     'type': 'data',
                     'array': df90s[sd_cols].iloc[0],
@@ -814,13 +822,22 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                 'titlefont': {
                     'family': 'sans'
                 },
-                'annotations': [{
-                    'x': 0.5004254919715793,
-                    'y': -0.16191064079952971,
+                'annotations': [
+                {
+                    'x': 0.5,
+                    'y': -0.20,
                     'xref': 'paper',
                     'yref': 'paper',
                     'showarrow': False,
-                    'text': 'Due to variability among climate models and among years in a natural climate system, these graphs are useful for examining trends over time, rather than for precisely predicting monthly or yearly values.'
+                    'text': 'These plots are useful for examining possible trends over time, rather than for precisely predicting values.'
+                },
+                {
+                    'x': 0.5,
+                    'y': -0.26,
+                    'xref': 'paper',
+                    'yref': 'paper',
+                    'showarrow': False,
+                    'text': 'Credit: Scenarios Network for Alaska + Arctic Planning, University of Alaska Fairbanks.'
                 }],
                 'yaxis': {
                     'title': 'Precipitation (' + unit_conversion_lu['precip'][units] +')'
@@ -828,7 +845,7 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                 'margin': {
                     'l': 50,
                     'r': 50,
-                    'b': 100,
+                    'b': 130,
                     't': 100
                 }
             }
