@@ -141,7 +141,7 @@ baseline_radio = html.Div(
 rcp_radio = html.Div(
     className='field',
     children=[
-        html.Label('Representative Concentration Pathways', className='label'),
+        html.Label('Scenarios (RCPs)', className='label'),
         html.Div(
             className='control',
             children=[
@@ -293,9 +293,9 @@ form_layout = html.Div(
 )
 config = {
     'toImageButtonOptions': {
-        'title': 'Export to SVG',
-        'format': 'svg',
-        'filename': 'custom_image',
+        'title': 'Export to PNG',
+        'format': 'png',
+        'filename': 'CommunityChart',
         'height': 600,
         'width': 1600,
         'scale': 1
@@ -427,7 +427,7 @@ This tool is part of an ongoing collaboration between SNAP and the Government of
 
 UA is an AA/EO employer and educational institution and prohibits illegal discrimination against any individual. [Statement of Nondiscrimination](https://www.alaska.edu/nondiscrimination/)
             """,
-            className='content is-size-5'
+            className='content is-size-6'
         )
     ]
 )
