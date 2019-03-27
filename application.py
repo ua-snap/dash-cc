@@ -730,8 +730,8 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                     'title': 'Temperature (' + unit_conversion_lu['temp'][units] + ')'
                 },
                 'margin': {
-                    'l': 50,
-                    'r': 50,
+                    'l': 80,
+                    'r': 80,
                     'b': 130,
                     't': 100
                 },
@@ -843,8 +843,8 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                     'title': 'Precipitation (' + unit_conversion_lu['precip'][units] +')'
                 },
                 'margin': {
-                    'l': 50,
-                    'r': 50,
+                    'l': 80,
+                    'r': 80,
                     'b': 130,
                     't': 100
                 }
