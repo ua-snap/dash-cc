@@ -704,7 +704,7 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                 'barmode': 'group',
                 'title': '<b>Average Monthly Temperature for ' + community + ', ' + region_label + '</b><br>Historical ' + baseline_label + ' and 5-Model Projected Average at 2km resolution, ' + emission_label + ' Scenario &nbsp;',
                 'titlefont': {
-                    'family': 'sans'
+                    'family': 'Open Sans'
                 },
                 'annotations': [
                 {
@@ -820,7 +820,7 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                 'barmode': 'group',
                 'title': '<b>Average Monthly Precipitation for ' + community + ', ' + region_label + '</b><br>Historical ' + baseline_label + ' and 5-Model Projected Average at 2km resolution, ' + emission_label + ' Scenario &nbsp;',
                 'titlefont': {
-                    'family': 'sans'
+                    'family': 'Open Sans'
                 },
                 'annotations': [
                 {
