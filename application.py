@@ -517,7 +517,7 @@ header_section = html.Div(
                                     className='title is-2'
                                 ),
                                 html.H2(
-                                    'Explore temperature and precipitation projections for selected communities across Alaska and central and northwestern Canada.',
+                                    'Explore temperature and precipitation projections for communities across Alaska and Western Canada.',
                                     className='subtitle is-4'
                                 )
                             ]
