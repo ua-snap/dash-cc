@@ -507,12 +507,17 @@ graph_layout = html.Div(
 
 main_layout = html.Div(
     className='container',
+    children=[
+        html.Div(
+            className='section',
             children=[
                 header_layout,
                 form_layout,
                 graph_layout,
                 explanations
             ]
+        )
+    ]
 )
 
 layout = html.Div(

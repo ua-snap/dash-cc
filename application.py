@@ -86,7 +86,7 @@ def update_graph(community_raw, variable, scenario, variability, units, baseline
 
     variability = variability == 'on'  # convert to boolean for use in configuring graph
     community = re.sub('[^A-Za-z0-9]+', '', community_raw)
-    comm_file = './data/' + community + '_SNAP_comm_charts_export.csv'
+    comm_file = 'https://s3-us-west-2.amazonaws.com/community-charts/data/' + community + '_SNAP_comm_charts_export.csv'
     df = pd.read_csv(comm_file)
 
     # [ML] maybe hardwire these? Not a huge time sink, but it could be made cleaner
