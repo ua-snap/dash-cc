@@ -19,6 +19,8 @@ import time
 import os
 from gui import layout
 
+path_prefix = os.environ['REQUESTS_PATHNAME_PREFIX']
+
 app = dash.Dash(__name__)
 app.title = 'SNAP Community Climate Charts'
 # AWS Elastic Beanstalk looks for application by default,
@@ -373,9 +375,9 @@ def update_graph(community_raw, variable, scenario, variability, units, baseline
     [Input('community', 'value')])
 
 def update_download_link(comm):
-    return '/dash/dlCSV?value={}'.format(comm)
+    return path_prefix + '/dash/dlCSV?value={}'.format(comm)
 
-@app.server.route('/dash/dlCSV') 
+@app.server.route(path_prefix + '/dash/dlCSV') 
 def download_csv():
     value = flask.request.args.get('value')
     value = h.unescape(value)
