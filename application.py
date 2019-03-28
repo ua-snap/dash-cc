@@ -1,6 +1,7 @@
 """
 SNAP Community Charts / Community Climate
 """
+# pylint: disable=invalid-name, import-error, line-too-long, too-many-arguments
 
 import dash
 from dash.dependencies import Input, Output, State
@@ -26,6 +27,42 @@ application = app.server
 
 Months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 mean_cols = []
+
+# The next config sets a relative base path so we can deploy
+# with custom URLs.
+# https://community.plot.ly/t/dash-error-loading-layout/8139/6
+app.config.requests_pathname_prefix = os.environ['REQUESTS_PATHNAME_PREFIX']
+
+# Customize this layout to include Google Analytics
+gtag_id = os.environ['GTAG_ID']
+app.index_string = f'''
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-3978613-12"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){{dataLayer.push(arguments);}}
+          gtag('js', new Date());
+
+          gtag('config', '{gtag_id}');
+        </script>
+        {{%metas%}}
+        <title>{{%title%}}</title>
+        {{%favicon%}}
+        {{%css%}}
+    </head>
+    <body>
+        {{%app_entry%}}
+        <footer>
+            {{%config%}}
+            {{%scripts%}}
+            {{%renderer%}}
+        </footer>
+    </body>
+</html>
+'''
 
 app.layout = layout
 
