@@ -380,7 +380,7 @@ def download_csv():
     value = flask.request.args.get('value')
     value = h.unescape(value)
     value = re.sub('[^A-Za-z0-9]+', '', value)
-    return send_file('./data/' + value + '_SNAP_comm_charts_export.csv',
+    return send_file('https://s3-us-west-2.amazonaws.com/community-charts/data/' + value + '_SNAP_comm_charts_export.csv',
                      mimetype='text/csv',
                      attachment_filename=value + '_charts.csv',
                      as_attachment=True)
