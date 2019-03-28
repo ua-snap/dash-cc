@@ -7,30 +7,24 @@ To run the application locally, install [pipenv](https://pipenv.readthedocs.io/e
 ```bash
 cd /path/to/this/repo
 pipenv install
-pipenv run python app.py
+export GTAG_ID='abc' # google analytics ID, nonce for dev
+export REQUESTS_PATHNAME_PREFIX='/' # see below for more info
+pipenv run python application.py
 ```
 
-The application will be available at http://127.0.0.1:8080/.
+The application will be available at [http://127.0.0.1:8080/](http://127.0.0.1:8080/).
 
-## Deploy to AWS EB
+## Deployment on AWS
 
 Before deploying, update the `requirements.txt` file:
 
 ```sh
 pipenv clean
 pipenv run pip freeze > requirements.txt
+git commit -am'updating requirements.txt'
 ```
 
-Environment variables to configure for this application:
+When deploying on AWS Elastic Beanstalk, a few environment variables must be set:
 
-```
-DEBUG=False # set to True to enable debug on the server
-```
-
-Static path mappings:
-
-```
-/assets -> assets
-```
-
-These configurations are specified in the `.ebextensions/options.config` file.
+ * `GTAG_ID`: property ID for Google Analytics, no default value
+ * `REQUESTS_PATHNAME_PREFIX`: Path prefix on host, should be `/` for local development and `/tools/community-charts/` for current deploy on AWS
