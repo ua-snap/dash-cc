@@ -12,6 +12,8 @@ import pandas as pd
 df = None
 co = pd.read_json('CommunityNames.json')
 names = list(co.community)
+#path_prefix = os.environ['REQUESTS_PATHNAME_PREFIX']
+path_prefix = ''
 
 community_selector = html.Div(
     className='field',
@@ -316,8 +318,9 @@ For comparison and a look at model uncertainty related to the challenges of crea
 A Global Climate Model (GCM) is a type of General Circulation Model that focuses on projections of climate change by simulating how Earth’s physical processes respond to increasing greenhouse gas concentrations. Slight variations between these models allow us to consider a range of possible future climate conditions. SNAP projections use 5 GCMs that perform best in the Arctic, as well as an average of the 5 selected models. 
 
 This tool offers users a way to hide and show this variability: 
-* Click "Range" to see a bar graph for your selected community. Notice the black lines extending above and below each bar. The bars represent the average (mean) values from all 5 models, and the black lines show the lowest and highest values among the 5 models used. Baseline years have no range values because they are derived directly from climate station data, rather than from the 5 models.
-* Click "Off" to hide range values and show only the 5-model average.
+* Click Inter-model Variability. Notice the black lines extending above and below each bar. The shaded bars represent the average (mean) values from all 5 models, and the black lines show the lowest and highest values among the 5 models used. Baseline years have no variability values because they are derived directly from climate station data, rather than from the 5 models.
+* Click "Off" to hide variability values and show only the 5-model average.
+
 
 ###### More details
 * [SNAP’s model evaluation and selection process](https://www.snap.uaf.edu/methods/model-selection)
@@ -430,39 +433,43 @@ header_section = html.Div(
                     className='section',
                     children=[
                         html.Div(
-                            className='header--logo',
-                            children=[
-                                html.A(
-                                    className='header--snap-link',
-                                    children=[
-                                        html.Img(src='assets/SNAP.svg')
-                                    ]
-                                )
-                            ]
-                        ),
-                        html.Div(
-                            className='header--map',
+                            className='columns',
                             children=[
                                 html.Div(
+                                    className='header--logo',
                                     children=[
-                                        html.Img(src='assets/akcanada.svg')
+                                        html.A(
+                                            className='header--snap-link',
+                                            children=[
+                                                html.Img(src=path_prefix + 'assets/SNAP_acronym_color_square.svg')
+                                            ]
+                                        )
+                                    ]
+                                ),
+                                html.Div(
+                                    className='header--titles',
+                                    children=[
+                                        html.H1(
+                                            'Community Climate Charts',
+                                            className='title is-2'
+                                        ),
+                                        html.H2(
+                                            'Explore temperature and precipitation projections for communities across Alaska and Western Canada.',
+                                            className='subtitle is-4'
+                                        )
+                                    ]
+                                ),
+                                html.Div(
+                                    className='header--map',
+                                    children=[
+                                        html.Div(
+                                            children=[
+                                                html.Img(src='assets/akcanada.svg')
+                                            ]
+                                        )
                                     ]
                                 )
                             ]
-                        ),
-                        html.Div(
-                            className='header--titles',
-                            children=[
-                                html.H1(
-                                    'Community Climate Charts',
-                                    className='title is-2'
-                                ),
-                                html.H2(
-                                    'Explore temperature and precipitation projections for communities across Alaska and Western Canada.',
-                                    className='subtitle is-4'
-                                )
-                            ]
-
                         )
                     ]
                 )

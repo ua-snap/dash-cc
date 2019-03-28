@@ -77,9 +77,9 @@ def update_graph(community_raw, variable, scenario, variability, units, baseline
         baseline_df[mean_cols] = baseline_df[mean_cols]* imperial_conversion_lu[variable]
 
     # scenario lookup
-    scenario_lu = {'rcp45':'Low-Range Emissions (RCP 4.5)', 
-                'rcp60':'Mid-Range Emissions (RCP 6.0)', 
-                'rcp85':'High-Range Emissions (RCP 8.5)'}
+    scenario_lu = {'rcp45':'Low Emissions (RCP 4.5)', 
+                'rcp60':'Mid Emissions (RCP 6.0)', 
+                'rcp85':'High Emissions (RCP 8.5)'}
     emission_label = scenario_lu[scenario]
 
     # unit lookup
@@ -95,7 +95,7 @@ def update_graph(community_raw, variable, scenario, variability, units, baseline
     }
 
     # baseline lookup
-    baseline_lu = {'cru32':'CRU 3.2','prism':'Prism'}
+    baseline_lu = {'cru32':'CRU 3.2','prism':'PRISM'}
     baseline_label = baseline_lu[baseline]
 
     region_label = dff['region'].iloc[0]

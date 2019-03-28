@@ -34,12 +34,10 @@ label.label:not(:last-child) {
 
 .header--logo {
 	width: 6.8em;
-	float: left;
 }
 
 .header--map {
 	width: 15.0em;
-	float: right;
 }
 
 .header--headers {
