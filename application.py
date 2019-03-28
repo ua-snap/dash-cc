@@ -40,15 +40,15 @@ app.layout = layout
         Input('baseline', 'value')
     ]
 )
-def update_graph(community, variable, scenario, variability, units, baseline):
+def update_graph(community_raw, variable, scenario, variability, units, baseline):
     """ Update the graph from user input """
 
     # Default!
-    if community is None:
-        community = 'Fairbanks'
+    if community_raw is None:
+        community_raw = 'Fairbanks'
 
     variability = variability == 'on'  # convert to boolean for use in configuring graph
-    community = re.sub('[^A-Za-z0-9]+', '', community)
+    community = re.sub('[^A-Za-z0-9]+', '', community_raw)
     comm_file = './data/' + community + '_SNAP_comm_charts_export.csv'
     df = pd.read_csv(comm_file)
 
@@ -182,7 +182,7 @@ def update_graph(community, variable, scenario, variability, units, baseline):
             }],
             'layout': {
                 'barmode': 'group',
-                'title': '<b>Average Monthly Temperature for ' + community + ', ' + region_label + '</b><br>Historical ' + baseline_label + ' and 5-Model Projected Average at 2km resolution, ' + emission_label + ' Scenario &nbsp;',
+                'title': '<b>Average Monthly Temperature for ' + community_raw + ', ' + region_label + '</b><br>Historical ' + baseline_label + ' and 5-Model Projected Average at 2km resolution, ' + emission_label + ' Scenario &nbsp;',
                 'titlefont': {
                     'family': 'Open Sans'
                 },
@@ -298,7 +298,7 @@ def update_graph(community, variable, scenario, variability, units, baseline):
             }],
             'layout': {
                 'barmode': 'group',
-                'title': '<b>Average Monthly Precipitation for ' + community + ', ' + region_label + '</b><br>Historical ' + baseline_label + ' and 5-Model Projected Average at 2km resolution, ' + emission_label + ' Scenario &nbsp;',
+                'title': '<b>Average Monthly Precipitation for ' + community_raw + ', ' + region_label + '</b><br>Historical ' + baseline_label + ' and 5-Model Projected Average at 2km resolution, ' + emission_label + ' Scenario &nbsp;',
                 'titlefont': {
                     'family': 'Open Sans'
                 },
