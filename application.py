@@ -10,7 +10,7 @@ import dash_html_components as html
 import plotly
 import plotly.io as pio
 import html as h
-from flask import send_file
+from flask import redirect,send_file
 import flask
 import re
 
@@ -380,10 +380,7 @@ def download_csv():
     value = flask.request.args.get('value')
     value = h.unescape(value)
     value = re.sub('[^A-Za-z0-9]+', '', value)
-    return send_file('https://s3-us-west-2.amazonaws.com/community-charts/data/' + value + '_SNAP_comm_charts_export.csv',
-                     mimetype='text/csv',
-                     attachment_filename=value + '_charts.csv',
-                     as_attachment=True)
+    return redirect('https://s3-us-west-2.amazonaws.com/community-charts/data/' + value + '_SNAP_comm_charts_export.csv')
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8080))
