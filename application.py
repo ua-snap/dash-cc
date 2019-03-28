@@ -102,7 +102,7 @@ def update_graph(community_raw, variable, scenario, variability, units, baseline
     # subset to the data we want to display using the callback variables
     dff = df[(df['community'] == community) & (df['resolution'] == '2km') & \
             (df['type'] == variable_lu[variable]) & (df['scenario'] == scenario) ]
-    cols = mean_cols+sd_cols+['daterange','region'] # fun with list appending! 
+    cols = mean_cols+sd_cols+['daterange','region'] # fun with list appending!
     dff = dff[cols] # grab just the cols we need
     baseline_df = df[(df['community'] == community) & (df['resolution'] == '2km') &\
                      (df['type'] == variable_lu[variable]) & (df['scenario'] == baseline.lower()) ]
@@ -116,8 +116,8 @@ def update_graph(community_raw, variable, scenario, variability, units, baseline
         baseline_df[mean_cols] = baseline_df[mean_cols]* imperial_conversion_lu[variable]
 
     # scenario lookup
-    scenario_lu = {'rcp45':'Low Emissions (RCP 4.5)', 
-                'rcp60':'Mid Emissions (RCP 6.0)', 
+    scenario_lu = {'rcp45':'Low Emissions (RCP 4.5)',
+                'rcp60':'Mid Emissions (RCP 6.0)',
                 'rcp85':'High Emissions (RCP 8.5)'}
     emission_label = scenario_lu[scenario]
 
@@ -264,7 +264,7 @@ def update_graph(community_raw, variable, scenario, variability, units, baseline
             }
         }
 
-        
+
         figure['layout']['yaxis']['zeroline'] = False
         #img_bytes = pio.to_image(figure, format='svg')
         #pio.write_image(figure, 'images/fig1.png', width=1600, height=600, scale=2)
@@ -375,9 +375,9 @@ def update_graph(community_raw, variable, scenario, variability, units, baseline
     [Input('community', 'value')])
 
 def update_download_link(comm):
-    return path_prefix + 'dash/dlCSV?value={}'.format(comm)
+    return path_prefix + '/dash/dlCSV?value={}'.format(comm)
 
-@app.server.route(path_prefix + 'dash/dlCSV') 
+@app.server.route('/dash/dlCSV') 
 def download_csv():
     value = flask.request.args.get('value')
     value = h.unescape(value)
