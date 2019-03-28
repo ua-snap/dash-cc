@@ -12,8 +12,7 @@ import pandas as pd
 df = None
 co = pd.read_json('CommunityNames.json')
 names = list(co.community)
-#path_prefix = os.environ['REQUESTS_PATHNAME_PREFIX']
-path_prefix = ''
+path_prefix = os.environ['REQUESTS_PATHNAME_PREFIX']
 
 community_selector = html.Div(
     className='field',
@@ -343,7 +342,7 @@ footer = html.Footer(
                     className='level-item',
                     children=[
                         html.Img(
-                            src='assets/SNAP.svg'
+                            src=path_prefix + 'assets/SNAP.svg'
                         )
                     ]
                 ),
@@ -353,7 +352,7 @@ footer = html.Footer(
                     className='level-item',
                     children=[
                         html.Img(
-                            src='assets/UAF.svg'
+                            src=path_prefix + 'assets/UAF.svg'
                         )
                     ]
                 ),
@@ -363,7 +362,7 @@ footer = html.Footer(
                     className='level-item',
                     children=[
                         html.Img(
-                            src='assets/NWT.svg'
+                            src=path_prefix + 'assets/NWT.svg'
                         )
                     ]
                 )
@@ -464,7 +463,7 @@ header_section = html.Div(
                                     children=[
                                         html.Div(
                                             children=[
-                                                html.Img(src='assets/akcanada.svg')
+                                                html.Img(src=path_prefix + 'assets/akcanada.svg')
                                             ]
                                         )
                                     ]
