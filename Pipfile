@@ -1,9 +1,16 @@
-[requires]
-python_version = "3.6"
+[[source]]
+
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
 
 [packages]
-dash = "*"
-dash_renderer = "*"
-dash-html-components = "*"
-dash-core-components = "*"
+
 pandas = "*"
+dash = ">=0.39.0"
+
+[dev-packages]
+
+[requires]
+python_version = "3.6"
