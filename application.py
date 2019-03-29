@@ -97,14 +97,14 @@ def update_graph(community_raw, variable, scenario, variability, units, baseline
     min_cols = [col for col in df.columns if 'Min' in col]
     max_cols = [col for col in df.columns if 'Max' in col]
 
+    resolution_lu = {'cru32': '10min', 'prism': '2km' }
     variable_lu = {'temp':'Temperature', 'precip':'Precipitation'}
-
     # subset to the data we want to display using the callback variables
-    dff = df[(df['community'] == community) & (df['resolution'] == '10min') & \
+    dff = df[(df['community'] == community) & (df['resolution'] == resolution_lu[baseline]) & \
             (df['type'] == variable_lu[variable]) & (df['scenario'] == scenario) ]
     cols = mean_cols+sd_cols+['daterange','region'] # fun with list appending!
     dff = dff[cols] # grab just the cols we need
-    baseline_df = df[(df['community'] == community) & (df['resolution'] == '10min') &\
+    baseline_df = df[(df['community'] == community) & (df['resolution'] == resolution_lu[baseline]) &\
                      (df['type'] == variable_lu[variable]) & (df['scenario'] == baseline.lower()) ]
     baseline_df = baseline_df[mean_cols] # grab just the cols we need
 
@@ -221,7 +221,7 @@ def update_graph(community_raw, variable, scenario, variability, units, baseline
             }],
             'layout': {
                 'barmode': 'group',
-                'title': '<b>Average Monthly Temperature for ' + community_raw + ', ' + region_label + '</b><br>Historical ' + baseline_label + ' and 5-Model Projected Average at 10min resolution, ' + emission_label + ' Scenario &nbsp;',
+                'title': '<b>Average Monthly Temperature for ' + community_raw + ', ' + region_label + '</b><br>Historical ' + baseline_label + ' and 5-Model Projected Average at ' + resolution_lu[baseline] + ' resolution, ' + emission_label + ' Scenario &nbsp;',
                 'titlefont': {
                     'family': 'Open Sans'
                 },
@@ -337,7 +337,7 @@ def update_graph(community_raw, variable, scenario, variability, units, baseline
             }],
             'layout': {
                 'barmode': 'group',
-                'title': '<b>Average Monthly Precipitation for ' + community_raw + ', ' + region_label + '</b><br>Historical ' + baseline_label + ' and 5-Model Projected Average at 10min resolution, ' + emission_label + ' Scenario &nbsp;',
+                'title': '<b>Average Monthly Precipitation for ' + community_raw + ', ' + region_label + '</b><br>Historical ' + baseline_label + ' and 5-Model Projected Average at ' + resolution_lu[baseline] + ' resolution, ' + emission_label + ' Scenario &nbsp;',
                 'titlefont': {
                     'family': 'Open Sans'
                 },
