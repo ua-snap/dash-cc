@@ -439,9 +439,11 @@ header_section = html.Div(
                                     children=[
                                         html.A(
                                             className='header--snap-link',
+                                            href='https://www.snap.uaf.edu',
                                             children=[
                                                 html.Img(src=path_prefix + 'assets/SNAP_acronym_color_square.svg')
                                             ]
+                                            
                                         )
                                     ]
                                 ),
