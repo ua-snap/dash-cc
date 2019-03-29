@@ -100,11 +100,11 @@ def update_graph(community_raw, variable, scenario, variability, units, baseline
     variable_lu = {'temp':'Temperature', 'precip':'Precipitation'}
 
     # subset to the data we want to display using the callback variables
-    dff = df[(df['community'] == community) & (df['resolution'] == '2km') & \
+    dff = df[(df['community'] == community) & (df['resolution'] == '10min') & \
             (df['type'] == variable_lu[variable]) & (df['scenario'] == scenario) ]
     cols = mean_cols+sd_cols+['daterange','region'] # fun with list appending!
     dff = dff[cols] # grab just the cols we need
-    baseline_df = df[(df['community'] == community) & (df['resolution'] == '2km') &\
+    baseline_df = df[(df['community'] == community) & (df['resolution'] == '10min') &\
                      (df['type'] == variable_lu[variable]) & (df['scenario'] == baseline.lower()) ]
     baseline_df = baseline_df[mean_cols] # grab just the cols we need
 
@@ -221,7 +221,7 @@ def update_graph(community_raw, variable, scenario, variability, units, baseline
             }],
             'layout': {
                 'barmode': 'group',
-                'title': '<b>Average Monthly Temperature for ' + community_raw + ', ' + region_label + '</b><br>Historical ' + baseline_label + ' and 5-Model Projected Average at 2km resolution, ' + emission_label + ' Scenario &nbsp;',
+                'title': '<b>Average Monthly Temperature for ' + community_raw + ', ' + region_label + '</b><br>Historical ' + baseline_label + ' and 5-Model Projected Average at 10min resolution, ' + emission_label + ' Scenario &nbsp;',
                 'titlefont': {
                     'family': 'Open Sans'
                 },
@@ -337,7 +337,7 @@ def update_graph(community_raw, variable, scenario, variability, units, baseline
             }],
             'layout': {
                 'barmode': 'group',
-                'title': '<b>Average Monthly Precipitation for ' + community_raw + ', ' + region_label + '</b><br>Historical ' + baseline_label + ' and 5-Model Projected Average at 2km resolution, ' + emission_label + ' Scenario &nbsp;',
+                'title': '<b>Average Monthly Precipitation for ' + community_raw + ', ' + region_label + '</b><br>Historical ' + baseline_label + ' and 5-Model Projected Average at 10min resolution, ' + emission_label + ' Scenario &nbsp;',
                 'titlefont': {
                     'family': 'Open Sans'
                 },
