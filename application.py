@@ -139,18 +139,13 @@ def update_graph(community_raw, variable, scenario, variability, units, baseline
 
     region_label = dff['region'].iloc[0]
 
-    # subset to some dataframes for plotting. This can be improved.
-    df10s = dff[dff['daterange'] == '2010-2019']
-    df40s = dff[dff['daterange'] == '2040-2049']
-    df60s = dff[dff['daterange'] == '2060-2069']
-    df90s = dff[dff['daterange'] == '2090-2099']
-
     # set the freezing line for TEMPERATURE based on imperial or metric
     tMod = 0
     if variable == 'temp':
         if units == 'imperial':
             tMod = 32
-
+        # Lookup table for included decades (default: 2010,2040,2060,2090)
+        df_lu = {'2010-2019': {'color': '#fecc5c'},'2040-2049': {'color': '#fd8d3c'},'2060-2069': {'color': '#f03b20'},'2090-2099': {'color': '#bd0026'}}
         figure = {
             'data': [{
                 'x': Months,
@@ -161,65 +156,27 @@ def update_graph(community_raw, variable, scenario, variability, units, baseline
                     'color': '#999999'
                 },
                 'name': 'Historical '
-            },{
+            }]
+        }
+        for key in df_lu.keys():
+            df_l = dff[dff['daterange'] == key]
+            figure['data'].append({
                 'x': Months,
-                'y': df10s[mean_cols].iloc[0],
+                'y': df_l[mean_cols].iloc[0],
                 'type': 'bar',
                 'base': tMod,
                 'marker': {
-                    'color': '#fecc5c'
+                    'color': df_lu[key]['color']
                 },
                 'name': '2010-2019 ',
                 'error_y': {
                     'type': 'data',
-                    'array': df10s[sd_cols].iloc[0],
+                    'array': df_l[sd_cols].iloc[0],
                     'visible': variability
                 }
-            },{
-                'x': Months,
-                'y': df40s[mean_cols].iloc[0],
-                'type': 'bar',
-                'base': tMod,
-                'marker': {
-                    'color': '#fd8d3c'
-                },
-                'name': '2040-2049 ',
-                'error_y': {
-                    'type': 'data',
-                    'array': df40s[sd_cols].iloc[0],
-                    'visible': variability
-                }
-            },{
-                'x': Months,
-                'y': df60s[mean_cols].iloc[0],
-                'type': 'bar',
-                'base': tMod,
-                'marker': {
-                    'color': '#f03b20'
-                },
-                'name': '2060-2069 ',
-                'error_y': {
-                    'type': 'data',
-                    'array': df60s[sd_cols].iloc[0],
-                    'visible': variability
-                }
-            },{
-                'x': Months,
-                'y': df90s[mean_cols].iloc[0],
-                'type': 'bar',
-                'base': tMod,
-                'marker': {
-                    'color': '#bd0026'
-                },
-                'name': '2090-2099 ',
-                'error_y': {
-                    'type': 'data',
-                    'array': df90s[sd_cols].iloc[0],
-                    'visible': variability
-                }
-            }],
-            'layout': {
-                'barmode': 'group',
+            })
+        layout = {
+                'barmode': 'grouped',
                 'title': '<b>Average Monthly Temperature for ' + community_raw + ', ' + region_label + '</b><br>Historical ' + baseline_label + ' and 5-Model Projected Average at ' + resolution_lu[baseline] + ' resolution, ' + emission_label + ' Scenario &nbsp;',
                 'titlefont': {
                     'family': 'Open Sans'
@@ -261,16 +218,11 @@ def update_graph(community_raw, variable, scenario, variability, units, baseline
                 }]
 
             }
-        }
-
-
-        figure['layout']['yaxis']['zeroline'] = False
-        #img_bytes = pio.to_image(figure, format='svg')
-        #pio.write_image(figure, 'images/fig1.png', width=1600, height=600, scale=2)
-        figure['layout']['yaxis']['zeroline'] = 'false'
-        figure['layout']['barmode'] = 'grouped'
+        figure['layout'] = layout
         return figure
     else:
+        # Lookup table for included decades (default: 2010,2040,2060,2090)
+        df_lu = {'2010-2019': {'color': '#bae4bc'},'2040-2049': {'color': '#7bccc4'},'2060-2069': {'color': '#43a2ca'},'2090-2099': {'color': '#0868ac'}}
         figure = {
             'data': [{
                 'x': Months,
@@ -280,61 +232,26 @@ def update_graph(community_raw, variable, scenario, variability, units, baseline
                     'color': '#999999'
                 },
                 'name': 'Historical '
-            },{
+            }]
+        }
+        for key in df_lu.keys():
+            df_l = dff[dff['daterange'] == key]
+            figure['data'].append({
                 'x': Months,
-                'y': df10s[mean_cols].iloc[0],
+                'y': df_l[mean_cols].iloc[0],
                 'type': 'bar',
                 'marker': {
-                    'color': '#bae4bc'
+                    'color': df_lu[key]['color']
                 },
                 'name': '2010-2019 ',
                 'error_y': {
                     'type': 'data',
-                    'array': df10s[sd_cols].iloc[0],
+                    'array': df_l[sd_cols].iloc[0],
                     'visible': variability
                 }
-            },{
-                'x': Months,
-                'y': df40s[mean_cols].iloc[0],
-                'type': 'bar',
-                'marker': {
-                    'color': '#7bccc4'
-                },
-                'name': '2040-2049 ',
-                'error_y': {
-                    'type': 'data',
-                    'array': df40s[sd_cols].iloc[0],
-                    'visible': variability
-                }
-            },{
-                'x': Months,
-                'y': df60s[mean_cols].iloc[0],
-                'type': 'bar',
-                'marker': {
-                    'color': '#43a2ca'
-                },
-                'name': '2060-2069 ',
-                'error_y': {
-                    'type': 'data',
-                    'array': df60s[sd_cols].iloc[0],
-                    'visible': variability
-                }
-            },{
-                'x': Months,
-                'y': df90s[mean_cols].iloc[0],
-                'type': 'bar',
-                'marker': {
-                    'color': '#0868ac'
-                },
-                'name': '2090-2099 ',
-                'error_y': {
-                    'type': 'data',
-                    'array': df90s[sd_cols].iloc[0],
-                    'visible': variability
-                }
-            }],
-            'layout': {
-                'barmode': 'group',
+            })
+        layout = {
+                'barmode': 'grouped',
                 'title': '<b>Average Monthly Precipitation for ' + community_raw + ', ' + region_label + '</b><br>Historical ' + baseline_label + ' and 5-Model Projected Average at ' + resolution_lu[baseline] + ' resolution, ' + emission_label + ' Scenario &nbsp;',
                 'titlefont': {
                     'family': 'Open Sans'
@@ -366,7 +283,7 @@ def update_graph(community_raw, variable, scenario, variability, units, baseline
                     't': 100
                 }
             }
-        }
+        figure['layout'] = layout
         return figure
 @app.callback(
     Output('download_single', 'href'),
