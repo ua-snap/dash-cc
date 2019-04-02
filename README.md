@@ -28,3 +28,9 @@ When deploying on AWS Elastic Beanstalk, a few environment variables must be set
 
  * `GTAG_ID`: property ID for Google Analytics, no default value
  * `REQUESTS_PATHNAME_PREFIX`: Path prefix on host, should be `/` for local development and `/tools/community-charts/` for current deploy on AWS
+
+To run locally, the following variable settings can be used:
+```sh
+export GTAG_ID=abcdef
+export REQUESTS_PATHNAME_PREFIX=/
+```
