@@ -72,6 +72,7 @@ app.layout = layout
     Output('ccharts', 'figure'),
     inputs=[
         Input('community', 'value'),
+        Input('decades', 'value'),
         Input('variable', 'value'),
         Input('scenario', 'value'),
         Input('variability', 'value'),
@@ -79,7 +80,7 @@ app.layout = layout
         Input('baseline', 'value')
     ]
 )
-def update_graph(community_raw, variable, scenario, variability, units, baseline):
+def update_graph(community_raw, decades, variable, scenario, variability, units, baseline):
     """ Update the graph from user input """
 
     # Default!
@@ -177,8 +178,10 @@ def update_graph(community_raw, variable, scenario, variability, units, baseline
         if units == 'imperial':
             tMod = 32
         # Lookup table for included decades (default: 2010,2040,2060,2090)
-        #df_lu = {'2010-2019': {'color': '#ffd700'}, '2020-2029': {'color': '#ffc400'}, '2030-2039': {'color': '#ffb100'}, '2040-2049': {'color': '#ff9900'}, '2050-2059': {'color': '#ff7400'}, '2060-2069': {'color': '#ff5000'}, '2070-2079': {'color': '#e23300'}, '2080-2089': {'color': '#b61900'}, '2090-2099': {'color': '#8b0000'}}
-        df_lu = {'2010-2019': {'color': '#ffd700'}, '2040-2049': {'color': '#ff9900'}, '2060-2069': {'color': '#ff5000'}, '2090-2099': {'color': '#8b0000'}}
+        df_lu_full = {'2010-2019': {'color': '#ffd700'}, '2020-2029': {'color': '#ffc400'}, '2030-2039': {'color': '#ffb100'}, '2040-2049': {'color': '#ff9900'}, '2050-2059': {'color': '#ff7400'}, '2060-2069': {'color': '#ff5000'}, '2070-2079': {'color': '#e23300'}, '2080-2089': {'color': '#b61900'}, '2090-2099': {'color': '#8b0000'}}
+        df_lu = dict()
+        for decade in decades:
+            df_lu[decade] = df_lu_full[decade]
         
         figure = {
             'data': [{
@@ -192,7 +195,7 @@ def update_graph(community_raw, variable, scenario, variability, units, baseline
                 'name': 'Historical '
             }]
         }
-        for key in df_lu.keys():
+        for key in sorted(df_lu):
             df_l = dff[dff['daterange'] == key]
             figure['data'].append({
                 'x': Months,
@@ -226,8 +229,10 @@ def update_graph(community_raw, variable, scenario, variability, units, baseline
         return figure
     else:
         # Lookup table for included decades (default: 2010,2040,2060,2090)
-        #df_lu = {'2010-2019': {'color': '#7fffdf'}, '2020-2029': {'color': '#71e8ca'}, '2030-2039': {'color': '#63d2c1'}, '2040-2049': {'color': '#55bcb8'}, '2050-2059': {'color': '#47a6af'}, '2060-2069': {'color': '#3990a6'}, '2070-2079': {'color': '#2b7a9d'}, '2080-2089': {'color': '#1d6494'}, '2090-2099': {'color': '#104e8b'}}
-        df_lu = {'2010-2019': {'color': '#7fffdf'}, '2040-2049': {'color': '#55bcb8'}, '2060-2069': {'color': '#3990a6'}, '2090-2099': {'color': '#104e8b'}}
+        df_lu_full = {'2010-2019': {'color': '#7fffdf'}, '2020-2029': {'color': '#71e8ca'}, '2030-2039': {'color': '#63d2c1'}, '2040-2049': {'color': '#55bcb8'}, '2050-2059': {'color': '#47a6af'}, '2060-2069': {'color': '#3990a6'}, '2070-2079': {'color': '#2b7a9d'}, '2080-2089': {'color': '#1d6494'}, '2090-2099': {'color': '#104e8b'}}
+        df_lu = dict()
+        for decade in decades:
+            df_lu[decade] = df_lu_full[decade]
 
         figure = {
             'data': [{
@@ -240,7 +245,7 @@ def update_graph(community_raw, variable, scenario, variability, units, baseline
                 'name': 'Historical '
             }]
         }
-        for key in df_lu.keys():
+        for key in sorted(df_lu):
             df_l = dff[dff['daterange'] == key]
             figure['data'].append({
                 'x': Months,

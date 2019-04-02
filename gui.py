@@ -31,16 +31,49 @@ community_selector = html.Div(
     ]
 )
 
+decade_selector = html.Div(
+    className='field',
+    children=[
+        html.Label('Select the decades of interest', className='label'),
+        html.Div(
+            className='control',
+            children=[
+                dcc.Dropdown(
+                    id='decades',
+                    options=[
+                        {'label': '2010-2019', 'value': '2010-2019'},
+                        {'label': '2020-2029', 'value': '2020-2029'},
+                        {'label': '2030-2039', 'value': '2030-2039'},
+                        {'label': '2040-2049', 'value': '2040-2049'},
+                        {'label': '2050-2059', 'value': '2050-2059'},
+                        {'label': '2060-2069', 'value': '2060-2069'},
+                        {'label': '2070-2079', 'value': '2070-2079'},
+                        {'label': '2080-2089', 'value': '2080-2089'},
+                        {'label': '2090-2099', 'value': '2090-2099'},
+                    ],
+                    value=['2010-2019','2040-2049','2060-2069','2090-2099'],
+                    multi=True
+                )
+            ]
+        )
+    ]
+)
+
 header_layout = html.Div(
         html.Div(
             className='columns',
             children=[
                 html.Div(
-                    className='column is-three-fifths',
+                    className='column',
                     children=[
                         community_selector
                     ]
-
+                ),
+                html.Div(
+                    className='column',
+                    children=[
+                        decade_selector
+                    ]
                 )
             ]
 
