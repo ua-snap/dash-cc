@@ -2,14 +2,80 @@
 @import url('https://fonts.googleapis.com/css?family=Cardo:400,400i,700&subset=latin-ext');
 
 html, body {
+	font-family: 'Cardo';
+}
+
+h1, h2, h3, h4, h5, h6 {
 	font-family: 'Open Sans';
 }
 
-p, ul {
-	font-family: 'Cardo';
+label.label:not(:last-child) {
+	margin: 1.5em 0 1ex;
+}
+
+.section--form {
+	padding-top: 0;
+	margin-bottom: 0;
+}
+.section.graph {
+	padding-top: 0;
+	margin-top: -3rem;
 }
 
 /* We want vertical Checklists always. */
 .control label.checkbox {
 	display: block;
+}
+
+.header {
+	background-color: rgba(239, 241, 226, 1.00);
+	padding: 0;
+}
+
+.header--logo {
+	width: 6.8em;
+}
+
+.header--map {
+	width: 15.0em;
+}
+
+.header--headers {
+	width: 85%;
+}
+
+.header--titles {
+	width: 80%;
+}
+
+.header--snap-link img {
+	height: 5.4em;
+}
+
+.form label, .form input {
+	font-size: 130%;
+}
+
+label.checkbox input, label.radio input {
+	position: relative;
+	bottom: .1ex;
+	margin-right: .5ex;
+}
+
+.footer p {
+	width: 50%;
+	margin: 1em auto;
+}
+
+.footer a {
+	display: inline-block;
+}
+
+.footer a img {
+	height: 5em;
+	margin: 1em 1.5em;
+}
+
+._dash-undo-redo {
+	display: none;
 }

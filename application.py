@@ -1,23 +1,28 @@
 """
-SNAP Community Charts / Community Climate Outlooks
+SNAP Community Charts / Community Climate
 """
+# pylint: disable=invalid-name, import-error, line-too-long, too-many-arguments
 
 import dash
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import dash_html_components as html
+import plotly
+import plotly.io as pio
+import html as h
+from flask import redirect,send_file
+import flask
+import re
 
 import pandas as pd
 import time
 import os
+from gui import layout
 
-df = []
-co = pd.read_json('CommunityNames.json')
-names = list(co.community)
-units = 'imperial'
-variability = True
+path_prefix = os.environ['REQUESTS_PATHNAME_PREFIX']
 
 app = dash.Dash(__name__)
+app.title = 'SNAP Community Climate Charts'
 # AWS Elastic Beanstalk looks for application by default,
 # if this variable (application) isn't set you will get a WSGI error.
 application = app.server
@@ -25,302 +30,43 @@ application = app.server
 Months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 mean_cols = []
 
-header_layout = html.Div(
-    className='container',
-    children=[
-        html.Div(
-            className='columns',
-            children=[
-                html.Div(
-                    className='column',
-                    children=[
-                        html.A(
-                            href='https://snap.uaf.edu',
-                            children=[
-                                html.Img(src='assets/SNAP_acronym_color.svg')
-                            ]
-                        ),
-                        html.H1(
-                            'Community Charts',
-                            className='title is-3'
-                        ),
-                        html.H2(
-                            """
-Explore temperature and precipitation projections for communities across Alaska and Canada shown here.
-    """,
-                            className='subtitle is-5'
-                        ),
-                        html.Div(
-                            className='buttons',
-                            children=[
-                                html.A(
-                                    'Download all Community Charts data',
-                                    className='button is-info'
-                                ),
-                                html.A(
-                                    'Go to SNAP home page',
-                                    className='button is-link'
-                                )
-                            ]
-                        )
-                    ]
-                ),
-                html.Div(
-                    className='column',
-                    children=[
-                        html.Img(src='assets/akcanada_extent.png')
-                    ]
-                )
-            ]
+# The next config sets a relative base path so we can deploy
+# with custom URLs.
+# https://community.plot.ly/t/dash-error-loading-layout/8139/6
+app.config.requests_pathname_prefix = os.environ['REQUESTS_PATHNAME_PREFIX']
 
-        )
-    ]
-)
+# Customize this layout to include Google Analytics
+gtag_id = os.environ['GTAG_ID']
+app.index_string = f'''
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-3978613-12"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){{dataLayer.push(arguments);}}
+          gtag('js', new Date());
 
-community_selector = html.Div(
-    className='field',
-    children=[
-        html.Label('Type the name of a community in the box below to get started.', className='label'),
-        html.Div(
-            className='control',
-            children=[
-                dcc.Dropdown(
-                    id='community',
-                    options=[{'label':name, 'value':name} for name in names]
-                )
-            ]
-        )
-    ]
-)
+          gtag('config', '{gtag_id}');
+        </script>
+        {{%metas%}}
+        <title>{{%title%}}</title>
+        {{%favicon%}}
+        {{%css%}}
+    </head>
+    <body>
+        {{%app_entry%}}
+        <footer>
+            {{%config%}}
+            {{%scripts%}}
+            {{%renderer%}}
+        </footer>
+    </body>
+</html>
+'''
 
-dataset_radio = html.Div(
-    className='field',
-    children=[
-        html.Label('Dataset', className='label'),
-        html.Div(
-            className='control',
-            children=[
-                dcc.RadioItems(
-                    labelClassName='radio',
-                    options=[
-                        {'label': ' Temperature', 'value': 'temp'},
-                        {'label': ' Precipitation', 'value': 'precip'}
-                    ],
-                    id='variable',
-                    value='temp'
-                )
-            ]
-        )
-    ]
-)
-
-units_radio = html.Div(
-    className='field',
-    children=[
-        html.Label('Units', className='label'),
-        html.Div(
-            className='control',
-            children=[
-                dcc.RadioItems(
-                    labelClassName='radio',
-                    options=[
-                        {'label': ' Imperial', 'value': 'imperial'},
-                        {'label': ' Metric', 'value': 'metric'}
-                    ],
-                    id='units',
-                    value='imperial'
-                )
-            ]
-        )
-    ]
-)
-
-baseline_radio = html.Div(
-    className='field',
-    children=[
-        html.Label('Historical Baseline', className='label'),
-        html.Div(
-            className='control',
-            children=[
-                dcc.RadioItems(
-                    labelClassName='radio',
-                    options=[
-                        {'label': ' CRU', 'value': 'cru32'},
-                        {'label': ' PRISM', 'value': 'prism'}
-                    ],
-                    id='baseline',
-                    value='cru32'
-                )
-            ]
-        ),
-        html.P("""
-* Northwest Territories communities only available for CRU 3.2 baseline choice. 
-""",
-            className='help'
-        )
-    ]
-)
-
-rcp_radio = html.Div(
-    className='field',
-    children=[
-        html.Label('Representative Concentration Pathways', className='label'),
-        html.Div(
-            className='control',
-            children=[
-                dcc.RadioItems(
-                    labelClassName='radio',
-                    options=[
-                        {'label': ' Low (RCP4.5)', 'value': 'rcp45'},
-                        {'label': ' Medium (RCP6.0)', 'value': 'rcp60'},
-                        {'label': ' High (RCP8.5)', 'value': 'rcp85'}
-                    ],
-                    id='scenario',
-                    value='rcp60'
-                )
-            ]
-        )
-    ]
-)
-
-variability_radio = html.Div(
-    className='field',
-    children=[
-        html.Label('Inter-model Variability', className='label'),
-        html.Div(
-            className='control',
-            children=[
-                dcc.RadioItems(
-                    labelClassName='radio',
-                    options=[
-                        {'label': ' Off', 'value': 'off'},
-                        {'label': ' On', 'value': 'on'}
-                    ],
-                    id='variability',
-                    value='off'
-                )
-            ]
-        )
-    ]
-)
-
-form_layout = html.Div(
-    className='container',
-    children=[
-        community_selector,
-        html.Div(
-            className='columns',
-            children=[
-                html.Div(
-                    className='column',
-                    children=[
-                        dataset_radio,
-                        units_radio,
-                        baseline_radio
-                    ]
-                ),
-                html.Div(
-                    className='column',
-                    children=[
-                        rcp_radio,
-                        variability_radio
-                    ]
-                )
-            ]
-        )
-    ]
-)
-
-graph_layout = html.Div(
-    className='container',
-    children=[
-        dcc.Graph(id='ccharts')
-    ]
-)
-
-explanations = html.Div(
-    className='container',
-    children=[
-        dcc.Markdown("""
-Due to variability among climate models and among years in a natural climate system, these graphs are useful for examining trends over time, rather than for precisely predicting monthly or yearly values.
-
-### How to interpret climate outlooks for your community
-
-You can examine SNAP community outlooks for certain key changes and threshold values—for example, higher mean monthly temperatures in the spring and fall may be of particular interest. This could signify any or all of these conditions:
-
-* a longer growing season
-* a loss of ice and/or frozen ground needed for travel or food storage
-* a shift in precipitation from snow to rain, which impacts water storage capacity and surface water availability
-
-Note: Precipitation may occur as either rain or snow, but is reported for all months in terms of rainwater equivalent.
-
-Warmer, drier spring weather may also be an indicator for increased fire risk. In many locations, winter temperatures are projected to increase dramatically. Warmer winters may favor growth of species that are less cold-hardy (including desirable crops and invasive species), or it may decrease snowpack and increase the frequency of rain-on-snow events that impact wildlife. Higher temperatures across all seasons will likely impact permafrost and land-fast ice.
-""",
-            className='is-size-5 content'
-        ),
-        html.A(
-            'Learn more about how we derived the community climate outlooks',
-            id='button-show-about-derivation-modal',
-            className='button is-info'
-        )
-    ]
-)
-
-footer = html.Footer('Footer content goes here', className='footer')
-
-about_derivation_modal = html.Div(
-    id='about-derivation-modal',
-    className='modal',
-    children=[
-        html.Div(className='modal-background'),
-        html.Div(className='modal-card', children=[
-            html.Header(className='modal-card-head', children=[
-                html.P(
-                    'Community climate outlooks: core statistics and methods',
-                    className='modal-card-title'
-                ),
-                html.Button(className='delete')
-            ]),
-            html.Section(className='modal-card-body', children=[
-                dcc.Markdown(
-"""
-**Data sources**: Historical PRISM and CRU TS 3.2 climatology data (1961-1990) and downscaled outputs averaged from five GCMs.  [Learn more about how we downscale climate data from global to regional scales](https://www.snap.uaf.edu/methods/downscaling).
-
-**We averaged results to smooth out short-term variability**. Results are averaged across decades to lessen the influence of normal year-to-year climate variability on projected values. Averaging also tends to make overall projection trends clearer. Uncertainty is associated with each of these graphed values, and stems from:
-
-* modeling of atmospheric and oceanic movements used to create GCMs
-* the downscaling process
-* the assumptions made regarding greenhouse gas levels for each emissions scenario
-* [Learn more about uncertainty in SNAP's climate research work](https://www.snap.uaf.edu/methods/uncertainty).
-
-**Generally, precipitation is more uncertain than temperature**. And, although our models project increases in precipitation, water availability may decrease in some areas due to longer growing seasons and warmer weather.
-
-""",
-                    className='content'
-                )
-            ]),
-            html.Footer(
-                className='modal-card-foot',
-                children=[
-                    html.Button('Close', className='button is-primary')
-                ]
-            )
-        ])
-    ]
-)
-
-def section(content):
-    """ Convenince function: Wrap content in a section div """
-    return html.Div(className='section', children=[content])
-
-app.layout = html.Div([
-    section(header_layout),
-    section(form_layout),
-    section(graph_layout),
-    section(explanations),
-    footer,
-    about_derivation_modal
-], className="container")
+app.layout = layout
 
 @app.callback(
     Output('ccharts', 'figure'),
@@ -333,132 +79,179 @@ app.layout = html.Div([
         Input('baseline', 'value')
     ]
 )
-def update_graph(community, variable, scenario, variability, units, baseline):
+def update_graph(community_raw, variable, scenario, variability, units, baseline):
     """ Update the graph from user input """
 
     # Default!
-    if community is None:
-        community = 'Fairbanks'
+    if community_raw is None:
+        community_raw = 'Fairbanks'
 
     variability = variability == 'on'  # convert to boolean for use in configuring graph
-    comm_file = './data/' + community + '_SNAP_comm_charts_export.csv'
+    community = re.sub('[^A-Za-z0-9]+', '', community_raw)
+    comm_file = 'https://s3-us-west-2.amazonaws.com/community-charts/data/' + community + '_SNAP_comm_charts_export.csv'
     df = pd.read_csv(comm_file)
-    dff = df[df['community'] == community]
-    df2 = dff[dff['resolution'] == '2km']
-    if (variable == 'temp'):
-        df0 = df2[df2['type'] == 'Temperature']
-    else:
-        df0 = df2[df2['type'] == 'Precipitation']
 
-    df1 = df0[df0['scenario'] == scenario]
-    df3 = df0[df0['scenario'] == baseline]
-
+    # [ML] maybe hardwire these? Not a huge time sink, but it could be made cleaner
     mean_cols = [col for col in df.columns if 'Mean' in col]
     sd_cols = [col for col in df.columns if 'Sd' in col]
     min_cols = [col for col in df.columns if 'Min' in col]
     max_cols = [col for col in df.columns if 'Max' in col]
 
-    dfhist = df3[df3['daterange'] == 'Historical']
-    df10s = df1[df1['daterange'] == '2010-2019']
-    df40s = df1[df1['daterange'] == '2040-2049']
-    df60s = df1[df1['daterange'] == '2060-2069']
-    df90s = df1[df1['daterange'] == '2090-2099']
+    resolution_lu = {'cru32': '10min', 'prism': '2km' }
+    variable_lu = {'temp':'Temperature', 'precip':'Precipitation'}
+    # subset to the data we want to display using the callback variables
+    dff = df[(df['community'] == community) & (df['resolution'] == resolution_lu[baseline]) & \
+            (df['type'] == variable_lu[variable]) & (df['scenario'] == scenario) ]
+    cols = mean_cols+sd_cols+['daterange','region'] # fun with list appending!
+    dff = dff[cols] # grab just the cols we need
+    baseline_df = df[(df['community'] == community) & (df['resolution'] == resolution_lu[baseline]) &\
+                     (df['type'] == variable_lu[variable]) & (df['scenario'] == baseline.lower()) ]
+    baseline_df = baseline_df[mean_cols] # grab just the cols we need
 
+    # handle units conversion if needed:
+    imperial_conversion_lu = {'temp':1.8,'precip':0.0393701}
+    if units == 'imperial':
+        # make things F/inches
+        dff[mean_cols+sd_cols] = dff[mean_cols+sd_cols] * imperial_conversion_lu[variable]
+        baseline_df[mean_cols] = baseline_df[mean_cols]* imperial_conversion_lu[variable]
+
+    # scenario lookup
+    scenario_lu = {'rcp45':'Low Emissions (RCP 4.5)',
+                'rcp60':'Mid Emissions (RCP 6.0)',
+                'rcp85':'High Emissions (RCP 8.5)'}
+    emission_label = scenario_lu[scenario]
+
+    # unit lookup
+    unit_lu = {
+        'temp': {
+            'imperial': '&deg;F',
+            'metric': '&deg;C'
+        },
+        'precip': {
+            'imperial': 'in',
+            'metric': 'mm'
+        }
+    }
+
+    # baseline lookup
+    baseline_lu = {'cru32':'CRU 3.2','prism':'PRISM'}
+    baseline_label = baseline_lu[baseline]
+
+    region_label = dff['region'].iloc[0]
+
+    # subset to some dataframes for plotting. This can be improved.
+    df10s = dff[dff['daterange'] == '2010-2019']
+    df40s = dff[dff['daterange'] == '2040-2049']
+    df60s = dff[dff['daterange'] == '2060-2069']
+    df90s = dff[dff['daterange'] == '2090-2099']
+
+    # set the freezing line for TEMPERATURE based on imperial or metric
     tMod = 0
-    pMod = 1
-    units = 'standard'
-    if (units  == 'imperial'):
-        dfhist.Temp = dfhist.Temp.multiply(1.8) + 32
-        df10s.Temp = df10s.Temp.multiply(1.8) + 32
-        df40s.Temp = df40s.Temp.multiply(1.8) + 32
-        df60s.Temp = df60s.Temp.multiply(1.8) + 32
-        df90s.Temp = df90s.Temp.multiply(1.8) + 32
-        dfhist.Precip = dfhist.Precip * 0.0393701
-        df10s.Precip = df10s.Precip * 0.0393701
-        df40s.Precip = df40s.Precip * 0.0393701
-        df60s.Precip = df60s.Precip * 0.0393701
-        df90s.Precip = df90s.Precip * 0.0393701
-        tMod = 32
-    if (variable == 'temp'):
-        return {
+    if variable == 'temp':
+        if units == 'imperial':
+            tMod = 32
+
+        figure = {
             'data': [{
                 'x': Months,
-                'y': dfhist[mean_cols].T.iloc[:,0],
+                'y': baseline_df[mean_cols].iloc[0],
                 'type': 'bar',
                 'base': tMod,
                 'marker': {
                     'color': '#999999'
                 },
-                'name': 'Historical'
+                'name': 'Historical '
             },{
                 'x': Months,
-                'y': df10s[mean_cols].T.iloc[:,0],
+                'y': df10s[mean_cols].iloc[0],
                 'type': 'bar',
                 'base': tMod,
                 'marker': {
                     'color': '#fecc5c'
                 },
-                'name': '2010-2019',
+                'name': '2010-2019 ',
                 'error_y': {
                     'type': 'data',
-                    'array': df10s[sd_cols].T.iloc[:,0],
+                    'array': df10s[sd_cols].iloc[0],
                     'visible': variability
                 }
             },{
                 'x': Months,
-                'y': df40s[mean_cols].T.iloc[:,0],
+                'y': df40s[mean_cols].iloc[0],
                 'type': 'bar',
                 'base': tMod,
                 'marker': {
                     'color': '#fd8d3c'
                 },
-                'name': '2040-2049',
+                'name': '2040-2049 ',
                 'error_y': {
                     'type': 'data',
-                    'array': df40s[sd_cols].T.iloc[:,0],
+                    'array': df40s[sd_cols].iloc[0],
                     'visible': variability
                 }
             },{
                 'x': Months,
-                'y': df60s[mean_cols].T.iloc[:,0],
+                'y': df60s[mean_cols].iloc[0],
                 'type': 'bar',
                 'base': tMod,
                 'marker': {
                     'color': '#f03b20'
                 },
-                'name': '2060-2069',
+                'name': '2060-2069 ',
                 'error_y': {
                     'type': 'data',
-                    'array': df60s[sd_cols].T.iloc[:,0],
+                    'array': df60s[sd_cols].iloc[0],
                     'visible': variability
                 }
             },{
                 'x': Months,
-                'y': df90s[mean_cols].T.iloc[:,0],
+                'y': df90s[mean_cols].iloc[0],
                 'type': 'bar',
                 'base': tMod,
                 'marker': {
                     'color': '#bd0026'
                 },
-                'name': '2090-2099',
+                'name': '2090-2099 ',
                 'error_y': {
                     'type': 'data',
-                    'array': df90s[sd_cols].T.iloc[:,0],
+                    'array': df90s[sd_cols].iloc[0],
                     'visible': variability
                 }
             }],
             'layout': {
-                'barmode': 'grouped',
+                'barmode': 'group',
+                'title': '<b>Average Monthly Temperature for ' + community_raw + ', ' + region_label + '</b><br>Historical ' + baseline_label + ' and 5-Model Projected Average at ' + resolution_lu[baseline] + ' resolution, ' + emission_label + ' Scenario &nbsp;',
+                'titlefont': {
+                    'family': 'Open Sans'
+                },
+                'annotations': [
+                {
+                    'x': 0.5,
+                    'y': -0.20,
+                    'xref': 'paper',
+                    'yref': 'paper',
+                    'showarrow': False,
+                    'text': 'These plots are useful for examining possible trends over time, rather than for precisely predicting values.'
+                },
+                {
+                    'x': 0.5,
+                    'y': -0.26,
+                    'xref': 'paper',
+                    'yref': 'paper',
+                    'showarrow': False,
+                    'text': 'Credit: Scenarios Network for Alaska + Arctic Planning, University of Alaska Fairbanks.'
+                }],
                 'yaxis': {
                     'zeroline': 'false',
                     'zerolinecolor': '#efefef',
-                    'zerolinewidth': 0.5
+                    'zerolinewidth': 0.5,
+                    'title': 'Temperature (' + unit_lu['temp'][units] + ')'
                 },
                 'margin': {
-                    'l': 30,
-                    'r': 20,
-                    'b': 30,
-                    't': 20
+                    'l': 80,
+                    'r': 80,
+                    'b': 130,
+                    't': 100
                 },
                 'shapes': [{
                     'type': 'line',
@@ -466,81 +259,128 @@ def update_graph(community, variable, scenario, variability, units, baseline):
                     'y0': tMod, 'y1': tMod, 'yref': 'y',
                     'line': { 'width': 1 }
                 }]
+
             }
         }
+
+
+        figure['layout']['yaxis']['zeroline'] = False
+        #img_bytes = pio.to_image(figure, format='svg')
+        #pio.write_image(figure, 'images/fig1.png', width=1600, height=600, scale=2)
+        figure['layout']['yaxis']['zeroline'] = 'false'
+        figure['layout']['barmode'] = 'grouped'
+        return figure
     else:
-        return {
+        figure = {
             'data': [{
                 'x': Months,
-                'y': dfhist[mean_cols].T.iloc[:,0],
+                'y': baseline_df[mean_cols].iloc[0],
                 'type': 'bar',
                 'marker': {
                     'color': '#999999'
                 },
-                'name': 'Historical'
+                'name': 'Historical '
             },{
                 'x': Months,
-                'y': df10s[mean_cols].T.iloc[:,0],
+                'y': df10s[mean_cols].iloc[0],
                 'type': 'bar',
                 'marker': {
                     'color': '#bae4bc'
                 },
-                'name': '2010-2019',
+                'name': '2010-2019 ',
                 'error_y': {
                     'type': 'data',
-                    'array': df10s[sd_cols].T.iloc[:,0],
+                    'array': df10s[sd_cols].iloc[0],
                     'visible': variability
                 }
             },{
                 'x': Months,
-                'y': df40s[mean_cols].T.iloc[:,0],
+                'y': df40s[mean_cols].iloc[0],
                 'type': 'bar',
                 'marker': {
                     'color': '#7bccc4'
                 },
-                'name': '2040-2049',
+                'name': '2040-2049 ',
                 'error_y': {
                     'type': 'data',
-                    'array': df40s[sd_cols].T.iloc[:,0],
+                    'array': df40s[sd_cols].iloc[0],
                     'visible': variability
                 }
             },{
                 'x': Months,
-                'y': df60s[mean_cols].T.iloc[:,0],
+                'y': df60s[mean_cols].iloc[0],
                 'type': 'bar',
                 'marker': {
                     'color': '#43a2ca'
                 },
-                'name': '2060-2069',
+                'name': '2060-2069 ',
                 'error_y': {
                     'type': 'data',
-                    'array': df60s[sd_cols].T.iloc[:,0],
+                    'array': df60s[sd_cols].iloc[0],
                     'visible': variability
                 }
             },{
                 'x': Months,
-                'y': df90s[mean_cols].T.iloc[:,0],
+                'y': df90s[mean_cols].iloc[0],
                 'type': 'bar',
                 'marker': {
                     'color': '#0868ac'
                 },
-                'name': '2090-2099',
+                'name': '2090-2099 ',
                 'error_y': {
                     'type': 'data',
-                    'array': df90s[sd_cols].T.iloc[:,0],
+                    'array': df90s[sd_cols].iloc[0],
                     'visible': variability
                 }
             }],
             'layout': {
-                'barmode': 'grouped',
+                'barmode': 'group',
+                'title': '<b>Average Monthly Precipitation for ' + community_raw + ', ' + region_label + '</b><br>Historical ' + baseline_label + ' and 5-Model Projected Average at ' + resolution_lu[baseline] + ' resolution, ' + emission_label + ' Scenario &nbsp;',
+                'titlefont': {
+                    'family': 'Open Sans'
+                },
+                'annotations': [
+                {
+                    'x': 0.5,
+                    'y': -0.20,
+                    'xref': 'paper',
+                    'yref': 'paper',
+                    'showarrow': False,
+                    'text': 'These plots are useful for examining possible trends over time, rather than for precisely predicting values.'
+                },
+                {
+                    'x': 0.5,
+                    'y': -0.26,
+                    'xref': 'paper',
+                    'yref': 'paper',
+                    'showarrow': False,
+                    'text': 'Credit: Scenarios Network for Alaska + Arctic Planning, University of Alaska Fairbanks.'
+                }],
+                'yaxis': {
+                    'title': 'Precipitation (' + unit_lu['precip'][units] +')'
+                },
                 'margin': {
-                    'l': 30,
-                    'r': 20,
-                    'b': 30,
-                    't': 20
+                    'l': 80,
+                    'r': 80,
+                    'b': 130,
+                    't': 100
                 }
             }
         }
+        return figure
+@app.callback(
+    Output('download_single', 'href'),
+    [Input('community', 'value')])
+
+def update_download_link(comm):
+    return path_prefix + 'dash/dlCSV?value={}'.format(comm)
+
+@app.server.route('/dash/dlCSV') 
+def download_csv():
+    value = flask.request.args.get('value')
+    value = h.unescape(value)
+    value = re.sub('[^A-Za-z0-9]+', '', value)
+    return redirect('https://s3-us-west-2.amazonaws.com/community-charts/data/' + value + '_SNAP_comm_charts_export.csv')
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8080))
