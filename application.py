@@ -141,6 +141,38 @@ def update_graph(community_raw, variable, scenario, variability, units, baseline
 
     # set the freezing line for TEMPERATURE based on imperial or metric
     tMod = 0
+
+    # Base Layout Item (for both variables)
+    layout = {
+            'barmode': 'grouped',
+            'titlefont': {
+                'family': 'Open Sans'
+            },
+            'annotations': [
+            {
+                'x': 0.5,
+                'y': -0.20,
+                'xref': 'paper',
+                'yref': 'paper',
+                'showarrow': False,
+                'text': 'These plots are useful for examining possible trends over time, rather than for precisely predicting values.'
+            },
+            {
+                'x': 0.5,
+                'y': -0.26,
+                'xref': 'paper',
+                'yref': 'paper',
+                'showarrow': False,
+                'text': 'Credit: Scenarios Network for Alaska + Arctic Planning, University of Alaska Fairbanks.'
+            }],
+            'margin': {
+                'l': 80,
+                'r': 80,
+                'b': 130,
+                't': 100
+            }
+        }
+
     if variable == 'temp':
         if units == 'imperial':
             tMod = 32
@@ -175,50 +207,20 @@ def update_graph(community_raw, variable, scenario, variability, units, baseline
                     'visible': variability
                 }
             })
-        layout = {
-                'barmode': 'grouped',
-                'title': '<b>Average Monthly Temperature for ' + community_raw + ', ' + region_label + '</b><br>Historical ' + baseline_label + ' and 5-Model Projected Average at ' + resolution_lu[baseline] + ' resolution, ' + emission_label + ' Scenario &nbsp;',
-                'titlefont': {
-                    'family': 'Open Sans'
-                },
-                'annotations': [
-                {
-                    'x': 0.5,
-                    'y': -0.20,
-                    'xref': 'paper',
-                    'yref': 'paper',
-                    'showarrow': False,
-                    'text': 'These plots are useful for examining possible trends over time, rather than for precisely predicting values.'
-                },
-                {
-                    'x': 0.5,
-                    'y': -0.26,
-                    'xref': 'paper',
-                    'yref': 'paper',
-                    'showarrow': False,
-                    'text': 'Credit: Scenarios Network for Alaska + Arctic Planning, University of Alaska Fairbanks.'
-                }],
-                'yaxis': {
-                    'zeroline': 'false',
-                    'zerolinecolor': '#efefef',
-                    'zerolinewidth': 0.5,
-                    'title': 'Temperature (' + unit_lu['temp'][units] + ')'
-                },
-                'margin': {
-                    'l': 80,
-                    'r': 80,
-                    'b': 130,
-                    't': 100
-                },
-                'shapes': [{
-                    'type': 'line',
-                    'x0': 0, 'x1': 1, 'xref': 'paper',
-                    'y0': tMod, 'y1': tMod, 'yref': 'y',
-                    'line': { 'width': 1 }
-                }]
-
-            }
         figure['layout'] = layout
+        figure['layout']['title'] = '<b>Average Monthly Temperature for ' + community_raw + ', ' + region_label + '</b><br>Historical ' + baseline_label + ' and 5-Model Projected Average at ' + resolution_lu[baseline] + ' resolution, ' + emission_label + ' Scenario &nbsp;'
+        figure['layout']['yaxis'] = {
+            'zeroline': 'false',
+            'zerolinecolor': '#efefef',
+            'zerolinewidth': 0.5,
+            'title': 'Temperature (' + unit_lu['temp'][units] + ')'
+        }
+        figure['layout']['shapes'] = [{
+            'type': 'line',
+            'x0': 0, 'x1': 1, 'xref': 'paper',
+            'y0': tMod, 'y1': tMod, 'yref': 'y',
+            'line': { 'width': 1 }
+        }]
         return figure
     else:
         # Lookup table for included decades (default: 2010,2040,2060,2090)
@@ -250,40 +252,12 @@ def update_graph(community_raw, variable, scenario, variability, units, baseline
                     'visible': variability
                 }
             })
-        layout = {
-                'barmode': 'grouped',
-                'title': '<b>Average Monthly Precipitation for ' + community_raw + ', ' + region_label + '</b><br>Historical ' + baseline_label + ' and 5-Model Projected Average at ' + resolution_lu[baseline] + ' resolution, ' + emission_label + ' Scenario &nbsp;',
-                'titlefont': {
-                    'family': 'Open Sans'
-                },
-                'annotations': [
-                {
-                    'x': 0.5,
-                    'y': -0.20,
-                    'xref': 'paper',
-                    'yref': 'paper',
-                    'showarrow': False,
-                    'text': 'These plots are useful for examining possible trends over time, rather than for precisely predicting values.'
-                },
-                {
-                    'x': 0.5,
-                    'y': -0.26,
-                    'xref': 'paper',
-                    'yref': 'paper',
-                    'showarrow': False,
-                    'text': 'Credit: Scenarios Network for Alaska + Arctic Planning, University of Alaska Fairbanks.'
-                }],
-                'yaxis': {
-                    'title': 'Precipitation (' + unit_lu['precip'][units] +')'
-                },
-                'margin': {
-                    'l': 80,
-                    'r': 80,
-                    'b': 130,
-                    't': 100
-                }
-            }
+
         figure['layout'] = layout
+        figure['layout']['title'] = '<b>Average Monthly Precipitation for ' + community_raw + ', ' + region_label + '</b><br>Historical ' + baseline_label + ' and 5-Model Projected Average at ' + resolution_lu[baseline] + ' resolution, ' + emission_label + ' Scenario &nbsp;'
+        figure['layout']['yaxis'] = {
+            'title': 'Precipitation (' + unit_lu['precip'][units] +')'
+        }
         return figure
 @app.callback(
     Output('download_single', 'href'),
