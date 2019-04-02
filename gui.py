@@ -157,38 +157,6 @@ variability_radio = html.Div(
         )
     ]
 )
-download_svg = html.Div(
-    className='download',
-    children=[
-        html.Div(
-            className='control',
-            children=[
-                html.A(
-                    'Download SVG',
-                    className='button is-info',
-                    id='download_svg',
-                    href=''
-                )
-            ]
-        )
-    ]
-)
-download_png = html.Div(
-    className='download',
-    children=[
-        html.Div(
-            className='control',
-            children=[
-                html.A(
-                    'Download PNG',
-                    className='button is-info',
-                    id='download_png',
-                    href=''
-                )
-            ]
-        )
-    ]
-)
 download_single_csv = html.Div(
     className='download',
     children=[
@@ -378,50 +346,6 @@ UA is an AA/EO employer and educational institution and prohibits illegal discri
         )
     ]
 )
-
-about_derivation_modal = html.Div(
-    id='about-derivation-modal',
-    className='modal',
-    children=[
-        html.Div(className='modal-background'),
-        html.Div(className='modal-card', children=[
-            html.Header(className='modal-card-head', children=[
-                html.P(
-                    'Community climate outlooks: core statistics and methods',
-                    className='modal-card-title'
-                ),
-                html.Button(className='delete')
-            ]),
-            html.Section(className='modal-card-body', children=[
-                dcc.Markdown(
-"""
-#### Learn more about the variables used in this tool
-
-**Data sources**: Historical PRISM and CRU TS 3.2 climatology data (1961-1990) and downscaled outputs averaged from five GCMs.  [Learn more about how we downscale climate data from global to regional scales](https://www.snap.uaf.edu/methods/downscaling).
-
-**We averaged results to smooth out short-term variability**. Results are averaged across decades to lessen the influence of normal year-to-year climate variability on projected values. Averaging also tends to make overall projection trends clearer. Uncertainty is associated with each of these graphed values, and stems from:
-
-* modeling of atmospheric and oceanic movements used to create GCMs
-* the downscaling process
-* the assumptions made regarding greenhouse gas levels for each emissions scenario
-* [Learn more about uncertainty in SNAP's climate research work](https://www.snap.uaf.edu/methods/uncertainty).
-
-**Generally, precipitation is more uncertain than temperature**. And, although our models project increases in precipitation, water availability may decrease in some areas due to longer growing seasons and warmer weather.
-
-""",
-                    className='content'
-                )
-            ]),
-            html.Footer(
-                className='modal-card-foot',
-                children=[
-                    html.Button('Close', className='button is-primary')
-                ]
-            )
-        ])
-    ]
-)
-
 header_section = html.Div(
     className='header',
     children=[

@@ -62,18 +62,6 @@ label.checkbox input, label.radio input {
 	margin-right: .5ex;
 }
 
-tspan.line:nth-child(1) {
-	font-weight: 900;
-	font-size: 18pt;
-}
-
-.rc-slider-handle {
-	width: 25px;
-	height: 25px;
-	margin-left: -15px;
-	margin-top: -11px;
-}
-
 .footer p {
 	width: 50%;
 	margin: 1em auto;

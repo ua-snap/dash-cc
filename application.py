@@ -152,7 +152,6 @@ def update_graph(community_raw, variable, scenario, variability, units, baseline
             tMod = 32
 
         figure = {
-        #return {
             'data': [{
                 'x': Months,
                 'y': baseline_df[mean_cols].iloc[0],
@@ -273,7 +272,6 @@ def update_graph(community_raw, variable, scenario, variability, units, baseline
         return figure
     else:
         figure = {
-        #return {
             'data': [{
                 'x': Months,
                 'y': baseline_df[mean_cols].iloc[0],
