@@ -143,7 +143,8 @@ baseline_radio = html.Div(
         html.P("""
 * Northwest Territories communities only available for CRU 3.2 baseline choice. 
 """,
-            className='help'
+            className='help',
+            id='helptext'
         )
     ]
 )
