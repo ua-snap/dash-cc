@@ -8,9 +8,10 @@ name = "pypi"
 [packages]
 
 pandas = "*"
-dash = ">=0.39.0"
+dash = ">=0.40.0"
 
 [dev-packages]
 
 [requires]
 python_version = "3.6"
+

@@ -268,6 +268,31 @@ def update_graph(community_raw, decades, variable, scenario, variability, units,
             'title': 'Precipitation (' + unit_lu['precip'][units] +')'
         }
         return figure
+
+@app.callback(
+    [Output('baseline', 'options'),
+    Output('baseline', 'value')],
+    [Input('community', 'value')], [State('baseline', 'value')])
+def set_button_enabled_state(community_raw, value):
+    community = re.sub('[^A-Za-z0-9]+', '', community_raw)
+    comm_file = 'https://s3-us-west-2.amazonaws.com/community-charts/data/' + community + '_SNAP_comm_charts_export.csv'
+    df = pd.read_csv(comm_file)
+    region = df['region'][0]
+    if region == 'Northwest Territories':
+        value='cru32'
+        options=[
+            {'label': ' CRU', 'value': 'cru32'}
+        ]
+        return options, value
+    else:
+        value=value
+        options=[
+            {'label': ' CRU', 'value': 'cru32'},
+            {'label': ' PRISM', 'value': 'prism'}
+        ]
+        return options, value
+
+
 @app.callback(
     Output('download_single', 'href'),
     [Input('community', 'value')])
