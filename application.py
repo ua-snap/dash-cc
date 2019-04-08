@@ -20,6 +20,7 @@ import os
 from gui import layout
 
 path_prefix = os.environ['REQUESTS_PATHNAME_PREFIX']
+data_prefix = 'https://s3-us-west-2.amazonaws.com/community-charts/'
 
 app = dash.Dash(__name__)
 app.title = 'SNAP Community Climate Charts'
@@ -29,6 +30,7 @@ application = app.server
 
 Months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 mean_cols = []
+region_lu = {'Alaska': 'AK', 'Alberta': 'AB', 'British Columbia': 'BC', 'Manitoba': 'MB', 'Northwest Territories': 'NT', 'Saskatchewan': 'SK', 'Yukon Territories': 'YT' } 
 
 # The next config sets a relative base path so we can deploy
 # with custom URLs.
@@ -85,11 +87,13 @@ def update_graph(community_raw, decades, variable, scenario, variability, units,
 
     # Default!
     if community_raw is None:
-        community_raw = 'Fairbanks'
+        community_raw = 'Fairbanks, Alaska, US'
 
     variability = variability == 'on'  # convert to boolean for use in configuring graph
-    community = re.sub('[^A-Za-z0-9]+', '', community_raw)
-    comm_file = 'https://s3-us-west-2.amazonaws.com/community-charts/data/' + community + '_SNAP_comm_charts_export.csv'
+    community_region_country = community_raw.split(',')
+    region_full = community_region_country[1].strip()
+    community = re.sub('[^A-Za-z0-9]+', '', community_region_country[0])
+    comm_file = data_prefix + 'data/' + community + '_' + region_lu[region_full] + '_SNAP_comm_charts_export.csv'
     df = pd.read_csv(comm_file)
 
     # [ML] maybe hardwire these? Not a huge time sink, but it could be made cleaner
@@ -101,11 +105,11 @@ def update_graph(community_raw, decades, variable, scenario, variability, units,
     resolution_lu = {'cru32': '10min', 'prism': '2km' }
     variable_lu = {'temp':'Temperature', 'precip':'Precipitation'}
     # subset to the data we want to display using the callback variables
-    dff = df[(df['community'] == community) & (df['resolution'] == resolution_lu[baseline]) & \
+    dff = df[(df['community'] == community_region_country[0]) & (df['resolution'] == resolution_lu[baseline]) & \
             (df['type'] == variable_lu[variable]) & (df['scenario'] == scenario) ]
     cols = mean_cols+sd_cols+['daterange','region'] # fun with list appending!
     dff = dff[cols] # grab just the cols we need
-    baseline_df = df[(df['community'] == community) & (df['resolution'] == resolution_lu[baseline]) &\
+    baseline_df = df[(df['community'] == community_region_country[0]) & (df['resolution'] == resolution_lu[baseline]) &\
                      (df['type'] == variable_lu[variable]) & (df['scenario'] == baseline.lower()) ]
     baseline_df = baseline_df[mean_cols] # grab just the cols we need
 
@@ -138,7 +142,7 @@ def update_graph(community_raw, decades, variable, scenario, variability, units,
     baseline_lu = {'cru32':'CRU 3.2','prism':'PRISM'}
     baseline_label = baseline_lu[baseline]
 
-    region_label = dff['region'].iloc[0]
+    region_label = region_full
 
     # set the freezing line for TEMPERATURE based on imperial or metric
     tMod = 0
@@ -213,7 +217,7 @@ def update_graph(community_raw, decades, variable, scenario, variability, units,
                 }
             })
         figure['layout'] = layout
-        figure['layout']['title'] = '<b>Average Monthly Temperature for ' + community_raw + ', ' + region_label + '</b><br>Historical ' + baseline_label + ' and 5-Model Projected Average at ' + resolution_lu[baseline] + ' resolution, ' + emission_label + ' Scenario &nbsp;'
+        figure['layout']['title'] = '<b>Average Monthly Temperature for ' + community_region_country[0] + ', ' + region_label + '</b><br>Historical ' + baseline_label + ' and 5-Model Projected Average at ' + resolution_lu[baseline] + ' resolution, ' + emission_label + ' Scenario &nbsp;'
         figure['layout']['yaxis'] = {
             'zeroline': 'false',
             'zerolinecolor': '#efefef',
@@ -263,7 +267,7 @@ def update_graph(community_raw, decades, variable, scenario, variability, units,
             })
 
         figure['layout'] = layout
-        figure['layout']['title'] = '<b>Average Monthly Precipitation for ' + community_raw + ', ' + region_label + '</b><br>Historical ' + baseline_label + ' and 5-Model Projected Average at ' + resolution_lu[baseline] + ' resolution, ' + emission_label + ' Scenario &nbsp;'
+        figure['layout']['title'] = '<b>Average Monthly Precipitation for ' + community_region_country[0] + ', ' + region_label + '</b><br>Historical ' + baseline_label + ' and 5-Model Projected Average at ' + resolution_lu[baseline] + ' resolution, ' + emission_label + ' Scenario &nbsp;'
         figure['layout']['yaxis'] = {
             'title': 'Precipitation (' + unit_lu['precip'][units] +')'
         }
@@ -274,10 +278,14 @@ def update_graph(community_raw, decades, variable, scenario, variability, units,
     Output('baseline', 'value')],
     [Input('community', 'value')], [State('baseline', 'value')])
 def set_button_enabled_state(community_raw, value):
-    community = re.sub('[^A-Za-z0-9]+', '', community_raw)
-    comm_file = 'https://s3-us-west-2.amazonaws.com/community-charts/data/' + community + '_SNAP_comm_charts_export.csv'
+    if community_raw is None:
+        community_raw = 'Fairbanks, Alaska, US'
+    community_region_country = community_raw.split(',')
+    community = re.sub('[^A-Za-z0-9]+', '', community_region_country[0])
+    region_full = community_region_country[1].strip()
+    comm_file = data_prefix + 'data/' + community + '_' + region_lu[region_full] + '_SNAP_comm_charts_export.csv'
     df = pd.read_csv(comm_file)
-    region = df['region'][0]
+    region = region_full
     if region == 'Northwest Territories':
         value='cru32'
         options=[
@@ -305,7 +313,7 @@ def download_csv():
     value = flask.request.args.get('value')
     value = h.unescape(value)
     value = re.sub('[^A-Za-z0-9]+', '', value)
-    return redirect('https://s3-us-west-2.amazonaws.com/community-charts/data/' + value + '_SNAP_comm_charts_export.csv')
+    return redirect(data_prefix + 'data/' + value + '_SNAP_comm_charts_export.csv')
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8080))
