@@ -313,9 +313,10 @@ def download_csv():
     value = flask.request.args.get('value')
     value = h.unescape(value)
     community_region_country = value.split(',')
-    community = re.sub('[^A-Za-z0-9]+', '', community_region_state[0])
+    community = re.sub('[^A-Za-z0-9]+', '', community_region_country[0])
     region_full = community_region_country[1].strip()
-    return redirect(data_prefix + 'data/' + community + '_' + region_lu[region_full] + '_SNAP_comm_charts_export.csv')
+    pathname = data_prefix + 'data/' + community + '_' + region_lu[region_full] + '_SNAP_comm_charts_export.csv'
+    return redirect(pathname)
 
 
 if __name__ == '__main__':
