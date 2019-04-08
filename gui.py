@@ -24,7 +24,7 @@ community_selector = html.Div(
                 dcc.Dropdown(
                     id='community',
                     options=[{'label':name, 'value':name} for name in names],
-                    value='Fairbanks, Alaska, US'
+                    value='Fairbanks, Alaska'
                 )
             ]
         )

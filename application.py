@@ -209,7 +209,7 @@ def update_graph(community_raw, decades, variable, scenario, variability, units,
                 'marker': {
                     'color': df_lu[key]['color']
                 },
-                'name': key,
+                'name': key + ' ',
                 'error_y': {
                     'type': 'data',
                     'array': df_l[sd_cols].iloc[0],
@@ -258,7 +258,7 @@ def update_graph(community_raw, decades, variable, scenario, variability, units,
                 'marker': {
                     'color': df_lu[key]['color']
                 },
-                'name': key,
+                'name': key + ' ',
                 'error_y': {
                     'type': 'data',
                     'array': df_l[sd_cols].iloc[0],
