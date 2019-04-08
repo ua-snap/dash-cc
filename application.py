@@ -312,8 +312,11 @@ def update_download_link(comm):
 def download_csv():
     value = flask.request.args.get('value')
     value = h.unescape(value)
-    value = re.sub('[^A-Za-z0-9]+', '', value)
-    return redirect(data_prefix + 'data/' + value + '_SNAP_comm_charts_export.csv')
+    community_region_country = value.split(',')
+    community = re.sub('[^A-Za-z0-9]+', '', community_region_state[0])
+    region_full = community_region_country[1].strip()
+    return redirect(data_prefix + 'data/' + community + '_' + region_lu[region_full] + '_SNAP_comm_charts_export.csv')
+
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8080))
