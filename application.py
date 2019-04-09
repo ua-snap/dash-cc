@@ -279,7 +279,7 @@ def update_graph(community_raw, decades, variable, scenario, variability, units,
     [Input('community', 'value')], [State('baseline', 'value')])
 def set_button_enabled_state(community_raw, value):
     if community_raw is None:
-        community_raw = 'Fairbanks, Alaska, US'
+        community_raw = 'Fairbanks, Alaska'
     community_region_country = community_raw.split(',')
     community = re.sub('[^A-Za-z0-9]+', '', community_region_country[0])
     region_full = community_region_country[1].strip()
