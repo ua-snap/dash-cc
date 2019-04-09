@@ -87,7 +87,7 @@ def update_graph(community_raw, decades, variable, scenario, variability, units,
 
     # Default!
     if community_raw is None:
-        community_raw = 'Fairbanks, Alaska, US'
+        community_raw = 'Fairbanks, Alaska'
 
     variability = variability == 'on'  # convert to boolean for use in configuring graph
     community_region_country = community_raw.split(',')
