@@ -20,6 +20,7 @@ import os
 from gui import layout
 
 path_prefix = os.environ['REQUESTS_PATHNAME_PREFIX']
+data_prefix = 'https://s3-us-west-2.amazonaws.com/community-charts/'
 
 app = dash.Dash(__name__)
 app.title = 'SNAP Community Climate Charts'
@@ -29,6 +30,7 @@ application = app.server
 
 Months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 mean_cols = []
+region_lu = {'Alaska': 'AK', 'Alberta': 'AB', 'British Columbia': 'BC', 'Manitoba': 'MB', 'Northwest Territories': 'NT', 'Saskatchewan': 'SK', 'Yukon Territories': 'YT' } 
 
 # The next config sets a relative base path so we can deploy
 # with custom URLs.
@@ -72,6 +74,7 @@ app.layout = layout
     Output('ccharts', 'figure'),
     inputs=[
         Input('community', 'value'),
+        Input('decades', 'value'),
         Input('variable', 'value'),
         Input('scenario', 'value'),
         Input('variability', 'value'),
@@ -79,16 +82,18 @@ app.layout = layout
         Input('baseline', 'value')
     ]
 )
-def update_graph(community_raw, variable, scenario, variability, units, baseline):
+def update_graph(community_raw, decades, variable, scenario, variability, units, baseline):
     """ Update the graph from user input """
 
     # Default!
     if community_raw is None:
-        community_raw = 'Fairbanks'
+        community_raw = 'Fairbanks, Alaska'
 
     variability = variability == 'on'  # convert to boolean for use in configuring graph
-    community = re.sub('[^A-Za-z0-9]+', '', community_raw)
-    comm_file = 'https://s3-us-west-2.amazonaws.com/community-charts/data/' + community + '_SNAP_comm_charts_export.csv'
+    community_region_country = community_raw.split(',')
+    region_full = community_region_country[1].strip()
+    community = re.sub('[^A-Za-z0-9]+', '', community_region_country[0])
+    comm_file = data_prefix + 'data/' + community + '_' + region_lu[region_full] + '_SNAP_comm_charts_export.csv'
     df = pd.read_csv(comm_file)
 
     # [ML] maybe hardwire these? Not a huge time sink, but it could be made cleaner
@@ -100,11 +105,11 @@ def update_graph(community_raw, variable, scenario, variability, units, baseline
     resolution_lu = {'cru32': '10min', 'prism': '2km' }
     variable_lu = {'temp':'Temperature', 'precip':'Precipitation'}
     # subset to the data we want to display using the callback variables
-    dff = df[(df['community'] == community) & (df['resolution'] == resolution_lu[baseline]) & \
+    dff = df[(df['community'] == community_region_country[0]) & (df['resolution'] == resolution_lu[baseline]) & \
             (df['type'] == variable_lu[variable]) & (df['scenario'] == scenario) ]
     cols = mean_cols+sd_cols+['daterange','region'] # fun with list appending!
     dff = dff[cols] # grab just the cols we need
-    baseline_df = df[(df['community'] == community) & (df['resolution'] == resolution_lu[baseline]) &\
+    baseline_df = df[(df['community'] == community_region_country[0]) & (df['resolution'] == resolution_lu[baseline]) &\
                      (df['type'] == variable_lu[variable]) & (df['scenario'] == baseline.lower()) ]
     baseline_df = baseline_df[mean_cols] # grab just the cols we need
 
@@ -137,20 +142,51 @@ def update_graph(community_raw, variable, scenario, variability, units, baseline
     baseline_lu = {'cru32':'CRU 3.2','prism':'PRISM'}
     baseline_label = baseline_lu[baseline]
 
-    region_label = dff['region'].iloc[0]
-
-    # subset to some dataframes for plotting. This can be improved.
-    df10s = dff[dff['daterange'] == '2010-2019']
-    df40s = dff[dff['daterange'] == '2040-2049']
-    df60s = dff[dff['daterange'] == '2060-2069']
-    df90s = dff[dff['daterange'] == '2090-2099']
+    region_label = region_full
 
     # set the freezing line for TEMPERATURE based on imperial or metric
     tMod = 0
+
+    # Base Layout Item (for both variables)
+    layout = {
+            'barmode': 'grouped',
+            'titlefont': {
+                'family': 'Open Sans'
+            },
+            'annotations': [
+            {
+                'x': 0.5,
+                'y': -0.20,
+                'xref': 'paper',
+                'yref': 'paper',
+                'showarrow': False,
+                'text': 'These plots are useful for examining possible trends over time, rather than for precisely predicting values.'
+            },
+            {
+                'x': 0.5,
+                'y': -0.26,
+                'xref': 'paper',
+                'yref': 'paper',
+                'showarrow': False,
+                'text': 'Credit: Scenarios Network for Alaska + Arctic Planning, University of Alaska Fairbanks.'
+            }],
+            'margin': {
+                'l': 80,
+                'r': 80,
+                'b': 130,
+                't': 100
+            }
+        }
+
     if variable == 'temp':
         if units == 'imperial':
             tMod = 32
-
+        # Lookup table for included decades (default: 2010,2040,2060,2090)
+        df_lu_full = {'2010-2019': {'color': '#ffd700'}, '2020-2029': {'color': '#ffc400'}, '2030-2039': {'color': '#ffb100'}, '2040-2049': {'color': '#ff9900'}, '2050-2059': {'color': '#ff7400'}, '2060-2069': {'color': '#ff5000'}, '2070-2079': {'color': '#e23300'}, '2080-2089': {'color': '#b61900'}, '2090-2099': {'color': '#8b0000'}}
+        df_lu = dict()
+        for decade in decades:
+            df_lu[decade] = df_lu_full[decade]
+        
         figure = {
             'data': [{
                 'x': Months,
@@ -161,116 +197,47 @@ def update_graph(community_raw, variable, scenario, variability, units, baseline
                     'color': '#999999'
                 },
                 'name': 'Historical '
-            },{
-                'x': Months,
-                'y': df10s[mean_cols].iloc[0],
-                'type': 'bar',
-                'base': tMod,
-                'marker': {
-                    'color': '#fecc5c'
-                },
-                'name': '2010-2019 ',
-                'error_y': {
-                    'type': 'data',
-                    'array': df10s[sd_cols].iloc[0],
-                    'visible': variability
-                }
-            },{
-                'x': Months,
-                'y': df40s[mean_cols].iloc[0],
-                'type': 'bar',
-                'base': tMod,
-                'marker': {
-                    'color': '#fd8d3c'
-                },
-                'name': '2040-2049 ',
-                'error_y': {
-                    'type': 'data',
-                    'array': df40s[sd_cols].iloc[0],
-                    'visible': variability
-                }
-            },{
-                'x': Months,
-                'y': df60s[mean_cols].iloc[0],
-                'type': 'bar',
-                'base': tMod,
-                'marker': {
-                    'color': '#f03b20'
-                },
-                'name': '2060-2069 ',
-                'error_y': {
-                    'type': 'data',
-                    'array': df60s[sd_cols].iloc[0],
-                    'visible': variability
-                }
-            },{
-                'x': Months,
-                'y': df90s[mean_cols].iloc[0],
-                'type': 'bar',
-                'base': tMod,
-                'marker': {
-                    'color': '#bd0026'
-                },
-                'name': '2090-2099 ',
-                'error_y': {
-                    'type': 'data',
-                    'array': df90s[sd_cols].iloc[0],
-                    'visible': variability
-                }
-            }],
-            'layout': {
-                'barmode': 'group',
-                'title': '<b>Average Monthly Temperature for ' + community_raw + ', ' + region_label + '</b><br>Historical ' + baseline_label + ' and 5-Model Projected Average at ' + resolution_lu[baseline] + ' resolution, ' + emission_label + ' Scenario &nbsp;',
-                'titlefont': {
-                    'family': 'Open Sans'
-                },
-                'annotations': [
-                {
-                    'x': 0.5,
-                    'y': -0.20,
-                    'xref': 'paper',
-                    'yref': 'paper',
-                    'showarrow': False,
-                    'text': 'These plots are useful for examining possible trends over time, rather than for precisely predicting values.'
-                },
-                {
-                    'x': 0.5,
-                    'y': -0.26,
-                    'xref': 'paper',
-                    'yref': 'paper',
-                    'showarrow': False,
-                    'text': 'Credit: Scenarios Network for Alaska + Arctic Planning, University of Alaska Fairbanks.'
-                }],
-                'yaxis': {
-                    'zeroline': 'false',
-                    'zerolinecolor': '#efefef',
-                    'zerolinewidth': 0.5,
-                    'title': 'Temperature (' + unit_lu['temp'][units] + ')'
-                },
-                'margin': {
-                    'l': 80,
-                    'r': 80,
-                    'b': 130,
-                    't': 100
-                },
-                'shapes': [{
-                    'type': 'line',
-                    'x0': 0, 'x1': 1, 'xref': 'paper',
-                    'y0': tMod, 'y1': tMod, 'yref': 'y',
-                    'line': { 'width': 1 }
-                }]
-
-            }
+            }]
         }
-
-
-        figure['layout']['yaxis']['zeroline'] = False
-        #img_bytes = pio.to_image(figure, format='svg')
-        #pio.write_image(figure, 'images/fig1.png', width=1600, height=600, scale=2)
-        figure['layout']['yaxis']['zeroline'] = 'false'
-        figure['layout']['barmode'] = 'grouped'
+        for key in sorted(df_lu):
+            df_l = dff[dff['daterange'] == key]
+            figure['data'].append({
+                'x': Months,
+                'y': df_l[mean_cols].iloc[0],
+                'type': 'bar',
+                'base': tMod,
+                'marker': {
+                    'color': df_lu[key]['color']
+                },
+                'name': key + ' ',
+                'error_y': {
+                    'type': 'data',
+                    'array': df_l[sd_cols].iloc[0],
+                    'visible': variability
+                }
+            })
+        figure['layout'] = layout
+        figure['layout']['title'] = '<b>Average Monthly Temperature for ' + community_region_country[0] + ', ' + region_label + '</b><br>Historical ' + baseline_label + ' and 5-Model Projected Average at ' + resolution_lu[baseline] + ' resolution, ' + emission_label + ' Scenario &nbsp;'
+        figure['layout']['yaxis'] = {
+            'zeroline': 'false',
+            'zerolinecolor': '#efefef',
+            'zerolinewidth': 0.5,
+            'title': 'Temperature (' + unit_lu['temp'][units] + ')'
+        }
+        figure['layout']['shapes'] = [{
+            'type': 'line',
+            'x0': 0, 'x1': 1, 'xref': 'paper',
+            'y0': tMod, 'y1': tMod, 'yref': 'y',
+            'line': { 'width': 1 }
+        }]
         return figure
     else:
+        # Lookup table for included decades (default: 2010,2040,2060,2090)
+        df_lu_full = {'2010-2019': {'color': '#7fffdf'}, '2020-2029': {'color': '#71e8ca'}, '2030-2039': {'color': '#63d2c1'}, '2040-2049': {'color': '#55bcb8'}, '2050-2059': {'color': '#47a6af'}, '2060-2069': {'color': '#3990a6'}, '2070-2079': {'color': '#2b7a9d'}, '2080-2089': {'color': '#1d6494'}, '2090-2099': {'color': '#104e8b'}}
+        df_lu = dict()
+        for decade in decades:
+            df_lu[decade] = df_lu_full[decade]
+
         figure = {
             'data': [{
                 'x': Months,
@@ -280,94 +247,60 @@ def update_graph(community_raw, variable, scenario, variability, units, baseline
                     'color': '#999999'
                 },
                 'name': 'Historical '
-            },{
+            }]
+        }
+        for key in sorted(df_lu):
+            df_l = dff[dff['daterange'] == key]
+            figure['data'].append({
                 'x': Months,
-                'y': df10s[mean_cols].iloc[0],
+                'y': df_l[mean_cols].iloc[0],
                 'type': 'bar',
                 'marker': {
-                    'color': '#bae4bc'
+                    'color': df_lu[key]['color']
                 },
-                'name': '2010-2019 ',
+                'name': key + ' ',
                 'error_y': {
                     'type': 'data',
-                    'array': df10s[sd_cols].iloc[0],
+                    'array': df_l[sd_cols].iloc[0],
                     'visible': variability
                 }
-            },{
-                'x': Months,
-                'y': df40s[mean_cols].iloc[0],
-                'type': 'bar',
-                'marker': {
-                    'color': '#7bccc4'
-                },
-                'name': '2040-2049 ',
-                'error_y': {
-                    'type': 'data',
-                    'array': df40s[sd_cols].iloc[0],
-                    'visible': variability
-                }
-            },{
-                'x': Months,
-                'y': df60s[mean_cols].iloc[0],
-                'type': 'bar',
-                'marker': {
-                    'color': '#43a2ca'
-                },
-                'name': '2060-2069 ',
-                'error_y': {
-                    'type': 'data',
-                    'array': df60s[sd_cols].iloc[0],
-                    'visible': variability
-                }
-            },{
-                'x': Months,
-                'y': df90s[mean_cols].iloc[0],
-                'type': 'bar',
-                'marker': {
-                    'color': '#0868ac'
-                },
-                'name': '2090-2099 ',
-                'error_y': {
-                    'type': 'data',
-                    'array': df90s[sd_cols].iloc[0],
-                    'visible': variability
-                }
-            }],
-            'layout': {
-                'barmode': 'group',
-                'title': '<b>Average Monthly Precipitation for ' + community_raw + ', ' + region_label + '</b><br>Historical ' + baseline_label + ' and 5-Model Projected Average at ' + resolution_lu[baseline] + ' resolution, ' + emission_label + ' Scenario &nbsp;',
-                'titlefont': {
-                    'family': 'Open Sans'
-                },
-                'annotations': [
-                {
-                    'x': 0.5,
-                    'y': -0.20,
-                    'xref': 'paper',
-                    'yref': 'paper',
-                    'showarrow': False,
-                    'text': 'These plots are useful for examining possible trends over time, rather than for precisely predicting values.'
-                },
-                {
-                    'x': 0.5,
-                    'y': -0.26,
-                    'xref': 'paper',
-                    'yref': 'paper',
-                    'showarrow': False,
-                    'text': 'Credit: Scenarios Network for Alaska + Arctic Planning, University of Alaska Fairbanks.'
-                }],
-                'yaxis': {
-                    'title': 'Precipitation (' + unit_lu['precip'][units] +')'
-                },
-                'margin': {
-                    'l': 80,
-                    'r': 80,
-                    'b': 130,
-                    't': 100
-                }
-            }
+            })
+
+        figure['layout'] = layout
+        figure['layout']['title'] = '<b>Average Monthly Precipitation for ' + community_region_country[0] + ', ' + region_label + '</b><br>Historical ' + baseline_label + ' and 5-Model Projected Average at ' + resolution_lu[baseline] + ' resolution, ' + emission_label + ' Scenario &nbsp;'
+        figure['layout']['yaxis'] = {
+            'title': 'Precipitation (' + unit_lu['precip'][units] +')'
         }
         return figure
+
+@app.callback(
+    [Output('baseline', 'options'),
+    Output('baseline', 'value')],
+    [Input('community', 'value')], [State('baseline', 'value')])
+def set_button_enabled_state(community_raw, value):
+    if community_raw is None:
+        community_raw = 'Fairbanks, Alaska, US'
+    community_region_country = community_raw.split(',')
+    community = re.sub('[^A-Za-z0-9]+', '', community_region_country[0])
+    region_full = community_region_country[1].strip()
+    comm_file = data_prefix + 'data/' + community + '_' + region_lu[region_full] + '_SNAP_comm_charts_export.csv'
+    df = pd.read_csv(comm_file)
+    region = region_full
+    if region == 'Northwest Territories':
+        value='cru32'
+        options=[
+            {'label': ' CRU', 'value': 'cru32'}
+        ]
+        return options, value
+    else:
+        value=value
+        options=[
+            {'label': ' CRU', 'value': 'cru32'},
+            {'label': ' PRISM', 'value': 'prism'}
+        ]
+        return options, value
+
+
 @app.callback(
     Output('download_single', 'href'),
     [Input('community', 'value')])
@@ -379,8 +312,12 @@ def update_download_link(comm):
 def download_csv():
     value = flask.request.args.get('value')
     value = h.unescape(value)
-    value = re.sub('[^A-Za-z0-9]+', '', value)
-    return redirect('https://s3-us-west-2.amazonaws.com/community-charts/data/' + value + '_SNAP_comm_charts_export.csv')
+    community_region_country = value.split(',')
+    community = re.sub('[^A-Za-z0-9]+', '', community_region_country[0])
+    region_full = community_region_country[1].strip()
+    pathname = data_prefix + 'data/' + community + '_' + region_lu[region_full] + '_SNAP_comm_charts_export.csv'
+    return redirect(pathname)
+
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8080))
