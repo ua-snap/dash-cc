@@ -30,7 +30,7 @@ application = app.server
 
 Months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 mean_cols = []
-region_lu = {'Alaska': 'AK', 'Alberta': 'AB', 'British Columbia': 'BC', 'Manitoba': 'MB', 'Northwest Territories': 'NT', 'Saskatchewan': 'SK', 'Yukon Territories': 'YT' } 
+region_lu = {'Alaska': 'AK', 'Alberta': 'AB', 'British Columbia': 'BC', 'Manitoba': 'MB', 'Northwest Territories': 'NT', 'Saskatchewan': 'SK', 'Yukon': 'YT' } 
 
 # The next config sets a relative base path so we can deploy
 # with custom URLs.
