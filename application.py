@@ -19,10 +19,10 @@ import time
 import os
 from gui import layout
 
-path_prefix = os.environ['REQUESTS_PATHNAME_PREFIX']
+path_prefix = os.environ['DASH_REQUESTS_PATHNAME_PREFIX']
 data_prefix = 'https://s3-us-west-2.amazonaws.com/community-charts/'
 
-app = dash.Dash(__name__, requests_pathname_prefix=path_prefix)
+app = dash.Dash(__name__)
 app.title = 'SNAP Community Climate Charts'
 # AWS Elastic Beanstalk looks for application by default,
 # if this variable (application) isn't set you will get a WSGI error.
@@ -31,10 +31,6 @@ application = app.server
 Months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 mean_cols = []
 region_lu = {'Alaska': 'AK', 'Alberta': 'AB', 'British Columbia': 'BC', 'Manitoba': 'MB', 'Northwest Territories': 'NT', 'Saskatchewan': 'SK', 'Yukon': 'YT' } 
-
-# The next config sets a relative base path so we can deploy
-# with custom URLs.
-# https://community.plot.ly/t/dash-error-loading-layout/8139/6
 
 # Customize this layout to include Google Analytics
 gtag_id = os.environ['GTAG_ID']

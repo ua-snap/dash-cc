@@ -12,7 +12,7 @@ import pandas as pd
 df = None
 co = pd.read_json('CommunityNames.json')
 names = list(co.community)
-path_prefix = os.environ['REQUESTS_PATHNAME_PREFIX']
+path_prefix = os.environ['DASH_REQUESTS_PATHNAME_PREFIX']
 
 community_selector = html.Div(
     className='field',
