@@ -61,7 +61,7 @@ decade_selector = html.Div(
 
 header_layout = html.Div(
         html.Div(
-            className='columns',
+            className='columns no-print',
             children=[
                 html.Div(
                     className='column',
@@ -228,7 +228,7 @@ form_layout = html.Div(
     className='container',
     children=[
         html.Div(
-            className='columns',
+            className='columns no-print',
             children=[
                 html.Div(
                     className='column',
