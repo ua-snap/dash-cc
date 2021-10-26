@@ -79,3 +79,9 @@ label.checkbox input, label.radio input {
 ._dash-undo-redo {
 	display: none;
 }
+
+@media print {
+	.no-print * {
+		display: none;
+	}
+}
