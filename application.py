@@ -18,50 +18,23 @@ import pandas as pd
 import time
 import os
 from gui import layout
+import luts
 
 path_prefix = os.environ['DASH_REQUESTS_PATHNAME_PREFIX']
 data_prefix = 'https://s3-us-west-2.amazonaws.com/community-charts/'
 
 app = dash.Dash(__name__)
-app.title = 'SNAP Community Climate Charts'
+app.title = luts.title
 # AWS Elastic Beanstalk looks for application by default,
 # if this variable (application) isn't set you will get a WSGI error.
 application = app.server
 
-Months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+Months = luts.Months
 mean_cols = []
-region_lu = {'Alaska': 'AK', 'Alberta': 'AB', 'British Columbia': 'BC', 'Manitoba': 'MB', 'Northwest Territories': 'NT', 'Saskatchewan': 'SK', 'Yukon': 'YT' } 
+region_lu = luts.region_lu
 
 # Customize this layout to include Google Analytics
-gtag_id = os.environ['GTAG_ID']
-app.index_string = f'''
-<!DOCTYPE html>
-<html>
-    <head>
-        <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-3978613-12"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){{dataLayer.push(arguments);}}
-          gtag('js', new Date());
-
-          gtag('config', '{gtag_id}');
-        </script>
-        {{%metas%}}
-        <title>{{%title%}}</title>
-        {{%favicon%}}
-        {{%css%}}
-    </head>
-    <body>
-        {{%app_entry%}}
-        <footer>
-            {{%config%}}
-            {{%scripts%}}
-            {{%renderer%}}
-        </footer>
-    </body>
-</html>
-'''
+app.index_string = luts.index_string
 
 app.layout = layout
 
@@ -97,8 +70,8 @@ def update_graph(community_raw, decades, variable, scenario, variability, units,
     min_cols = [col for col in df.columns if 'Min' in col]
     max_cols = [col for col in df.columns if 'Max' in col]
 
-    resolution_lu = {'cru32': '10min', 'prism': '2km' }
-    variable_lu = {'temp':'Temperature', 'precip':'Precipitation'}
+    resolution_lu = luts.resolution_lu
+    variable_lu = luts.variable_lu
     # subset to the data we want to display using the callback variables
     dff = df[(df['community'] == community_region_country[0]) & (df['resolution'] == resolution_lu[baseline]) & \
             (df['type'] == variable_lu[variable]) & (df['scenario'] == scenario) ]
@@ -109,32 +82,21 @@ def update_graph(community_raw, decades, variable, scenario, variability, units,
     baseline_df = baseline_df[mean_cols] # grab just the cols we need
 
     # handle units conversion if needed:
-    imperial_conversion_lu = {'temp':1.8,'precip':0.0393701}
+    imperial_conversion_lu = luts.imperial_conversion_lu
     if units == 'imperial':
         # make things F/inches
         dff[mean_cols+sd_cols] = dff[mean_cols+sd_cols] * imperial_conversion_lu[variable]
         baseline_df[mean_cols] = baseline_df[mean_cols]* imperial_conversion_lu[variable]
 
     # scenario lookup
-    scenario_lu = {'rcp45':'Low Emissions (RCP 4.5)',
-                'rcp60':'Mid Emissions (RCP 6.0)',
-                'rcp85':'High Emissions (RCP 8.5)'}
+    scenario_lu = luts.scenario_lu
     emission_label = scenario_lu[scenario]
 
     # unit lookup
-    unit_lu = {
-        'temp': {
-            'imperial': '&deg;F',
-            'metric': '&deg;C'
-        },
-        'precip': {
-            'imperial': 'in',
-            'metric': 'mm'
-        }
-    }
+    unit_lu = luts.unit_lu
 
     # baseline lookup
-    baseline_lu = {'cru32':'CRU 3.2','prism':'PRISM'}
+    baseline_lu = luts.baseline_lu
     baseline_label = baseline_lu[baseline]
 
     region_label = region_full
@@ -177,10 +139,10 @@ def update_graph(community_raw, decades, variable, scenario, variability, units,
         if units == 'imperial':
             tMod = 32
         # Lookup table for included decades (default: 2010,2040,2060,2090)
-        df_lu_full = {'2010-2019': {'color': '#ffd700'}, '2020-2029': {'color': '#ffc400'}, '2030-2039': {'color': '#ffb100'}, '2040-2049': {'color': '#ff9900'}, '2050-2059': {'color': '#ff7400'}, '2060-2069': {'color': '#ff5000'}, '2070-2079': {'color': '#e23300'}, '2080-2089': {'color': '#b61900'}, '2090-2099': {'color': '#8b0000'}}
+        df_lu_full_temp = luts.df_lu_full_temp
         df_lu = dict()
         for decade in decades:
-            df_lu[decade] = df_lu_full[decade]
+            df_lu[decade] = df_lu_full_temp[decade]
         
         figure = {
             'data': [{
@@ -228,10 +190,10 @@ def update_graph(community_raw, decades, variable, scenario, variability, units,
         return figure
     else:
         # Lookup table for included decades (default: 2010,2040,2060,2090)
-        df_lu_full = {'2010-2019': {'color': '#7fffdf'}, '2020-2029': {'color': '#71e8ca'}, '2030-2039': {'color': '#63d2c1'}, '2040-2049': {'color': '#55bcb8'}, '2050-2059': {'color': '#47a6af'}, '2060-2069': {'color': '#3990a6'}, '2070-2079': {'color': '#2b7a9d'}, '2080-2089': {'color': '#1d6494'}, '2090-2099': {'color': '#104e8b'}}
+        df_lu_full_precip = luts.df_lu_full_precip
         df_lu = dict()
         for decade in decades:
-            df_lu[decade] = df_lu_full[decade]
+            df_lu[decade] = df_lu_full_precip[decade]
 
         figure = {
             'data': [{
