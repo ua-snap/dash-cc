@@ -8,11 +8,13 @@ import plotly.graph_objs as go
 from dash import dcc
 from dash import html
 import pandas as pd
+import dash_dangerously_set_inner_html as ddsih
 
 df = None
 co = pd.read_json('CommunityNames.json')
 names = list(co.community)
 path_prefix = os.environ['DASH_REQUESTS_PATHNAME_PREFIX']
+
 
 community_selector = html.Div(
     className='field',
@@ -224,45 +226,48 @@ download_all_csv = html.Div(
     ]
 )
 
+form_layout_left = html.Div(
+    className='column',
+    children=[
+        dataset_radio,
+        units_radio,
+        baseline_radio
+    ]
+)
+
+form_layout_right = html.Div(
+    className='column',
+    children=[
+        rcp_radio,
+        variability_radio,
+        html.Div(
+            className='columns is-1',
+            children=[
+                html.Div(
+                    className='column is-half',
+                    children=[
+                        download_single_csv
+                    ]
+                ),
+                html.Div(
+                    className='column is-half',
+                    children=[
+                        download_all_csv
+                    ]
+                )
+            ]
+        )
+    ]
+)
+
 form_layout = html.Div(
     className='container',
     children=[
         html.Div(
             className='columns no-print',
             children=[
-                html.Div(
-                    className='column',
-                    children=[
-                        dataset_radio,
-                        units_radio,
-                        baseline_radio
-                    ]
-                ),
-                html.Div(
-                    className='column',
-                    children=[
-                        rcp_radio,
-                        variability_radio,
-                        html.Div(
-                            className='columns is-1',
-                            children=[
-                                html.Div(
-                                    className='column is-half',
-                                    children=[
-                                        download_single_csv
-                                    ]
-                                ),
-                                html.Div(
-                                    className='column is-half',
-                                    children=[
-                                        download_all_csv
-                                    ]
-                                )
-
-                            ]
-                        )
-                    ]
-                )
+                form_layout_left,
+                form_layout_right
             ]
         )
     ]
@@ -333,43 +338,23 @@ This tool offers users a way to hide and show this variability:
     ]
 )
 
+
 footer = html.Footer(
     className='footer has-text-centered',
     children=[
-        html.Div(
-            children=[
-                html.A(
-                    href='https://snap.uaf.edu',
-                    target='_blank',
-                    className='level-item',
-                    children=[
-                        html.Img(
-                            src=path_prefix + 'assets/SNAP.svg'
-                        )
-                    ]
-                ),
-                html.A(
-                    href='https://uaf.edu/uaf/',
-                    target='_blank',
-                    className='level-item',
-                    children=[
-                        html.Img(
-                            src=path_prefix + 'assets/UAF.svg'
-                        )
-                    ]
-                ),
-                html.A(
-                    href='https://www.gov.nt.ca/',
-                    target='_blank',
-                    className='level-item',
-                    children=[
-                        html.Img(
-                            src=path_prefix + 'assets/NWT.svg'
-                        )
-                    ]
-                )
-            ]
-        ),
+        ddsih.DangerouslySetInnerHTML(f"""
+            <div>
+                <a class="level-item" href="https://snap.uaf.edu" target="_blank">
+                    <img src="{path_prefix}assets/SNAP.svg" />
+                </a>
+                <a class="level-item" href="https://uaf.edu/uaf/" target="_blank">
+                    <img src="{path_prefix}assets/UAF.svg" />
+                </a>
+                <a class="level-item" href="https://www.gov.nt.ca/" target="_blank">
+                    <img src="{path_prefix}assets/NWT.svg" />
+                </a>
+            </div>
+        """),
         dcc.Markdown(
             """
 This tool is part of an ongoing collaboration between SNAP and the Government of Northwest Territories. We are working to make a wide range of downscaled climate products that are easily accessible, flexibly usable, and fully interpreted and understandable to users in the Northwest Territories, while making these products relevant at a broad geographic scale.
@@ -380,63 +365,30 @@ UA is an AA/EO employer and educational institution and prohibits illegal discri
         )
     ]
 )
-header_section = html.Div(
-    className='header',
-    children=[
-        html.Div(
-            className='container',
-            children=[
-                html.Div(
-                    className='section',
-                    children=[
-                        html.Div(
-                            className='columns',
-                            children=[
-                                html.Div(
-                                    className='header--logo',
-                                    children=[
-                                        html.A(
-                                            className='header--snap-link',
-                                            href='https://snap.uaf.edu',
-                                            rel='external',
-                                            target='_blank',
-                                            children=[
-                                                html.Img(src=path_prefix + 'assets/SNAP_acronym_color_square.svg')
-                                            ]
-                                        )
-                                    ]
-                                ),
-                                html.Div(
-                                    className='header--titles',
-                                    children=[
-                                        html.H1(
-                                            'Community Climate Charts',
-                                            className='title is-2'
-                                        ),
-                                        html.H2(
-                                            'Explore temperature and precipitation projections for communities across Alaska and Western Canada.',
-                                            className='subtitle is-4'
-                                        )
-                                    ]
-                                ),
-                                html.Div(
-                                    className='header--map',
-                                    children=[
-                                        html.Div(
-                                            children=[
-                                                html.Img(src=path_prefix + 'assets/akcanada.svg')
-                                            ]
-                                        )
-                                    ]
-                                )
-                            ]
-                        )
-                    ]
-                )
-            ]
-        )
-    ]
-)
+
+
+header_section = ddsih.DangerouslySetInnerHTML(f"""
+<div class="header">
+    <div class="container">
+        <div class="section">
+            <div class="columns">
+                <div class="header--logo">
+                    <a class="header--snap-link" href="https://snap.uaf.edu" rel="external" target="_blank">
+                        <img src="{path_prefix}assets/SNAP_acronym_color_square.svg" />
+                    </a>
+                </div>
+                <div class="header--titles">
+                    <h1 class="title is-2">Community Climate Charts</h1>
+                    <h2 class="subtitle is-4">Explore temperature and precipitation projections for communities across Alaska and Western Canada.</h2>
+                </div>
+                <div class="header--map">
+                    <img src="{path_prefix}assets/akcanada.svg" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+""")
 
 config = {
     'toImageButtonOptions': {
