@@ -152,7 +152,7 @@ df_lu_full_temp = {
     '2090-2099': {'color': '#8b0000'}
 }
 
-df_lu_ful_precip = {
+df_lu_full_precip = {
     '2010-2019': {'color': '#7fffdf'},
     '2020-2029': {'color': '#71e8ca'},
     '2030-2039': {'color': '#63d2c1'},
