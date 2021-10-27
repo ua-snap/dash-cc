@@ -9,6 +9,7 @@ from dash import dcc
 from dash import html
 import pandas as pd
 import dash_dangerously_set_inner_html as ddsih
+import luts
 
 df = None
 co = pd.read_json('CommunityNames.json')
@@ -42,17 +43,7 @@ decade_selector = html.Div(
             children=[
                 dcc.Dropdown(
                     id='decades',
-                    options=[
-                        {'label': '2010-2019', 'value': '2010-2019'},
-                        {'label': '2020-2029', 'value': '2020-2029'},
-                        {'label': '2030-2039', 'value': '2030-2039'},
-                        {'label': '2040-2049', 'value': '2040-2049'},
-                        {'label': '2050-2059', 'value': '2050-2059'},
-                        {'label': '2060-2069', 'value': '2060-2069'},
-                        {'label': '2070-2079', 'value': '2070-2079'},
-                        {'label': '2080-2089', 'value': '2080-2089'},
-                        {'label': '2090-2099', 'value': '2090-2099'},
-                    ],
+                    options=luts.decade_selector_options,
                     value=['2010-2019','2040-2049','2060-2069','2090-2099'],
                     multi=True
                 )
@@ -91,10 +82,7 @@ dataset_radio = html.Div(
             children=[
                 dcc.RadioItems(
                     labelClassName='radio',
-                    options=[
-                        {'label': ' Temperature', 'value': 'temp'},
-                        {'label': ' Precipitation', 'value': 'precip'}
-                    ],
+                    options=luts.dataset_radio_options,
                     id='variable',
                     value='temp'
                 )
@@ -112,10 +100,7 @@ units_radio = html.Div(
             children=[
                 dcc.RadioItems(
                     labelClassName='radio',
-                    options=[
-                        {'label': ' Imperial', 'value': 'imperial'},
-                        {'label': ' Metric', 'value': 'metric'}
-                    ],
+                    options=luts.units_radio_options,
                     id='units',
                     value='imperial'
                 )
@@ -133,10 +118,7 @@ baseline_radio = html.Div(
             children=[
                 dcc.RadioItems(
                     labelClassName='radio',
-                    options=[
-                        {'label': ' CRU', 'value': 'cru32'},
-                        {'label': ' PRISM', 'value': 'prism'}
-                    ],
+                    options=luts.baseline_radio_options,
                     id='baseline',
                     value='cru32'
                 )
@@ -160,11 +142,7 @@ rcp_radio = html.Div(
             children=[
                 dcc.RadioItems(
                     labelClassName='radio',
-                    options=[
-                        {'label': ' Low (RCP4.5)', 'value': 'rcp45'},
-                        {'label': ' Medium (RCP6.0)', 'value': 'rcp60'},
-                        {'label': ' High (RCP8.5)', 'value': 'rcp85'}
-                    ],
+                    options=luts.rcp_radio_options,
                     id='scenario',
                     value='rcp60'
                 )
@@ -182,10 +160,7 @@ variability_radio = html.Div(
             children=[
                 dcc.RadioItems(
                     labelClassName='radio',
-                    options=[
-                        {'label': ' Off', 'value': 'off'},
-                        {'label': ' On', 'value': 'on'}
-                    ],
+                    options=luts.visibility_radio_options,
                     id='variability',
                     value='off'
                 )

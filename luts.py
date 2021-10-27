@@ -140,3 +140,41 @@ df_lu_ful_precip = {
     '2080-2089': {'color': '#1d6494'},
     '2090-2099': {'color': '#104e8b'}
 }
+
+decade_selector_options = [
+    {'label': '2010-2019', 'value': '2010-2019'},
+    {'label': '2020-2029', 'value': '2020-2029'},
+    {'label': '2030-2039', 'value': '2030-2039'},
+    {'label': '2040-2049', 'value': '2040-2049'},
+    {'label': '2050-2059', 'value': '2050-2059'},
+    {'label': '2060-2069', 'value': '2060-2069'},
+    {'label': '2070-2079', 'value': '2070-2079'},
+    {'label': '2080-2089', 'value': '2080-2089'},
+    {'label': '2090-2099', 'value': '2090-2099'}
+]
+
+dataset_radio_options = [
+    {'label': ' Temperature', 'value': 'temp'},
+    {'label': ' Precipitation', 'value': 'precip'}
+]
+
+units_radio_options = [
+    {'label': ' Imperial', 'value': 'imperial'},
+    {'label': ' Metric', 'value': 'metric'}
+]
+
+baseline_radio_options = [
+    {'label': ' CRU', 'value': 'cru32'},
+    {'label': ' PRISM', 'value': 'prism'}
+]
+
+rcp_radio_options = [
+    {'label': ' Low (RCP4.5)', 'value': 'rcp45'},
+    {'label': ' Medium (RCP6.0)', 'value': 'rcp60'},
+    {'label': ' High (RCP8.5)', 'value': 'rcp85'}
+]
+
+visibility_radio_options = [
+    {'label': ' Off', 'value': 'off'},
+    {'label': ' On', 'value': 'on'}
+]
