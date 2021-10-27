@@ -195,6 +195,8 @@ def update_graph(community_raw, decades, variable, scenario, variability, units,
         figure['layout']['yaxis'] = {
             'title': 'Precipitation (' + unit_lu['precip'][units] +')'
         }
+        if 'shapes' in figure['layout']:
+            del figure['layout']['shapes']
         return figure
 
 @app.callback(
