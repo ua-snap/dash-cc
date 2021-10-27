@@ -8,6 +8,10 @@ gtag_id = os.environ['GTAG_ID']
 
 # Core page components
 title = "SNAP Community Climate Charts"
+description = "Explore temperature and precipitation projections for communities across Alaska and Western Canada"
+url = "https://snap.uaf.edu/tools/community-charts"
+twitter_preview = "https://snap.uaf.edu/tools/community-charts/assets/twitter_preview.png"
+facebook_preview = "https://snap.uaf.edu/tools/community-charts/assets/facebook_preview.png"
 
 index_string = f'''
 <!DOCTYPE html>
@@ -24,6 +28,25 @@ index_string = f'''
         </script>
         {{%metas%}}
         <title>{{%title%}}</title>
+
+        <!-- Twitter Card data -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:site" content="@SNAPandACCAP">
+        <meta name="twitter:title" content="{title}">
+        <meta name="twitter:description" content="{description}">
+        <meta name="twitter:creator" content="@SNAPandACCAP">
+        <meta name="twitter:image:src" content="{twitter_preview}">
+
+        <!-- Open Graph data -->
+        <meta property="og:title" content="{title}" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="{url}" />
+        <meta property="og:image" content="{facebook_preview}" />
+        <meta property="og:description" content="{description}" />
+        <meta property="og:site_name" content="{title}" />
+        <link rel="alternate" hreflang="en" href="{url}" />
+        <link rel="canonical" href="{url}"/>
+
         {{%favicon%}}
         {{%css%}}
     </head>
