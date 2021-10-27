@@ -3,8 +3,6 @@ SNAP Community Charts / Community Climate
 """
 
 import os
-import json
-import plotly.graph_objs as go
 from dash import dcc
 from dash import html
 import pandas as pd
