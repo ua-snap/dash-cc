@@ -87,6 +87,36 @@ baseline_lu = {
     'prism': 'PRISM'
 }
 
+figure_layout = {
+    'barmode': 'grouped',
+    'titlefont': {
+        'family': 'Open Sans'
+    },
+    'annotations': [
+    {
+        'x': 0.5,
+        'y': -0.20,
+        'xref': 'paper',
+        'yref': 'paper',
+        'showarrow': False,
+        'text': 'These plots are useful for examining possible trends over time, rather than for precisely predicting values.'
+    },
+    {
+        'x': 0.5,
+        'y': -0.26,
+        'xref': 'paper',
+        'yref': 'paper',
+        'showarrow': False,
+        'text': 'Credit: Scenarios Network for Alaska + Arctic Planning, University of Alaska Fairbanks.'
+    }],
+    'margin': {
+        'l': 80,
+        'r': 80,
+        'b': 130,
+        't': 100
+    }
+}
+
 df_lu_full_temp = {
     '2010-2019': {'color': '#ffd700'},
     '2020-2029': {'color': '#ffc400'},
