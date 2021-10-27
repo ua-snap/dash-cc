@@ -190,7 +190,7 @@ def update_graph(community_raw, decades, variable, scenario, variability, units,
                 }
             })
 
-        figure['layout'] = layout
+        figure['layout'] = figure_layout
         figure['layout']['title'] = '<b>Average Monthly Precipitation for ' + community_region_country[0] + ', ' + region_label + '</b><br>Historical ' + baseline_label + ' and 5-Model Projected Average at ' + resolution_lu[baseline] + ' resolution, ' + emission_label + ' Scenario &nbsp;'
         figure['layout']['yaxis'] = {
             'title': 'Precipitation (' + unit_lu['precip'][units] +')'
