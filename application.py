@@ -5,17 +5,12 @@ SNAP Community Charts / Community Climate
 
 import dash
 from dash.dependencies import Input, Output, State
-from dash import dcc
-from dash import html
-import plotly
-import plotly.io as pio
 import html as h
-from flask import redirect,send_file
+from flask import redirect
 import flask
 import re
 
 import pandas as pd
-import time
 import os
 from gui import layout
 import luts
