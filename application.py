@@ -13,6 +13,7 @@ import re
 import pandas as pd
 import os
 from gui import layout
+import copy
 import luts
 
 path_prefix = os.environ['DASH_REQUESTS_PATHNAME_PREFIX']
@@ -100,7 +101,7 @@ def update_graph(community_raw, decades, variable, scenario, variability, units,
     tMod = 0
 
     # Base Layout Item (for both variables)
-    figure_layout = luts.figure_layout
+    figure_layout = copy.deepcopy(luts.figure_layout)
 
     if variable == 'temp':
         if units == 'imperial':
@@ -195,8 +196,6 @@ def update_graph(community_raw, decades, variable, scenario, variability, units,
         figure['layout']['yaxis'] = {
             'title': 'Precipitation (' + unit_lu['precip'][units] +')'
         }
-        if 'shapes' in figure['layout']:
-            del figure['layout']['shapes']
         return figure
 
 @app.callback(
