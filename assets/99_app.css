@@ -3,7 +3,12 @@
 @import url('https://fonts.googleapis.com/css?family=Special+Elite&display=swap');
 
 html, body {
+	font-family: 'Courier';
+}
+
+h1, h2, h3, h4, h5, h6 {
 	font-family: 'Special Elite';
+	letter-spacing: .02em;
 }
 
 label.label:not(:last-child) {
@@ -78,6 +83,8 @@ label.label:not(:last-child) {
 	max-width: 700px;
 	margin: 0 auto;
 	font-size: 110%;
+	font-family: 'Special Elite';
+	letter-spacing: .02em;
 }
 
 .form label, .form input {
