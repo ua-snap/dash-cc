@@ -342,22 +342,34 @@ UA is an AA/EO employer and educational institution and prohibits illegal discri
 
 header_section = ddsih.DangerouslySetInnerHTML(f"""
 <div class="header">
+    <div class="page-bar">
+        <div class="page-bar-container container">
+            <div class="page-bar-row has-text-centered">
+                UNIVERSITY OF ALASKA FAIRBANKS&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;SCENARIOS NETWORK FOR ALASKA + ARCTIC PLANNING
+            </div>
+        </div>
+    </div>
     <div class="container">
         <div class="section">
-            <div class="columns">
-                <div class="header--logo">
-                    <a class="header--snap-link" href="https://snap.uaf.edu" rel="external" target="_blank">
-                        <img src="{path_prefix}assets/SNAP_acronym_color_square.svg" />
-                    </a>
-                </div>
-                <div class="header--titles">
-                    <h1 class="title is-2">Community Climate Charts</h1>
-                    <h2 class="subtitle is-4">Explore temperature and precipitation projections for communities across Alaska and Western Canada.</h2>
-                </div>
-                <div class="header--map">
-                    <img src="{path_prefix}assets/akcanada.svg" />
+                <div class="header--titles has-text-centered">
+                    <h1 class="title is-1">Community Climate Charts</h1>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+""")
+
+intro_section = ddsih.DangerouslySetInnerHTML(f"""
+<div class="container">
+    <div class="section">
+        <div class="intro-text has-text-centered">
+            <h4 class="title is-4 mt-3 mb-5">What’s up—or down—in your corner of the North?</h4>
+            <p class="m-3">See temperature and precipitation projections 2020–2099 for over 3,800 communities in Alaska and western Canada.</p>
+            <p class="m-3">Look for key changes.</p>
+            <p class="m-3">For example, higher temperatures in spring and fall could mean a longer growing season and/or a shift from snow to rain.</p>
+            <p class="m-3">Warmer, drier spring weather may increase fire risk.</p>
+            <h5 class="title is-5 mt-5">Happy exploring!</h5>
         </div>
     </div>
 </div>
@@ -408,6 +420,7 @@ main_layout = html.Div(
 layout = html.Div(
     children=[
         header_section,
+        intro_section,
         main_layout,
         footer
     ]

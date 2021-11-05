@@ -1,16 +1,24 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700&subset=latin-ext');
 @import url('https://fonts.googleapis.com/css?family=Cardo:400,400i,700&subset=latin-ext');
+@import url('https://fonts.googleapis.com/css?family=Special+Elite&display=swap');
 
 html, body {
-	font-family: 'Cardo';
-}
-
-h1, h2, h3, h4, h5, h6 {
-	font-family: 'Open Sans';
+	font-family: 'Special Elite';
 }
 
 label.label:not(:last-child) {
 	margin: 1.5em 0 1ex;
+}
+
+.page-bar-container {
+	padding-bottom: 5px;
+	padding-top: 5px;
+}
+
+.page-bar-row {
+	padding: 5px 0;
+	letter-spacing: 0.3em;
+	font-size: 0.9em;
 }
 
 .section--form {
@@ -28,8 +36,22 @@ label.label:not(:last-child) {
 }
 
 .header {
-	background-color: rgba(239, 241, 226, 1.00);
+	background-image: url('/assets/header_background.jpg');
+	background-size: cover;
+	height: 400px;
 	padding: 0;
+}
+
+.header .page-bar {
+	font-family: "Lato",sans-serif;
+	font-weight: 400;
+	border-bottom: 1px solid #e6e6e6;
+	font-size: 12px;
+	line-height: 14px;
+	border-color: #6e768c;
+	background-color: #515767;
+	color: #fff;
+	background: #8e1e23;
 }
 
 .header--logo {
@@ -45,11 +67,17 @@ label.label:not(:last-child) {
 }
 
 .header--titles {
-	width: 80%;
+	width: 100%;
 }
 
 .header--snap-link img {
 	height: 5.4em;
+}
+
+.intro-text {
+	max-width: 700px;
+	margin: 0 auto;
+	font-size: 110%;
 }
 
 .form label, .form input {
