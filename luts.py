@@ -62,6 +62,7 @@ index_string = f'''
 '''
 
 Months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+decades = ['2040-2049', '2060-2069', '2090-2099']
 
 region_lu = {
     'Alaska': 'AK',
@@ -164,18 +165,6 @@ df_lu_full_precip = {
     '2090-2099': {'color': '#104e8b'}
 }
 
-decade_selector_options = [
-    {'label': '2010-2019', 'value': '2010-2019'},
-    {'label': '2020-2029', 'value': '2020-2029'},
-    {'label': '2030-2039', 'value': '2030-2039'},
-    {'label': '2040-2049', 'value': '2040-2049'},
-    {'label': '2050-2059', 'value': '2050-2059'},
-    {'label': '2060-2069', 'value': '2060-2069'},
-    {'label': '2070-2079', 'value': '2070-2079'},
-    {'label': '2080-2089', 'value': '2080-2089'},
-    {'label': '2090-2099', 'value': '2090-2099'}
-]
-
 dataset_radio_options = [
     {'label': ' Temperature', 'value': 'temp'},
     {'label': ' Precipitation', 'value': 'precip'}
@@ -184,11 +173,6 @@ dataset_radio_options = [
 units_radio_options = [
     {'label': ' Imperial', 'value': 'imperial'},
     {'label': ' Metric', 'value': 'metric'}
-]
-
-baseline_radio_options = [
-    {'label': ' CRU', 'value': 'cru32'},
-    {'label': ' PRISM', 'value': 'prism'}
 ]
 
 rcp_radio_options = [
