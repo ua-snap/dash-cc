@@ -38,15 +38,13 @@ app.layout = layout
     Output('ccharts', 'figure'),
     inputs=[
         Input('community', 'value'),
-        Input('decades', 'value'),
         Input('variable', 'value'),
         Input('scenario', 'value'),
         Input('variability', 'value'),
-        Input('units', 'value'),
-        Input('baseline', 'value')
+        Input('units', 'value')
     ]
 )
-def update_graph(community_raw, decades, variable, scenario, variability, units, baseline):
+def update_graph(community_raw, variable, scenario, variability, units):
     """ Update the graph from user input """
 
     # Default!
@@ -69,6 +67,13 @@ def update_graph(community_raw, decades, variable, scenario, variability, units,
     resolution_lu = luts.resolution_lu
     variable_lu = luts.variable_lu
     # subset to the data we want to display using the callback variables
+
+    region = community_region_country[1].strip()
+    if region == 'Northwest Territories':
+        baseline = 'cru32'
+    else:
+        baseline = 'prism'
+
     dff = df[(df['community'] == community_region_country[0]) & (df['resolution'] == resolution_lu[baseline]) & \
             (df['type'] == variable_lu[variable]) & (df['scenario'] == scenario) ]
     cols = mean_cols+sd_cols+['daterange','region'] # fun with list appending!
@@ -109,7 +114,8 @@ def update_graph(community_raw, decades, variable, scenario, variability, units,
         # Lookup table for included decades (default: 2010,2040,2060,2090)
         df_lu_full_temp = luts.df_lu_full_temp
         df_lu = dict()
-        for decade in decades:
+
+        for decade in luts.decades:
             df_lu[decade] = df_lu_full_temp[decade]
         
         figure = {
@@ -160,7 +166,7 @@ def update_graph(community_raw, decades, variable, scenario, variability, units,
         # Lookup table for included decades (default: 2010,2040,2060,2090)
         df_lu_full_precip = luts.df_lu_full_precip
         df_lu = dict()
-        for decade in decades:
+        for decade in luts.decades:
             df_lu[decade] = df_lu_full_precip[decade]
 
         figure = {
@@ -197,34 +203,6 @@ def update_graph(community_raw, decades, variable, scenario, variability, units,
             'title': 'Precipitation (' + unit_lu['precip'][units] +')'
         }
         return figure
-
-@app.callback(
-    [Output('baseline', 'options'),
-    Output('baseline', 'value')],
-    [Input('community', 'value')], [State('baseline', 'value')])
-def set_button_enabled_state(community_raw, value):
-    if community_raw is None:
-        community_raw = 'Fairbanks, Alaska'
-    community_region_country = community_raw.split(',')
-    community = re.sub('[^A-Za-z0-9]+', '', community_region_country[0])
-    region_full = community_region_country[1].strip()
-    comm_file = data_prefix + 'data/' + community + '_' + region_lu[region_full] + '_SNAP_comm_charts_export.csv'
-    df = pd.read_csv(comm_file)
-    region = region_full
-    if region == 'Northwest Territories':
-        value='cru32'
-        options=[
-            {'label': ' CRU', 'value': 'cru32'}
-        ]
-        return options, value
-    else:
-        value=value
-        options=[
-            {'label': ' CRU', 'value': 'cru32'},
-            {'label': ' PRISM', 'value': 'prism'}
-        ]
-        return options, value
-
 
 @app.callback(
     Output('download_single', 'href'),

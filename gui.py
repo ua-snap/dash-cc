@@ -20,7 +20,7 @@ community_selector = html.Div(
     children=[
         html.Label('Type the name of a community in the box below to get started.', className='label'),
         html.Div(
-            className='control',
+            className='control column is-two-thirds px-0',
             children=[
                 dcc.Dropdown(
                     id='community',
@@ -32,40 +32,11 @@ community_selector = html.Div(
     ]
 )
 
-decade_selector = html.Div(
-    className='field',
-    children=[
-        html.Label('Select the decades of interest', className='label'),
-        html.Div(
-            className='control',
-            children=[
-                dcc.Dropdown(
-                    id='decades',
-                    options=luts.decade_selector_options,
-                    value=['2010-2019','2040-2049','2060-2069','2090-2099'],
-                    multi=True
-                )
-            ]
-        )
-    ]
-)
-
 header_layout = html.Div(
         html.Div(
-            className='columns no-print',
+            className='no-print',
             children=[
-                html.Div(
-                    className='column',
-                    children=[
-                        community_selector
-                    ]
-                ),
-                html.Div(
-                    className='column',
-                    children=[
-                        decade_selector
-                    ]
-                )
+                community_selector
             ]
 
         )
@@ -103,30 +74,6 @@ units_radio = html.Div(
                     value='imperial'
                 )
             ]
-        )
-    ]
-)
-
-baseline_radio = html.Div(
-    className='field',
-    children=[
-        html.Label('Historical Baseline', className='label'),
-        html.Div(
-            className='control',
-            children=[
-                dcc.RadioItems(
-                    labelClassName='radio',
-                    options=luts.baseline_radio_options,
-                    id='baseline',
-                    value='cru32'
-                )
-            ]
-        ),
-        html.P("""
-* Northwest Territories communities only available for CRU 3.2 baseline choice. 
-""",
-            className='help',
-            id='helptext'
         )
     ]
 )
@@ -200,28 +147,32 @@ download_all_csv = html.Div(
 )
 
 form_layout_left = html.Div(
-    className='column',
+    className='column mb-6',
     children=[
-        dataset_radio,
-        units_radio,
-        baseline_radio
+        html.Div(
+            className='mb-5',
+            children=[
+                dataset_radio,
+                units_radio
+            ]
+        ),
+        download_single_csv
     ]
 )
 
 form_layout_right = html.Div(
-    className='column',
+    className='column mb-6',
     children=[
-        rcp_radio,
-        variability_radio,
+        html.Div(
+            className='mb-5',
+            children=[
+                rcp_radio,
+                variability_radio
+            ]
+        ),
         html.Div(
             className='columns is-1',
             children=[
-                html.Div(
-                    className='column is-half',
-                    children=[
-                        download_single_csv
-                    ]
-                ),
                 html.Div(
                     className='column is-half',
                     children=[
