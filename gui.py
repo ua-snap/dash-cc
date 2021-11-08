@@ -353,6 +353,7 @@ config = {
         'lasso',
         'toggleSpikeLines'
     ],
+    'displayModeBar': True,
     'displaylogo': False
 }
 
