@@ -342,13 +342,18 @@ config = {
         'scale': 1
     },
     'modeBarButtonsToRemove': [
-        'zoom2d',
+        'zoom',
+        'zoomIn',
+        'zoomOut',
+        'resetScale',
+        'autoScale',
         'sendToCloud',
-        'pan2d',
-        'select2d',
-        'lasso2d',
+        'pan',
+        'select',
+        'lasso',
         'toggleSpikeLines'
-    ]
+    ],
+    'displaylogo': False
 }
 
 camera_icon_text = ddsih.DangerouslySetInnerHTML(f"""
