@@ -155,8 +155,7 @@ form_layout_left = html.Div(
                 dataset_radio,
                 units_radio
             ]
-        ),
-        download_single_csv
+        )
     ]
 )
 
@@ -169,16 +168,23 @@ form_layout_right = html.Div(
                 rcp_radio,
                 variability_radio
             ]
+        )
+    ]
+)
+
+download_csv_buttons = html.Div(
+    className='columns is-1 mb-6',
+    children=[
+        html.Div(
+            className='column is-half has-text-centered',
+            children=[
+                download_single_csv
+            ]
         ),
         html.Div(
-            className='columns is-1',
+            className='column is-half has-text-centered',
             children=[
-                html.Div(
-                    className='column is-half',
-                    children=[
-                        download_all_csv
-                    ]
-                )
+                download_all_csv
             ]
         )
     ]
@@ -368,6 +374,7 @@ main_layout = html.Div(
                 form_layout,
                 camera_icon_text,
                 graph_layout,
+                download_csv_buttons,
                 explanations
             ]
         )
