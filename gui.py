@@ -270,29 +270,22 @@ This tool offers users a way to hide and show this variability:
 
 
 footer = html.Footer(
-    className='footer has-text-centered',
+    className='footer',
     children=[
         ddsih.DangerouslySetInnerHTML(f"""
             <div>
-                <a class="level-item" href="https://snap.uaf.edu" target="_blank">
-                    <img src="{path_prefix}assets/SNAP.svg" />
-                </a>
-                <a class="level-item" href="https://uaf.edu/uaf/" target="_blank">
-                    <img src="{path_prefix}assets/UAF.svg" />
-                </a>
-                <a class="level-item" href="https://www.gov.nt.ca/" target="_blank">
-                    <img src="{path_prefix}assets/NWT.svg" />
-                </a>
+                <div class="container">
+                    <div class="wrapper is-size-6">
+                        <img src="https://www.snap.uaf.edu/tools/airport-winds/assets/UAF.svg">
+                        <div class="wrapped">
+                            <p>This tool was developed by the <a href="https://uaf-snap.org">Scenarios Network for Alaska &amp; Arctic Planning (SNAP)</a>. SNAP is a research group at the <a href="https://uaf-iarc.org/">International Arctic Research Center</a> at the <a href="https://uaf.edu/uaf/">University of Alaska Fairbanks</a>.</p>
+                            <p>Copyright © 2021 University of Alaska Fairbanks.  All rights reserved.</p>
+                            <p>UA is an AA/EO employer and educational institution and prohibits illegal discrimination against any individual.  <a href="https://www.alaska.edu/nondiscrimination/">Statement of Nondiscrimination</a> and <a href="https://www.alaska.edu/records/records/compliance/gdpr/ua-privacy-statement/">Privacy Statement</a>.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-        """),
-        dcc.Markdown(
-            """
-This tool is part of an ongoing collaboration between SNAP and the Government of Northwest Territories. We are working to make a wide range of downscaled climate products that are easily accessible, flexibly usable, and fully interpreted and understandable to users in the Northwest Territories, while making these products relevant at a broad geographic scale.
-
-UA is an AA/EO employer and educational institution and prohibits illegal discrimination against any individual. [Statement of Nondiscrimination](https://www.alaska.edu/nondiscrimination/)
-            """,
-            className='content is-size-6'
-        )
+        """)
     ]
 )
 
