@@ -9,6 +9,7 @@ import html as h
 from flask import redirect
 import flask
 import re
+import json
 
 import pandas as pd
 import os
@@ -24,6 +25,9 @@ app.title = luts.title
 # AWS Elastic Beanstalk looks for application by default,
 # if this variable (application) isn't set you will get a WSGI error.
 application = app.server
+
+with open('CommunityNames.json', 'r') as community_file:
+    communities = json.load(community_file)
 
 Months = luts.Months
 mean_cols = []
@@ -49,13 +53,12 @@ def update_graph(community_raw, variable, scenario, variability, units):
 
     # Default!
     if community_raw is None:
-        community_raw = 'Fairbanks, Alaska'
+        community_raw = 'AK124'
 
-    variability = variability == 'on'  # convert to boolean for use in configuring graph
-    community_region_country = community_raw.split(',')
+    community_region_country = communities[community_raw].split(',')
     region_full = community_region_country[1].strip()
-    community = re.sub('[^A-Za-z0-9]+', '', community_region_country[0])
-    comm_file = data_prefix + 'data/' + community + '_' + region_lu[region_full] + '_SNAP_comm_charts_export.csv'
+    community_id = re.sub('[^A-Z0-9]+', '', community_raw)
+    comm_file = data_prefix + 'data/' + community_id + '.csv'
     df = pd.read_csv(comm_file)
 
     # [ML] maybe hardwire these? Not a huge time sink, but it could be made cleaner
@@ -215,10 +218,9 @@ def update_download_link(comm):
 def download_csv():
     value = flask.request.args.get('value')
     value = h.unescape(value)
-    community_region_country = value.split(',')
-    community = re.sub('[^A-Za-z0-9]+', '', community_region_country[0])
-    region_full = community_region_country[1].strip()
-    pathname = data_prefix + 'data/' + community + '_' + region_lu[region_full] + '_SNAP_comm_charts_export.csv'
+    community_region_country = communities[value].split(',')
+    community_id = re.sub('[^A-Z0-9]+', '', value)
+    pathname = data_prefix + 'data/' + community_id + '.csv'
     return redirect(pathname)
 
 

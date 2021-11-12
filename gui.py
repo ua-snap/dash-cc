@@ -5,13 +5,15 @@ SNAP Community Charts / Community Climate
 import os
 from dash import dcc
 from dash import html
-import pandas as pd
+import json
 import dash_dangerously_set_inner_html as ddsih
 import luts
 
 df = None
-co = pd.read_json('CommunityNames.json')
-names = list(co.community)
+
+with open('CommunityNames.json', 'r') as community_file:
+    communities = json.load(community_file)
+
 path_prefix = os.environ['DASH_REQUESTS_PATHNAME_PREFIX']
 
 
@@ -24,8 +26,8 @@ community_selector = html.Div(
             children=[
                 dcc.Dropdown(
                     id='community',
-                    options=[{'label':name, 'value':name} for name in names],
-                    value='Fairbanks, Alaska'
+                    options=[{'label':name, 'value':id} for id, name in communities.items()],
+                    value='AK124'
                 )
             ]
         )
