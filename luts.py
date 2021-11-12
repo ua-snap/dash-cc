@@ -176,9 +176,9 @@ units_radio_options = [
 ]
 
 rcp_radio_options = [
-    {'label': ' Low (RCP4.5)', 'value': 'rcp45'},
-    {'label': ' Medium (RCP6.0)', 'value': 'rcp60'},
-    {'label': ' High (RCP8.5)', 'value': 'rcp85'}
+    {'label': ' Low Emissions (RCP4.5)', 'value': 'rcp45'},
+    {'label': ' Medium Emissions (RCP6.0)', 'value': 'rcp60'},
+    {'label': ' High Emissions (RCP8.5)', 'value': 'rcp85'}
 ]
 
 visibility_radio_options = [
