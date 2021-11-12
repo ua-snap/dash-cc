@@ -132,13 +132,13 @@ label.label:not(:last-child) {
 
 @media (min-width: 768px) and (max-width: 899px) {
 	.extent-wrapper.desktop {
-		height: 450px;
+		height: 480px;
 	}
 }
 
 @media (min-width: 900px) {
 	.extent-wrapper.desktop {
-		height: 380px;
+		height: 400px;
 	}
 }
 
