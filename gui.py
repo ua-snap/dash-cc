@@ -98,23 +98,6 @@ rcp_radio = html.Div(
     ]
 )
 
-variability_radio = html.Div(
-    className='field',
-    children=[
-        html.Label('Inter-model Variability', className='label'),
-        html.Div(
-            className='control',
-            children=[
-                dcc.RadioItems(
-                    labelClassName='radio',
-                    options=luts.visibility_radio_options,
-                    id='variability',
-                    value='off'
-                )
-            ]
-        )
-    ]
-)
 download_single_csv = html.Div(
     className='download',
     children=[
@@ -167,8 +150,7 @@ form_layout_right = html.Div(
         html.Div(
             className='mb-5',
             children=[
-                rcp_radio,
-                variability_radio
+                rcp_radio
             ]
         )
     ]
@@ -254,10 +236,6 @@ For comparison and a look at model uncertainty related to the challenges of crea
 #### Variability Among Models
 
 A Global Climate Model (GCM) is a type of General Circulation Model that focuses on projections of climate change by simulating how Earth’s physical processes respond to increasing greenhouse gas concentrations. Slight variations between these models allow us to consider a range of possible future climate conditions. SNAP projections use 5 GCMs that perform best in the Arctic, as well as an average of the 5 selected models. 
-
-This tool offers users a way to hide and show this variability: 
-* Click Inter-model Variability. Notice the black lines extending above and below each bar. The shaded bars represent the average (mean) values from all 5 models, and the black lines show the lowest and highest values among the 5 models used. Baseline years have no variability values because they are derived directly from climate station data, rather than from the 5 models.
-* Click "Off" to hide variability values and show only the 5-model average.
 
 
 ###### More details

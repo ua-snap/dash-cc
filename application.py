@@ -44,11 +44,10 @@ app.layout = layout
         Input('community', 'value'),
         Input('variable', 'value'),
         Input('scenario', 'value'),
-        Input('variability', 'value'),
         Input('units', 'value')
     ]
 )
-def update_graph(community_raw, variable, scenario, variability, units):
+def update_graph(community_raw, variable, scenario, units):
     """ Update the graph from user input """
 
     # Default!
@@ -143,12 +142,7 @@ def update_graph(community_raw, variable, scenario, variability, units):
                 'marker': {
                     'color': df_lu[key]['color']
                 },
-                'name': key + ' ',
-                'error_y': {
-                    'type': 'data',
-                    'array': df_l[sd_cols].iloc[0],
-                    'visible': variability
-                }
+                'name': key + ' '
             })
         figure['layout'] = figure_layout
         figure['layout']['title'] = '<b>Average Monthly Temperature for ' + community_region_country[0] + ', ' + region_label + '</b><br>Historical ' + baseline_label + ' and 5-Model Projected Average at ' + resolution_lu[baseline] + ' resolution, ' + emission_label + ' Scenario &nbsp;'
@@ -192,12 +186,7 @@ def update_graph(community_raw, variable, scenario, variability, units):
                 'marker': {
                     'color': df_lu[key]['color']
                 },
-                'name': key + ' ',
-                'error_y': {
-                    'type': 'data',
-                    'array': df_l[sd_cols].iloc[0],
-                    'visible': variability
-                }
+                'name': key + ' '
             })
 
         figure['layout'] = figure_layout
