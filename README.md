@@ -9,7 +9,7 @@ cd /path/to/this/repo
 pipenv install
 export FLASK_APP=application.py
 export GTAG_ID='abc' # google analytics ID, nonce for dev
-export REQUESTS_PATHNAME_PREFIX='/' # see below for more info
+export DASH_REQUESTS_PATHNAME_PREFIX='/' # see below for more info
 pipenv run flask run
 ```
 
