@@ -20,9 +20,9 @@ path_prefix = os.environ['DASH_REQUESTS_PATHNAME_PREFIX']
 community_selector = html.Div(
     className='field',
     children=[
-        html.Label('Type the name of a community in the box below to get started.', className='label'),
+        html.Label('Type the name of a community in the box below to get started.', className='label has-text-centered'),
         html.Div(
-            className='control column is-two-thirds px-0',
+            className='control column px-0 mb-3',
             children=[
                 dcc.Dropdown(
                     id='community',
@@ -34,7 +34,7 @@ community_selector = html.Div(
     ]
 )
 
-header_layout = html.Div(
+community_selector_layout = html.Div(
         html.Div(
             className='no-print',
             children=[
@@ -114,6 +114,7 @@ download_single_csv = html.Div(
         )
     ]
 )
+
 download_all_csv = html.Div(
     className='download',
     children=[
@@ -131,24 +132,32 @@ download_all_csv = html.Div(
     ]
 )
 
-form_layout_left = html.Div(
-    className='column mb-6',
+radio_buttons_left = html.Div(
+    className='column is-one-third',
     children=[
         html.Div(
-            className='mb-5',
             children=[
-                dataset_radio,
+                dataset_radio
+            ]
+        )
+    ]
+)
+
+radio_buttons_middle = html.Div(
+    className='column is-one-third',
+    children=[
+        html.Div(
+            children=[
                 units_radio
             ]
         )
     ]
 )
 
-form_layout_right = html.Div(
-    className='column mb-6',
+radio_buttons_right = html.Div(
+    className='column is-one-third',
     children=[
         html.Div(
-            className='mb-5',
             children=[
                 rcp_radio
             ]
@@ -174,14 +183,15 @@ download_csv_buttons = html.Div(
     ]
 )
 
-form_layout = html.Div(
+radio_button_layout = html.Div(
     className='container',
     children=[
         html.Div(
             className='columns no-print',
             children=[
-                form_layout_left,
-                form_layout_right
+                radio_buttons_left,
+                radio_buttons_middle,
+                radio_buttons_right
             ]
         )
     ]
@@ -236,7 +246,6 @@ For comparison and a look at model uncertainty related to the challenges of crea
 #### Variability Among Models
 
 A Global Climate Model (GCM) is a type of General Circulation Model that focuses on projections of climate change by simulating how Earth’s physical processes respond to increasing greenhouse gas concentrations. Slight variations between these models allow us to consider a range of possible future climate conditions. SNAP projections use 5 GCMs that perform best in the Arctic, as well as an average of the 5 selected models. 
-
 
 ###### More details
 * [SNAP’s model evaluation and selection process](https://www.snap.uaf.edu/methods/model-selection)
@@ -367,14 +376,34 @@ graph_layout = html.Div(
     ]
 )
 
-main_layout = html.Div(
-    className='container',
+community_selector_container = html.Div(
+    className='container top',
     children=[
         html.Div(
-            className='section main',
             children=[
-                header_layout,
-                form_layout,
+                community_selector_layout,
+            ]
+        )
+    ]
+)
+
+radio_button_container = html.Div(
+    className='container middle',
+    children=[
+        html.Div(
+            children=[
+                radio_button_layout,
+            ]
+        )
+    ]
+)
+
+bottom_container = html.Div(
+    className='container bottom mb-6',
+    children=[
+        html.Div(
+            className='section',
+            children=[
                 camera_icon_text,
                 graph_layout,
                 download_csv_buttons,
@@ -388,7 +417,9 @@ layout = html.Div(
     children=[
         header_section,
         intro_section,
-        main_layout,
+        community_selector_container,
+        radio_button_container,
+        bottom_container,
         footer
     ]
 )
