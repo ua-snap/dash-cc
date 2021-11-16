@@ -18,7 +18,7 @@ import copy
 import luts
 
 path_prefix = os.environ['DASH_REQUESTS_PATHNAME_PREFIX']
-data_prefix = 'https://s3-us-west-2.amazonaws.com/community-charts/'
+data_prefix = 'https://community-charts-dev.s3.us-west-2.amazonaws.com/'
 
 app = dash.Dash(__name__)
 app.title = luts.title
