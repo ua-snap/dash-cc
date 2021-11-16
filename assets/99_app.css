@@ -41,7 +41,6 @@ label.label:not(:last-child) {
 
 .header {
 	background-image: url('/assets/header_background.jpg');
-	background-size: cover;
 	height: 400px;
 	padding: 0;
 }
@@ -49,6 +48,12 @@ label.label:not(:last-child) {
 @media (max-width: 749px) {
 	.header {
 		background-position: 50% 8%;
+	}
+}
+
+@media (min-width: 999px) {
+	.header {
+		background-size: cover;
 	}
 }
 
