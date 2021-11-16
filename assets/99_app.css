@@ -157,6 +157,10 @@ label.label:not(:last-child) {
 	}
 }
 
+.container.top {
+	clear: both;
+}
+
 @media (max-width: 767px) {
 	.container.top {
 		padding: 0 20px;
