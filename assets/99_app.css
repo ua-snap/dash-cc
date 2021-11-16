@@ -129,6 +129,7 @@ label.label:not(:last-child) {
 
 @media (min-width: 1700px) {
 	.extent-map {
+		height: 120%;
 		margin-top: -60px;
 	}
 }
