@@ -8,7 +8,6 @@ To run the application locally, install [pipenv](https://pipenv.readthedocs.io/e
 cd /path/to/this/repo
 pipenv install
 export FLASK_APP=application.py
-export GTAG_ID='abc' # google analytics ID, nonce for dev
 export DASH_REQUESTS_PATHNAME_PREFIX='/' # see below for more info
 pipenv run flask run
 ```
@@ -27,5 +26,4 @@ git commit -am'updating requirements.txt'
 
 When deploying on AWS Elastic Beanstalk, a few environment variables must be set:
 
- * `GTAG_ID`: property ID for Google Analytics, no default value
  * `DASH_REQUESTS_PATHNAME_PREFIX`: Path prefix on host, should be `/` for local development and `/tools/community-charts/` for current deploy on AWS
