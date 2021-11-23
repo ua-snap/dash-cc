@@ -22,7 +22,6 @@ label.label:not(:last-child) {
 .page-bar-row {
 	padding: 5px 0;
 	letter-spacing: 0.3em;
-	font-size: 0.9em;
 }
 
 .section--form {
