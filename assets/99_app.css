@@ -102,7 +102,7 @@ label.label:not(:last-child) {
 	text-align: right;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 799px) {
 	.intro-text {
 		text-align: center;
 	}
@@ -115,7 +115,7 @@ label.label:not(:last-child) {
 	}
 }
 
-@media (min-width: 768px) {
+@media (min-width: 800px) {
 	.extent-wrapper.desktop {
 		float: right;
 		width: 50%;
@@ -126,9 +126,43 @@ label.label:not(:last-child) {
 	}
 }
 
-@media (min-width: 768px) and (max-width: 1699px) {
+@media (max-width: 1215px) {
+	.intro-text {
+		max-width: 1000px;
+	}
+}
+
+.line-break {
+	display: none;
+}
+
+@media (max-width: 799px) {
+	.line-break.show-below-800 {
+		display: block;
+	}
+}
+
+@media (min-width: 800px) and (max-width: 1215px) {
+	.line-break.show-above-800-below-1215 {
+		display: block;
+	}
+}
+
+@media (min-width: 916px) and (max-width: 1215px) {
+	.line-break.show-above-916-below-1215 {
+		display: block;
+	}
+}
+
+@media (min-width: 950px) {
+	.line-break.show-above-950 {
+		display: block;
+	}
+}
+
+@media (min-width: 768px) and (max-width: 1215px) {
 	.extent-map {
-		margin-top: calc(200px - (1vw * 15));
+		margin-top: 75px;
 	}
 }
 
@@ -153,7 +187,7 @@ label.label:not(:last-child) {
 
 @media (min-width: 1120px) {
 	.extent-wrapper.desktop {
-		height: 400px;
+		height: 450px;
 	}
 }
 

@@ -325,11 +325,11 @@ intro_section = ddsih.DangerouslySetInnerHTML(f"""
             <div class="extent-wrapper desktop">
                 <img class="extent-map" src="assets/akcanada.svg" />
             </div>
-            <h4 class="title is-4 mt-3 mb-5">What’s up — or down — in your corner of the North?</h4>
-            <p class="my-3">See temperature and precipitation projections through 2099 for over 3,800 communities in Alaska and western Canada.</p>
-            <p class="my-3">These projections show only patterns and trends. Look for changes like these:</p>
-            <p class="my-3">Higher temperatures in spring and fall could mean a longer growing season and/or a shift from snow to rain.</p>
-            <p class="my-3">Warmer, drier spring weather may increase fire risk.</p>
+            <h4 class="title is-4 mt-3 mb-5">What’s up — or down — in your <br class="line-break show-above-1000 show-above-800-below-1215" /> corner of the North?</h4>
+            <p class="my-3">See temperature and precipitation projections <br class="line-break show-above-916-below-1215" /> through 2099 for over 3,800 communities in <br class="line-break show-above-916-below-1215" /> Alaska and western Canada.</p>
+            <p class="my-3">These projections show only patterns <br class="line-break show-below-800" /> and trends. <br class="line-break show-above-950 show-above-1000" /> Look for changes like these:</p>
+            <p class="my-3">Higher temperatures in spring and fall <br class="line-break show-above-1000 show-above-800-below-1215" /> could mean a longer growing season <br class="line-break show-above-800-below-1215" /> and/or a shift from snow to rain.</p>
+            <p class="my-3">Warmer, drier spring weather <br class="line-break show-above-1000 show-above-800-below-1215" /> may increase fire risk.</p>
             <h5 class="title is-5 mt-5">Happy exploring!</h5>
             <div class="extent-wrapper mobile">
                 <img class="extent-map" src="assets/akcanada.svg" />
