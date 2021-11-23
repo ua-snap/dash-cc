@@ -142,26 +142,14 @@ figure_layout = {
 }
 
 df_lu_full_temp = {
-    '2010-2019': {'color': '#ffd700'},
-    '2020-2029': {'color': '#ffc400'},
     '2030-2039': {'color': '#ffb100'},
-    '2040-2049': {'color': '#ff9900'},
-    '2050-2059': {'color': '#ff7400'},
     '2060-2069': {'color': '#ff5000'},
-    '2070-2079': {'color': '#e23300'},
-    '2080-2089': {'color': '#b61900'},
     '2090-2099': {'color': '#8b0000'}
 }
 
 df_lu_full_precip = {
-    '2010-2019': {'color': '#7fffdf'},
-    '2020-2029': {'color': '#71e8ca'},
     '2030-2039': {'color': '#63d2c1'},
-    '2040-2049': {'color': '#55bcb8'},
-    '2050-2059': {'color': '#47a6af'},
     '2060-2069': {'color': '#3990a6'},
-    '2070-2079': {'color': '#2b7a9d'},
-    '2080-2089': {'color': '#1d6494'},
     '2090-2099': {'color': '#104e8b'}
 }
 
@@ -179,9 +167,4 @@ rcp_radio_options = [
     {'label': ' Low Emissions (RCP4.5)', 'value': 'rcp45'},
     {'label': ' Medium Emissions (RCP6.0)', 'value': 'rcp60'},
     {'label': ' High Emissions (RCP8.5)', 'value': 'rcp85'}
-]
-
-visibility_radio_options = [
-    {'label': ' Off', 'value': 'off'},
-    {'label': ' On', 'value': 'on'}
 ]
