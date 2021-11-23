@@ -99,7 +99,7 @@ rcp_radio = html.Div(
 )
 
 download_single_csv = html.Div(
-    className='download',
+    className='has-text-centered mb-6',
     children=[
         html.Div(
             className='control',
@@ -109,23 +109,6 @@ download_single_csv = html.Div(
                     className='button is-info',
                     id='download_single',
                     href=''
-                )
-            ]
-        )
-    ]
-)
-
-download_all_csv = html.Div(
-    className='download',
-    children=[
-        html.Div(
-            className='control',
-            children=[
-                html.A(
-                    'Download All Data and View Metadata',
-                    className='button is-info',
-                    id='download_all',
-                    href='http://ckan.snap.uaf.edu/dataset/community-charts-temperature-and-precipitation'
                 )
             ]
         )
@@ -160,24 +143,6 @@ radio_buttons_right = html.Div(
         html.Div(
             children=[
                 rcp_radio
-            ]
-        )
-    ]
-)
-
-download_csv_buttons = html.Div(
-    className='columns is-1 mb-6',
-    children=[
-        html.Div(
-            className='column is-half has-text-centered',
-            children=[
-                download_single_csv
-            ]
-        ),
-        html.Div(
-            className='column is-half has-text-centered',
-            children=[
-                download_all_csv
             ]
         )
     ]
@@ -250,6 +215,10 @@ A Global Climate Model (GCM) is a type of General Circulation Model that focuses
 ###### More details
 * [SNAP’s model evaluation and selection process](https://www.snap.uaf.edu/methods/model-selection)
 * [General Circulation Models and Global Climate Models](https://www.sciencedaily.com/terms/global_climate_model.htm)
+
+#### Download Data
+
+All data used by this tool can be downloaded as a single CSV file from the [SNAP Data Portal](http://ckan.snap.uaf.edu/dataset/community-charts-temperature-and-precipitation).
 
 """,
             className='is-size-5 content'
@@ -406,7 +375,7 @@ bottom_container = html.Div(
             children=[
                 camera_icon_text,
                 graph_layout,
-                download_csv_buttons,
+                download_single_csv,
                 explanations
             ]
         )
