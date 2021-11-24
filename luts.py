@@ -47,6 +47,9 @@ index_string = f'''
         <link rel="alternate" hreflang="en" href="{url}" />
         <link rel="canonical" href="{url}"/>
 
+        <!-- Safari 15 tab bar color -->
+        <meta name="theme-color" content="#8e1e23">
+
         {{%favicon%}}
         {{%css%}}
     </head>
