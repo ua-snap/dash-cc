@@ -105,6 +105,9 @@ label.label:not(:last-child) {
 	.intro-text {
 		text-align: center;
 	}
+	.extent.section {
+		padding-bottom: 0;
+	}
 	.extent-wrapper.mobile {
 		width: 100%;
 		display: block;
@@ -159,7 +162,7 @@ label.label:not(:last-child) {
 	}
 }
 
-@media (min-width: 768px) and (max-width: 1215px) {
+@media (min-width: 799px) and (max-width: 1215px) {
 	.extent-map {
 		margin-top: 75px;
 	}
@@ -186,7 +189,7 @@ label.label:not(:last-child) {
 
 @media (min-width: 1120px) {
 	.extent-wrapper.desktop {
-		height: 450px;
+		height: 410px;
 	}
 }
 
@@ -204,43 +207,13 @@ label.label:not(:last-child) {
 	}
 }
 
-@media (min-width: 768px) and (max-width: 1215px) {
-	.container.top {
-		padding: 0 100px;
-	}
-
-	.container.middle {
-		padding: 0 100px;
-	}
-}
-
-@media (min-width: 1216px) {
-	.container.top {
-		padding: 0 150px;
-	}
-	.container.middle {
-		padding: 0 150px;
-	}
-}
-
-.community-selector {
-	margin: 0 auto;
-}
-
-@media (max-width: 899px) {
-	.community-selector {
-		width: 90%;
-	}
-}
-
-@media (min-width: 900px) {
-	.community-selector {
-		width: 75%;
-	}
-}
-
 .container.middle label.label:not(:last-child) {
 	margin-top: 0;
+}
+
+.form-input.section {
+	padding-top: 0;
+	padding-bottom: 0;
 }
 
 .form label, .form input {
@@ -271,10 +244,6 @@ label.checkbox input, label.radio input {
 
 .camera-icon span path {
   fill: #ccc;
-}
-
-.explanation h4 {
-	margin-top: 30px;
 }
 
 .footer p {

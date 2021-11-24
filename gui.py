@@ -20,9 +20,9 @@ path_prefix = os.environ['DASH_REQUESTS_PATHNAME_PREFIX']
 community_selector = html.Div(
     className='field',
     children=[
-        html.Label('Type the name of a community in the box below to get started.', className='label has-text-centered'),
+        html.Label('Type the name of a community in the box below to get started.', className='label'),
         html.Div(
-            className='control column px-0 mb-3 community-selector',
+            className='control px-0 mb-3',
             children=[
                 dcc.Dropdown(
                     id='community',
@@ -32,16 +32,6 @@ community_selector = html.Div(
             ]
         )
     ]
-)
-
-community_selector_layout = html.Div(
-        html.Div(
-            className='no-print',
-            children=[
-                community_selector
-            ]
-
-        )
 )
 
 dataset_radio = html.Div(
@@ -115,85 +105,83 @@ download_single_csv = html.Div(
     ]
 )
 
-radio_buttons_left = html.Div(
-    className='column is-one-third',
+rcp_blurb = ddsih.DangerouslySetInnerHTML(f"""
+<div class="mt-5">
+    <label class="label">What are RCPs?</label>
+    <p>This tool uses Representative Concentration Pathways (RCPs) to display climate scenarios. RCPs describe paths to future climates based on greenhouse gas concentrations. They represent possible climate futures (scenarios) out to the year 2100 and provide a basis for comparison. <a href="#rcp-explanation">Learn more about RCPs below.</a></p>
+</div>
+""")
+
+form_inputs_left = html.Div(
+    className='no-print column is-half',
     children=[
-        html.Div(
-            children=[
-                dataset_radio
-            ]
-        )
+        community_selector,
+        rcp_blurb
     ]
 )
 
-radio_buttons_middle = html.Div(
-    className='column is-one-third',
+form_inputs_right = html.Div(
+    className='no-print column is-half',
     children=[
-        html.Div(
-            children=[
-                units_radio
-            ]
-        )
+        dataset_radio,
+        units_radio,
+        rcp_radio
     ]
 )
 
-radio_buttons_right = html.Div(
-    className='column is-one-third',
-    children=[
-        html.Div(
-            children=[
-                rcp_radio
-            ]
-        )
-    ]
+explanation_variability = dcc.Markdown("""
+    ### Learn more about the variables used in this tool
+
+    Due to variability among climate models and among years in a natural climate system, these graphs are useful for examining trends over time, rather than for precisely predicting monthly or yearly values.
+    """,
+    className='mb-5'
 )
 
-radio_button_layout = html.Div(
-    className='container',
-    children=[
-        html.Div(
-            className='columns no-print',
-            children=[
-                radio_buttons_left,
-                radio_buttons_middle,
-                radio_buttons_right
-            ]
-        )
-    ]
-)
+explanation_interpret = dcc.Markdown("""
+    #### How to interpret climate outlooks for your community
+
+    You can examine SNAP community outlooks for certain key changes and threshold values—for example, higher mean monthly temperatures in the spring and fall may be of particular interest. This could signify any or all of these conditions:
+
+    * a longer growing season
+    * a loss of ice and/or frozen ground needed for travel or food storage
+    * a shift in precipitation from snow to rain, which impacts water storage capacity and surface water availability
+
+    Note: Precipitation may occur as either rain or snow, but is reported for all months in terms of rainwater equivalent.
+
+    Warmer, drier spring weather may also be an indicator for increased fire risk. In many locations, winter temperatures are projected to increase dramatically. Warmer winters may favor growth of species that are less cold-hardy (including desirable crops and invasive species), or it may decrease snowpack and increase the frequency of rain-on-snow events that impact wildlife. Higher temperatures across all seasons will likely impact permafrost and land-fast ice.
+    """,
+    className='mb-5')
+
+explanation_rcps_anchor = html.A(id='rcp-explanation')
+
+explanation_rcps = dcc.Markdown("""
+    #### Representative Concentration Pathways
+
+    RCPs describe paths to future climates based on atmospheric greenhouse gas concentrations. They represent climate futures—scenarios—extrapolated out to the year 2100, based on a range of possible future human behaviors. RCPs provide a basis for comparison and a “common language” for modelers to share their work.
+
+    The RCP values 4.5, 6.0, and 8.5 indicate projected radiative forcing values—the difference between solar energy absorbed by Earth vs. energy radiated back to space—measured in watts per square meter. RCP X projects that in 2100 the concentration of greenhouse gases will be such that each square meter of Earth will absorb X times more solar energy than it did in 1750.
+
+    * RCP 4.5 — “low” scenario. Assumes that new technologies and socioeconomic strategies cause emissions to peak in 2040 and radiative forcing to stabilize after 2100.
+    * RCP 6.0 — “medium” scenario. Assumes that emissions peak in 2080 and radiative forcing stabilizes after 2100.
+    * RCP 8.5 — “high” scenario. Emissions increase through the 21st century.
+    """,
+    className='mb-5')
+
+explanations_download = dcc.Markdown("""
+    #### Download Data
+
+    All data used by this tool can be downloaded as a single CSV file from the [SNAP Data Portal](http://ckan.snap.uaf.edu/dataset/community-charts-temperature-and-precipitation).
+    """,
+    className='mb-5')
 
 explanations = html.Div(
-    className='container explanation',
+    className='container is-size-5 content',
     children=[
-        dcc.Markdown("""
-## How to interpret climate outlooks for your community
-
-Climate systems naturally change year to year, as do the models built to simulate them. Because of that, these charts are best for examining trends over time, and not for precise predictions.
-
-#### Look for key changes
-For example, higher monthly temperatures in spring and fall may be particularly interesting. Higher temperature could mean any or all of these things:
-
-* A longer growing season
-* A loss of ice and/or frozen ground needed for travel or food storage
-* Precipitation changes. A shift from snow to rain impacts water storage capacity and surface water availability. This tool reports precipitation in terms of rainwater equivalent, even though it could occur as rain or snow.
-* Increased fire risk. In many locations, winter temperatures are projected to increase dramatically.
-* Changes in species composition. Warmer winters may favor species that are less cold-hardy (including desirable crops and invasive species), or it may mean less snow and/or more rain-on-snow events that impact wildlife.
-* Thawing. Higher temperatures will impact permafrost and land-fast ice.
-
-#### Scenarios (RCPs)
-This tool uses Representative Concentration Pathways (RCPs) to display climate scenarios. RCPs describe paths to future climates based on atmospheric greenhouse gas concentrations. They represent climate futures, or scenarios, extrapolated out to the year 2100, based on a range of possible future human behaviors. RCPs provide a basis for comparison and a “common language” for modelers to share their work.
-The RCP values 4.5, 6.0, and 8.5 indicate projected radiative forcing values—the difference between solar energy absorbed by Earth vs. energy radiated back to space—measured in watts per square meter. RCP X projects that in 2100 the concentration of greenhouse gases will be such that each square meter of Earth will absorb X times more solar energy than it did in 1750.
-
-* RCP 4.5 — “low” scenario. Assumes that new technologies and socioeconomic strategies cause emissions to peak in 2040 and radiative forcing to stabilize after 2100.
-* RCP 6.0 — “medium” scenario. Assumes that emissions peak in 2080 and radiative forcing stabilizes after 2100.
-* RCP 8.5 — “high” scenario. Emissions increase through the 21st century.
-
-#### Download Data
-
-All data used by this tool can be downloaded as a single CSV file from the [SNAP Data Portal](http://ckan.snap.uaf.edu/dataset/community-charts-temperature-and-precipitation).
-""",
-            className='is-size-5 content'
-        )
+        explanation_variability,
+        explanation_interpret,
+        explanation_rcps_anchor,
+        explanation_rcps,
+        explanations_download
     ]
 )
 
@@ -202,26 +190,42 @@ footer = html.Footer(
     className='footer',
     children=[
         ddsih.DangerouslySetInnerHTML(f"""
-        <div class="container">
-            <div class="columns">
-                <div class="logos column is-one-fifth">
-                    <a href="https://uaf.edu/uaf/">
-                        <img src="assets/UAF.svg">
-                    </a>
-                </div>
-                <div class="column content is-size-5">
-                    <p>This tool is part of an ongoing collaboration between the <a href="https://uaf-snap.org">Scenarios Network for Alaska + Arctic Planning</a> and the Government of Northwest Territories. We are working to make a wide range of downscaled climate products that are easily accessible, flexibly usable, and fully interpreted and understandable to users in the Northwest Territories, while making these products relevant at a broad geographic scale.
-                    </p>
-                    <p>Please contact <a href="mailto:uaf-snap-data-tools@alaska.edu">uaf-snap-data-tools@alaska.edu</a> if you have questions or would like to provide feedback for this tool. <a href="https://uaf-snap.org/tools-overview/">Visit the SNAP Climate + Weather Tools page</a> to see our full suite of interactive web tools.</p>
-                    <p>Copyright © 2021 University of Alaska Fairbanks.  All rights reserved.</p>
-                    <p>UA is an AA/EO employer and educational institution and prohibits illegal discrimination against any individual.  <a href="https://www.alaska.edu/nondiscrimination/">Statement of Nondiscrimination</a> and <a href="https://www.alaska.edu/records/records/compliance/gdpr/ua-privacy-statement/">Privacy Statement</a>.</p>
-                    <p>Photo © __________</p>
+            <div>
+                <div class="container">
+                    <div class="wrapper is-size-6">
+                        <img src="https://www.snap.uaf.edu/tools/airport-winds/assets/UAF.svg">
+                        <div class="wrapped">
+                            <p>This tool was developed by the <a href="https://uaf-snap.org">Scenarios Network for Alaska &amp; Arctic Planning (SNAP)</a>. SNAP is a research group at the <a href="https://uaf-iarc.org/">International Arctic Research Center</a> at the <a href="https://uaf.edu/uaf/">University of Alaska Fairbanks</a>.</p>
+                            <p>Copyright © 2021 University of Alaska Fairbanks.  All rights reserved.</p>
+                            <p>UA is an AA/EO employer and educational institution and prohibits illegal discrimination against any individual.  <a href="https://www.alaska.edu/nondiscrimination/">Statement of Nondiscrimination</a> and <a href="https://www.alaska.edu/records/records/compliance/gdpr/ua-privacy-statement/">Privacy Statement</a>.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
         """)
     ]
 )
+
+
+header_section = ddsih.DangerouslySetInnerHTML(f"""
+<div class="header">
+    <div class="page-bar">
+        <div class="page-bar-container container">
+            <div class="page-bar-row has-text-centered">
+                UNIVERSITY OF ALASKA FAIRBANKS&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;SCENARIOS NETWORK FOR ALASKA + ARCTIC PLANNING
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="section">
+                <div class="header--titles has-text-centered">
+                    <h1 class="title is-1">Community Climate Charts</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+""")
 
 header_section = ddsih.DangerouslySetInnerHTML(f"""
 <div class="header">
@@ -244,7 +248,7 @@ header_section = ddsih.DangerouslySetInnerHTML(f"""
 """)
 
 intro_section = ddsih.DangerouslySetInnerHTML(f"""
-    <div class="section">
+    <div class="extent section">
         <div class="intro-text">
             <div class="extent-wrapper desktop">
                 <img class="extent-map" src="assets/akcanada.svg" />
@@ -300,30 +304,26 @@ graph_layout = html.Div(
     ]
 )
 
-community_selector_container = html.Div(
-    className='container top',
+form_container = html.Div(
+    className='form-input section',
     children=[
         html.Div(
+            className='container top',
             children=[
-                community_selector_layout,
-            ]
-        )
-    ]
-)
-
-radio_button_container = html.Div(
-    className='container middle',
-    children=[
-        html.Div(
-            children=[
-                radio_button_layout,
+                html.Div(
+                    className='columns',
+                    children=[
+                        form_inputs_left,
+                        form_inputs_right
+                    ]
+                )
             ]
         )
     ]
 )
 
 bottom_container = html.Div(
-    className='container bottom mb-6',
+    className='bottom mb-6',
     children=[
         html.Div(
             className='section',
@@ -341,8 +341,7 @@ layout = html.Div(
     children=[
         header_section,
         intro_section,
-        community_selector_container,
-        radio_button_container,
+        form_container,
         bottom_container,
         footer
     ]
