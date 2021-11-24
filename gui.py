@@ -224,27 +224,6 @@ footer = html.Footer(
     ]
 )
 
-
-header_section = ddsih.DangerouslySetInnerHTML(f"""
-<div class="header">
-    <div class="page-bar">
-        <div class="page-bar-container container">
-            <div class="page-bar-row has-text-centered">
-                UNIVERSITY OF ALASKA FAIRBANKS&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;SCENARIOS NETWORK FOR ALASKA + ARCTIC PLANNING
-            </div>
-        </div>
-    </div>
-    <div class="container">
-        <div class="section">
-                <div class="header--titles has-text-centered">
-                    <h1 class="title is-1">Community Climate Charts</h1>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-""")
-
 header_section = ddsih.DangerouslySetInnerHTML(f"""
 <div class="header">
     <div class="page-bar">
