@@ -205,7 +205,6 @@ footer = html.Footer(
         <div class="container">
             <div class="columns">
                 <div class="logos column is-one-fifth">
-                    <br>
                     <a href="https://uaf.edu/uaf/">
                         <img src="assets/UAF.svg">
                     </a>
