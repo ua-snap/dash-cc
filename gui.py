@@ -124,8 +124,8 @@ form_inputs_right = html.Div(
     className='no-print column is-half',
     children=[
         dataset_radio,
-        units_radio,
-        rcp_radio
+        rcp_radio,
+        units_radio
     ]
 )
 
