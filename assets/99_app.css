@@ -10,6 +10,10 @@ h1, h2, h3, h4, h5, h6 {
 	letter-spacing: .02em;
 }
 
+.form-input a {
+	color: #0033cc;
+}
+
 label.label:not(:last-child) {
 	margin: 1.5em 0 1ex;
 }
