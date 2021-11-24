@@ -18,7 +18,10 @@ import copy
 import luts
 
 path_prefix = os.environ['DASH_REQUESTS_PATHNAME_PREFIX']
-data_prefix = os.environ['DATA_PREFIX']
+
+data_prefix = os.environ.get('DATA_PREFIX')
+if data_prefix is None:
+    data_prefix = ''
 
 app = dash.Dash(__name__)
 app.title = luts.title
