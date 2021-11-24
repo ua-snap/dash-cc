@@ -22,7 +22,7 @@ community_selector = html.Div(
     children=[
         html.Label('Type the name of a community in the box below to get started.', className='label has-text-centered'),
         html.Div(
-            className='control column px-0 mb-3',
+            className='control column px-0 mb-3 community-selector',
             children=[
                 dcc.Dropdown(
                     id='community',

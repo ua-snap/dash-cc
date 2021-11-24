@@ -223,6 +223,22 @@ label.label:not(:last-child) {
 	}
 }
 
+.community-selector {
+	margin: 0 auto;
+}
+
+@media (max-width: 899px) {
+	.community-selector {
+		width: 90%;
+	}
+}
+
+@media (min-width: 900px) {
+	.community-selector {
+		width: 75%;
+	}
+}
+
 .container.middle label.label:not(:last-child) {
 	margin-top: 0;
 }
