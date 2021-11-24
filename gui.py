@@ -192,30 +192,6 @@ The RCP values 4.5, 6.0, and 8.5 indicate projected radiative forcing values—t
 * RCP 6.0 — “medium” scenario. Assumes that emissions peak in 2080 and radiative forcing stabilizes after 2100.
 * RCP 8.5 — “high” scenario. Emissions increase through the 21st century.
 
-#### Historical Baseline
-
-Making climate projections requires use of historical data as a starting point, or baseline. It’s challenging to estimate historical data across a map grid because these data are only available from a few climate stations across Alaska and western Canada. Also, stations are often clustered in low-lying communities rather than across remote locations such as mountain ranges. Ideally, estimates should be made at regular intervals, or on a grid.  
-
-To get around this, two types of models are used to create gridded climate datasets from available historical values: Parameter elevation Regression on Independent Slopes Model (PRISM) and Climate Research Unit (CRU).
-
-PRISM and CRU can each be used to create climate grids using climate station data, grid point locations relative to nearby stations, elevation, slope, aspect, proximity to coastlines, and other features. CRU data are coarser but cover a broader area than PRISM. 
-
-For comparison and a look at model uncertainty related to the challenges of creating gridded climate data from limited historical data, this tool offers both:
-* Baseline PRISM data and future projections downscaled using 2km PRISM grids
-* Baseline CRU data and future projections downscaled using ~18km CRU grids
-
-###### More details
-* [SNAP data sources](https://www.snap.uaf.edu/methods/data-sources)
-* [SNAP’s downscaling process](https://www.snap.uaf.edu/methods/downscaling)
-
-#### Variability Among Models
-
-A Global Climate Model (GCM) is a type of General Circulation Model that focuses on projections of climate change by simulating how Earth’s physical processes respond to increasing greenhouse gas concentrations. Slight variations between these models allow us to consider a range of possible future climate conditions. SNAP projections use 5 GCMs that perform best in the Arctic, as well as an average of the 5 selected models. 
-
-###### More details
-* [SNAP’s model evaluation and selection process](https://www.snap.uaf.edu/methods/model-selection)
-* [General Circulation Models and Global Climate Models](https://www.sciencedaily.com/terms/global_climate_model.htm)
-
 #### Download Data
 
 All data used by this tool can be downloaded as a single CSV file from the [SNAP Data Portal](http://ckan.snap.uaf.edu/dataset/community-charts-temperature-and-precipitation).
