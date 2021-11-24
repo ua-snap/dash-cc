@@ -201,10 +201,13 @@ def update_graph(community_raw, variable, scenario, units):
 
 @app.callback(
     Output('download_single', 'href'),
+    Output('download_single', 'children'),
     [Input('community', 'value')])
 
 def update_download_link(comm):
-    return path_prefix + 'dash/dlCSV?value={}'.format(comm)
+    url = path_prefix + 'dash/dlCSV?value={}'.format(comm)
+    text = 'Download CSV for ' + communities[comm]
+    return url, text
 
 @app.server.route('/dash/dlCSV') 
 def download_csv():
