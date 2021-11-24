@@ -117,28 +117,25 @@ figure_layout = {
         'family': 'Open Sans'
     },
     'annotations': [
-    {
-        'x': 0.5,
-        'y': -0.20,
-        'xref': 'paper',
-        'yref': 'paper',
-        'showarrow': False,
-        'text': 'These plots are useful for examining possible trends over time, rather than for precisely predicting values.'
-    },
-    {
-        'x': 0.5,
-        'y': -0.26,
-        'xref': 'paper',
-        'yref': 'paper',
-        'showarrow': False,
-        'text': 'Credit: Scenarios Network for Alaska + Arctic Planning, University of Alaska Fairbanks.'
-    }],
-    'margin': {
-        'l': 80,
-        'r': 80,
-        'b': 130,
-        't': 100
-    }
+        {
+            'x': 0.5,
+            'y': -0.4,
+            'xref': 'paper',
+            'yref': 'paper',
+            'showarrow': False,
+            'text': 'These plots are useful for examining possible trends over time, rather than for precisely predicting values.',
+        },
+        {
+            'x': 0.5,
+            'y': -0.48,
+            'xref': 'paper',
+            'yref': 'paper',
+            'showarrow': False,
+            'text': 'Credit: Scenarios Network for Alaska + Arctic Planning, University of Alaska Fairbanks.',
+        },
+    ],
+    'margin': dict(t=100, b=130),
+    'xaxis': dict(title='Month')
 }
 
 df_lu_full_temp = {
