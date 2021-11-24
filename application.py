@@ -6,7 +6,7 @@ SNAP Community Charts / Community Climate
 import dash
 from dash.dependencies import Input, Output, State
 import html as h
-from flask import redirect
+from flask import Response
 import flask
 import re
 import json
@@ -216,8 +216,18 @@ def download_csv():
     community_region_country = communities[value].split(',')
     community_id = re.sub('[^A-Z0-9]+', '', value)
     pathname = data_prefix + 'data/' + community_id + '.csv'
-    return redirect(pathname)
 
+    file = open(pathname, mode='r')
+    csv = file.read()
+    csv_filename = re.sub('[ ,]+', '_', communities[value])
+
+    return Response(
+        csv,
+        mimetype='text/csv',
+        headers={
+            'Content-disposition': 'attachment; filename=' + csv_filename
+        }
+    )
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8080))
