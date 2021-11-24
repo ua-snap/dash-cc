@@ -1,8 +1,8 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700&subset=latin-ext');
 @import url('https://fonts.googleapis.com/css?family=Special+Elite&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
 
 html, body {
-	font-family: 'Open Sans';
+	font-family: 'Lato', serif;
 }
 
 h1, h2, h3, h4, h5, h6 {
