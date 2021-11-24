@@ -65,9 +65,6 @@ def update_graph(community_raw, variable, scenario, units):
 
     # [ML] maybe hardwire these? Not a huge time sink, but it could be made cleaner
     mean_cols = [col for col in df.columns if 'Mean' in col]
-    sd_cols = [col for col in df.columns if 'Sd' in col]
-    min_cols = [col for col in df.columns if 'Min' in col]
-    max_cols = [col for col in df.columns if 'Max' in col]
 
     resolution_lu = luts.resolution_lu
     variable_lu = luts.variable_lu
@@ -81,7 +78,7 @@ def update_graph(community_raw, variable, scenario, units):
 
     dff = df[(df['community'] == community_region_country[0]) & (df['resolution'] == resolution_lu[baseline]) & \
             (df['type'] == variable_lu[variable]) & (df['scenario'] == scenario) ]
-    cols = mean_cols+sd_cols+['daterange','region'] # fun with list appending!
+    cols = mean_cols+['daterange','region'] # fun with list appending!
     dff = dff[cols] # grab just the cols we need
     baseline_df = df[(df['community'] == community_region_country[0]) & (df['resolution'] == resolution_lu[baseline]) &\
                      (df['type'] == variable_lu[variable]) & (df['scenario'] == baseline.lower()) ]
@@ -91,7 +88,7 @@ def update_graph(community_raw, variable, scenario, units):
     imperial_conversion_lu = luts.imperial_conversion_lu
     if units == 'imperial':
         # make things F/inches
-        dff[mean_cols+sd_cols] = dff[mean_cols+sd_cols] * imperial_conversion_lu[variable]
+        dff[mean_cols] = dff[mean_cols] * imperial_conversion_lu[variable]
         baseline_df[mean_cols] = baseline_df[mean_cols]* imperial_conversion_lu[variable]
 
     # scenario lookup
