@@ -273,6 +273,10 @@ label.checkbox input, label.radio input {
   fill: #ccc;
 }
 
+.explanation h4 {
+	margin-top: 30px;
+}
+
 .footer p {
 	margin: 1em auto;
 }
