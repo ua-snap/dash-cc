@@ -278,11 +278,16 @@ label.checkbox input, label.radio input {
 }
 
 .footer p {
-	margin: 1em auto;
+	margin-bottom: 1em;
+	width: 90%;
 }
 
 footer .logos.column {
 	text-align: right;
+}
+
+footer .logos img {
+	margin-top: 7px;
 }
 
 .footer {
