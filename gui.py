@@ -163,39 +163,34 @@ radio_button_layout = html.Div(
 )
 
 explanations = html.Div(
-    className='container',
+    className='container explanation',
     children=[
         dcc.Markdown("""
-### Learn more about the variables used in this tool
+## How to interpret climate outlooks for your community
 
-Due to variability among climate models and among years in a natural climate system, these graphs are useful for examining trends over time, rather than for precisely predicting monthly or yearly values.
+Climate systems naturally change year to year, as do the models built to simulate them. Because of that, these charts are best for examining trends over time, and not for precise predictions.
 
-#### How to interpret climate outlooks for your community
+#### Look for key changes
+For example, higher monthly temperatures in spring and fall may be particularly interesting. Higher temperature could mean any or all of these things:
 
-You can examine SNAP community outlooks for certain key changes and threshold values—for example, higher mean monthly temperatures in the spring and fall may be of particular interest. This could signify any or all of these conditions:
+* A longer growing season
+* A loss of ice and/or frozen ground needed for travel or food storage
+* Precipitation changes. A shift from snow to rain impacts water storage capacity and surface water availability. This tool reports precipitation in terms of rainwater equivalent, even though it could occur as rain or snow.
+* Increased fire risk. In many locations, winter temperatures are projected to increase dramatically.
+* Changes in species composition. Warmer winters may favor species that are less cold-hardy (including desirable crops and invasive species), or it may mean less snow and/or more rain-on-snow events that impact wildlife.
+* Thawing. Higher temperatures will impact permafrost and land-fast ice.
 
-* a longer growing season
-* a loss of ice and/or frozen ground needed for travel or food storage
-* a shift in precipitation from snow to rain, which impacts water storage capacity and surface water availability
-
-Note: Precipitation may occur as either rain or snow, but is reported for all months in terms of rainwater equivalent.
-
-Warmer, drier spring weather may also be an indicator for increased fire risk. In many locations, winter temperatures are projected to increase dramatically. Warmer winters may favor growth of species that are less cold-hardy (including desirable crops and invasive species), or it may decrease snowpack and increase the frequency of rain-on-snow events that impact wildlife. Higher temperatures across all seasons will likely impact permafrost and land-fast ice.
-
-#### Representative Concentration Pathways
-
-RCPs describe paths to future climates based on atmospheric greenhouse gas concentrations. They represent climate futures—scenarios—extrapolated out to the year 2100, based on a range of possible future human behaviors. RCPs provide a basis for comparison and a “common language” for modelers to share their work.
-
+#### Scenarios (RCPs)
+This tool uses Representative Concentration Pathways (RCPs) to display climate scenarios. RCPs describe paths to future climates based on atmospheric greenhouse gas concentrations. They represent climate futures, or scenarios, extrapolated out to the year 2100, based on a range of possible future human behaviors. RCPs provide a basis for comparison and a “common language” for modelers to share their work.
 The RCP values 4.5, 6.0, and 8.5 indicate projected radiative forcing values—the difference between solar energy absorbed by Earth vs. energy radiated back to space—measured in watts per square meter. RCP X projects that in 2100 the concentration of greenhouse gases will be such that each square meter of Earth will absorb X times more solar energy than it did in 1750.
 
-* RCP 4.5 — “low” scenario. Assumes that new technologies and socioeconomic strategies cause emissions to peak in 2040 and radiative forcing to stabilize after 2100. 
+* RCP 4.5 — “low” scenario. Assumes that new technologies and socioeconomic strategies cause emissions to peak in 2040 and radiative forcing to stabilize after 2100.
 * RCP 6.0 — “medium” scenario. Assumes that emissions peak in 2080 and radiative forcing stabilizes after 2100.
 * RCP 8.5 — “high” scenario. Emissions increase through the 21st century.
 
 #### Download Data
 
 All data used by this tool can be downloaded as a single CSV file from the [SNAP Data Portal](http://ckan.snap.uaf.edu/dataset/community-charts-temperature-and-precipitation).
-
 """,
             className='is-size-5 content'
         )
