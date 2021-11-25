@@ -129,35 +129,34 @@ form_inputs_right = html.Div(
     ]
 )
 
-explanation_variability = dcc.Markdown("""
-    ### Learn more about the variables used in this tool
+explanation_interpret = dcc.Markdown("""
+    ## How to interpret climate outlooks for your community
 
-    Due to variability among climate models and among years in a natural climate system, these graphs are useful for examining trends over time, rather than for precisely predicting monthly or yearly values.
+    Climate systems naturally change year to year, as do the models built to simulate them. Because of that, these charts are best for examining trends over time, and not for precise predictions.
     """,
     className='mb-5'
 )
 
-explanation_interpret = dcc.Markdown("""
-    #### How to interpret climate outlooks for your community
+explanation_key_changes = dcc.Markdown("""
+    #### Look for key changes
 
-    You can examine SNAP community outlooks for certain key changes and threshold values—for example, higher mean monthly temperatures in the spring and fall may be of particular interest. This could signify any or all of these conditions:
+    For example, higher monthly temperatures in spring and fall may be particularly interesting. Higher temperature could mean any or all of these things:
 
-    * a longer growing season
-    * a loss of ice and/or frozen ground needed for travel or food storage
-    * a shift in precipitation from snow to rain, which impacts water storage capacity and surface water availability
-
-    Note: Precipitation may occur as either rain or snow, but is reported for all months in terms of rainwater equivalent.
-
-    Warmer, drier spring weather may also be an indicator for increased fire risk. In many locations, winter temperatures are projected to increase dramatically. Warmer winters may favor growth of species that are less cold-hardy (including desirable crops and invasive species), or it may decrease snowpack and increase the frequency of rain-on-snow events that impact wildlife. Higher temperatures across all seasons will likely impact permafrost and land-fast ice.
+    * A longer growing season
+    * A loss of ice and/or frozen ground needed for travel or food storage
+    * Precipitation changes. A shift from snow to rain impacts water storage capacity and surface water availability. This tool reports precipitation in terms of rainwater equivalent, even though it could occur as rain or snow.
+    * Increased fire risk. In many locations, winter temperatures are projected to increase dramatically.
+    * Changes in species composition. Warmer winters may favor species that are less cold-hardy (including desirable crops and invasive species), or it may mean less snow and/or more rain-on-snow events that impact wildlife.
+    * Thawing. Higher temperatures will impact permafrost and land-fast ice.
     """,
     className='mb-5')
 
 explanation_rcps_anchor = html.A(id='rcp-explanation')
 
 explanation_rcps = dcc.Markdown("""
-    #### Representative Concentration Pathways
+    #### Scenarios (RCPs)
 
-    RCPs describe paths to future climates based on atmospheric greenhouse gas concentrations. They represent climate futures—scenarios—extrapolated out to the year 2100, based on a range of possible future human behaviors. RCPs provide a basis for comparison and a “common language” for modelers to share their work.
+    This tool uses Representative Concentration Pathways (RCPs) to display climate scenarios. RCPs describe paths to future climates based on atmospheric greenhouse gas concentrations. They represent climate futures, or scenarios, extrapolated out to the year 2100, based on a range of possible future human behaviors. RCPs provide a basis for comparison and a “common language” for modelers to share their work.
 
     The RCP values 4.5, 6.0, and 8.5 indicate projected radiative forcing values—the difference between solar energy absorbed by Earth vs. energy radiated back to space—measured in watts per square meter. RCP X projects that in 2100 the concentration of greenhouse gases will be such that each square meter of Earth will absorb X times more solar energy than it did in 1750.
 
@@ -177,14 +176,13 @@ explanations_download = dcc.Markdown("""
 explanations = html.Div(
     className='container is-size-5 content',
     children=[
-        explanation_variability,
         explanation_interpret,
+        explanation_key_changes,
         explanation_rcps_anchor,
         explanation_rcps,
         explanations_download
     ]
 )
-
 
 footer = html.Footer(
     className='footer',
