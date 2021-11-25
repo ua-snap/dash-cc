@@ -134,34 +134,6 @@ label.label:not(:last-child) {
 	}
 }
 
-.line-break {
-	display: none;
-}
-
-@media (max-width: 799px) {
-	.line-break.show-below-800 {
-		display: block;
-	}
-}
-
-@media (min-width: 800px) and (max-width: 1215px) {
-	.line-break.show-above-800-below-1215 {
-		display: block;
-	}
-}
-
-@media (min-width: 916px) and (max-width: 1215px) {
-	.line-break.show-above-916-below-1215 {
-		display: block;
-	}
-}
-
-@media (min-width: 950px) {
-	.line-break.show-above-950 {
-		display: block;
-	}
-}
-
 @media (min-width: 799px) and (max-width: 1215px) {
 	.extent-map {
 		margin-top: 75px;
