@@ -238,10 +238,12 @@ footer .logos.column {
 }
 
 footer .logos img {
-	margin-top: 7px;
+	max-width: 90%;
+	display: inline-block;
+	margin-bottom: 1rem;
 }
 
-.footer {
+footer {
   box-shadow: inset 0 7px 9px -7px rgb(0 0 0 / 40%);
 }
 
