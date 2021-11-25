@@ -258,11 +258,11 @@ intro_section = ddsih.DangerouslySetInnerHTML(f"""
             <div class="extent-wrapper desktop">
                 <img class="extent-map" src="assets/akcanada.svg" />
             </div>
-            <h4 class="title is-4 mt-3 mb-5">What’s up — or down — in your corner of&nbsp;the&nbsp;North?</h4>
-            <p class="my-3">See temperature and precipitation projections through 2099 for over 3,800 communities in Alaska and&nbsp;western&nbsp;Canada.</p>
-            <p class="my-3">These projections show only patterns and trends. Look for changes&nbsp;like&nbsp;these:</p>
-            <p class="my-3">Higher temperatures in spring and fall could mean a longer growing season and/or a shift from snow&nbsp;to&nbsp;rain.</p>
-            <p class="my-3">Warmer, drier spring weather may increase&nbsp;fire&nbsp;risk.</p>
+            <h4 class="title is-4 mt-3 mb-5">What’s up — or down — in your corner&nbsp;of&nbsp;the&nbsp;North?</h4>
+            <p class="my-3">See temperature and precipitation projections through 2099 for over 3,800 communities in Alaska&nbsp;and&nbsp;western&nbsp;Canada.</p>
+            <p class="my-3">These projections show only patterns and trends. Look for&nbsp;changes&nbsp;like&nbsp;these:</p>
+            <p class="my-3">Higher temperatures in spring and fall could mean a longer growing season and/or a shift from&nbsp;snow&nbsp;to&nbsp;rain.</p>
+            <p class="my-3">Warmer, drier spring weather may&nbsp;increase&nbsp;fire&nbsp;risk.</p>
             <h5 class="title is-5 mt-5">Happy exploring!</h5>
             <div class="extent-wrapper mobile">
                 <img class="extent-map" src="assets/akcanada.svg" />
