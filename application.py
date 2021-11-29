@@ -7,6 +7,7 @@ import re
 import json
 import copy
 import os
+import urllib.request
 import html as h
 import pandas as pd
 import dash
@@ -256,9 +257,14 @@ def download_csv():
     community_id = re.sub("[^A-Z0-9]+", "", value)
     pathname = data_prefix + "data/" + community_id + ".csv"
 
-    with open(pathname, mode="r") as file_handle:
-        csv = file_handle.read()
-        csv_filename = re.sub("[ ,]+", "_", communities[value])
+    if data_prefix.find("http") != -1:
+        with urllib.request.urlopen(pathname) as response:
+            csv = response.read().decode("utf-8")
+    else:
+        with open(pathname, mode="r") as file_handle:
+            csv = file_handle.read()
+
+    csv_filename = re.sub("[ ,]+", "_", communities[value])
 
     return Response(
         csv,
