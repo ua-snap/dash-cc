@@ -3,141 +3,140 @@ SNAP Community Charts / Community Climate
 """
 
 import os
+import json
 from dash import dcc
 from dash import html
-import json
 import dash_dangerously_set_inner_html as ddsih
 import luts
 
-df = None
-
-with open('CommunityNames.json', 'r') as community_file:
+with open("CommunityNames.json", "r") as community_file:
     communities = json.load(community_file)
 
-path_prefix = os.environ['DASH_REQUESTS_PATHNAME_PREFIX']
+path_prefix = os.environ["DASH_REQUESTS_PATHNAME_PREFIX"]
 
 
 community_selector = html.Div(
-    className='field',
+    className="field",
     children=[
-        html.Label('Type the name of a community in the box below to get started.', className='label'),
+        html.Label(
+            "Type the name of a community in the box below to get started.",
+            className="label",
+        ),
         html.Div(
-            className='control px-0 mb-3',
+            className="control px-0 mb-3",
             children=[
                 dcc.Dropdown(
-                    id='community',
-                    options=[{'label':name, 'value':id} for id, name in communities.items()],
-                    value='AK124'
+                    id="community",
+                    options=[
+                        {"label": name, "value": id} for id, name in communities.items()
+                    ],
+                    value="AK124",
                 )
-            ]
-        )
-    ]
+            ],
+        ),
+    ],
 )
 
 dataset_radio = html.Div(
-    className='field',
+    className="field",
     children=[
-        html.Label('Dataset', className='label'),
+        html.Label("Dataset", className="label"),
         html.Div(
-            className='control',
+            className="control",
             children=[
                 dcc.RadioItems(
-                    labelClassName='radio',
+                    labelClassName="radio",
                     options=luts.dataset_radio_options,
-                    id='variable',
-                    value='temp'
+                    id="variable",
+                    value="temp",
                 )
-            ]
-        )
-    ]
+            ],
+        ),
+    ],
 )
 
 units_radio = html.Div(
-    className='field',
+    className="field",
     children=[
-        html.Label('Units', className='label'),
+        html.Label("Units", className="label"),
         html.Div(
-            className='control',
+            className="control",
             children=[
                 dcc.RadioItems(
-                    labelClassName='radio',
+                    labelClassName="radio",
                     options=luts.units_radio_options,
-                    id='units',
-                    value='imperial'
+                    id="units",
+                    value="imperial",
                 )
-            ]
-        )
-    ]
+            ],
+        ),
+    ],
 )
 
 rcp_radio = html.Div(
-    className='field',
+    className="field",
     children=[
-        html.Label('Scenarios (RCPs)', className='label'),
+        html.Label("Scenarios (RCPs)", className="label"),
         html.Div(
-            className='control',
+            className="control",
             children=[
                 dcc.RadioItems(
-                    labelClassName='radio',
+                    labelClassName="radio",
                     options=luts.rcp_radio_options,
-                    id='scenario',
-                    value='rcp60'
+                    id="scenario",
+                    value="rcp60",
                 )
-            ]
-        )
-    ]
+            ],
+        ),
+    ],
 )
 
 download_single_csv = html.Div(
-    className='has-text-centered mb-6',
+    className="has-text-centered mb-6",
     children=[
         html.Div(
-            className='control',
+            className="control",
             children=[
                 html.A(
-                    'Download Single Community (CSV)',
-                    className='button is-info',
-                    id='download_single',
-                    href=''
+                    "Download Single Community (CSV)",
+                    className="button is-info",
+                    id="download_single",
+                    href="",
                 )
-            ]
+            ],
         )
-    ]
+    ],
 )
 
-rcp_blurb = ddsih.DangerouslySetInnerHTML(f"""
+rcp_blurb = ddsih.DangerouslySetInnerHTML(
+    """
 <div class="mt-5">
     <label class="label">What are RCPs?</label>
     <p>This tool uses Representative Concentration Pathways (RCPs) to display climate scenarios. RCPs describe paths to future climates based on greenhouse gas concentrations. They represent possible climate futures (scenarios) out to the year 2100 and provide a basis for comparison. <a href="#rcp-explanation">Learn more about RCPs below.</a></p>
 </div>
-""")
+"""
+)
 
 form_inputs_left = html.Div(
-    className='no-print column is-half',
-    children=[
-        community_selector,
-        rcp_blurb
-    ]
+    className="no-print column is-half", children=[community_selector, rcp_blurb]
 )
 
 form_inputs_right = html.Div(
-    className='no-print column is-half',
-    children=[
-        dataset_radio,
-        rcp_radio,
-        units_radio
-    ]
+    className="no-print column is-half",
+    children=[dataset_radio, rcp_radio, units_radio],
 )
 
-explanation_interpret = dcc.Markdown("""
+explanation_interpret = dcc.Markdown(
+    """
     ## How to interpret climate outlooks for your community
 
     Climate systems naturally change year to year, as do the models built to simulate them. Because of that, these charts are best for examining trends over time, and not for precise predictions.
     """,
-    className='mb-5'
+    className="mb-5",
 )
 
-explanation_key_changes = dcc.Markdown("""
+explanation_key_changes = dcc.Markdown(
+    """
     #### Look for key changes
 
     For example, higher monthly temperatures in spring and fall may be particularly interesting. Higher temperature could mean any or all of these things:
@@ -149,11 +148,13 @@ explanation_key_changes = dcc.Markdown("""
     * Changes in species composition. Warmer winters may favor species that are less cold-hardy (including desirable crops and invasive species), or it may mean less snow and/or more rain-on-snow events that impact wildlife.
     * Thawing. Higher temperatures will impact permafrost and land-fast ice.
     """,
-    className='mb-5')
+    className="mb-5",
+)
 
-explanation_rcps_anchor = html.A(id='rcp-explanation')
+explanation_rcps_anchor = html.A(id="rcp-explanation")
 
-explanation_rcps = dcc.Markdown("""
+explanation_rcps = dcc.Markdown(
+    """
     #### Scenarios (RCPs)
 
     This tool uses Representative Concentration Pathways (RCPs) to display climate scenarios. RCPs describe paths to future climates based on atmospheric greenhouse gas concentrations. They represent climate futures, or scenarios, extrapolated out to the year 2100, based on a range of possible future human behaviors. RCPs provide a basis for comparison and a “common language” for modelers to share their work.
@@ -164,30 +165,34 @@ explanation_rcps = dcc.Markdown("""
     * RCP 6.0 — “medium” scenario. Assumes that emissions peak in 2080 and radiative forcing stabilizes after 2100.
     * RCP 8.5 — “high” scenario. Emissions increase through the 21st century.
     """,
-    className='mb-5')
+    className="mb-5",
+)
 
-explanations_download = dcc.Markdown("""
+explanations_download = dcc.Markdown(
+    """
     #### Download Data
 
     All data used by this tool can be downloaded as a single CSV file from the [SNAP Data Portal](http://ckan.snap.uaf.edu/dataset/community-charts-temperature-and-precipitation).
     """,
-    className='mb-5')
+    className="mb-5",
+)
 
 explanations = html.Div(
-    className='container is-size-5 content',
+    className="container is-size-5 content",
     children=[
         explanation_interpret,
         explanation_key_changes,
         explanation_rcps_anchor,
         explanation_rcps,
-        explanations_download
-    ]
+        explanations_download,
+    ],
 )
 
 footer = html.Footer(
-    className='footer',
+    className="footer",
     children=[
-        ddsih.DangerouslySetInnerHTML(f"""
+        ddsih.DangerouslySetInnerHTML(
+            """
         <div class="container">
             <div class="columns">
                 <div class="logos column is-one-fifth">
@@ -208,12 +213,14 @@ footer = html.Footer(
                 </div>
             </div>
         </div>
-        """)
-    ]
+        """
+        )
+    ],
 )
 
 
-header_section = ddsih.DangerouslySetInnerHTML(f"""
+header_section = ddsih.DangerouslySetInnerHTML(
+    """
 <div class="header">
     <div class="page-bar">
         <div class="page-bar-container container">
@@ -231,9 +238,11 @@ header_section = ddsih.DangerouslySetInnerHTML(f"""
         </div>
     </div>
 </div>
-""")
+"""
+)
 
-header_section = ddsih.DangerouslySetInnerHTML(f"""
+header_section = ddsih.DangerouslySetInnerHTML(
+    """
 <div class="header">
     <div class="page-bar">
         <div class="page-bar-container container">
@@ -251,9 +260,11 @@ header_section = ddsih.DangerouslySetInnerHTML(f"""
         </div>
     </div>
 </div>
-""")
+"""
+)
 
-intro_section = ddsih.DangerouslySetInnerHTML(f"""
+intro_section = ddsih.DangerouslySetInnerHTML(
+    """
     <div class="extent section">
         <div class="intro-text">
             <div class="extent-wrapper desktop">
@@ -270,85 +281,75 @@ intro_section = ddsih.DangerouslySetInnerHTML(f"""
             </div>
         </div>
     </div>
-""")
+"""
+)
 
 config = {
-    'toImageButtonOptions': {
-        'title': 'Export to PNG',
-        'format': 'png',
-        'filename': 'CommunityChart',
-        'height': 600,
-        'width': 1600,
-        'scale': 1
+    "toImageButtonOptions": {
+        "title": "Export to PNG",
+        "format": "png",
+        "filename": "CommunityChart",
+        "height": 600,
+        "width": 1600,
+        "scale": 1,
     },
-    'modeBarButtonsToRemove': [
-        'zoom',
-        'zoomIn',
-        'zoomOut',
-        'resetScale',
-        'autoScale',
-        'sendToCloud',
-        'pan',
-        'select',
-        'lasso',
-        'toggleSpikeLines'
+    "modeBarButtonsToRemove": [
+        "zoom",
+        "zoomIn",
+        "zoomOut",
+        "resetScale",
+        "autoScale",
+        "sendToCloud",
+        "pan",
+        "select",
+        "lasso",
+        "toggleSpikeLines",
     ],
-    'displayModeBar': True,
-    'displaylogo': False
+    "displayModeBar": True,
+    "displaylogo": False,
 }
 
-camera_icon_text = ddsih.DangerouslySetInnerHTML(f"""
+camera_icon_text = ddsih.DangerouslySetInnerHTML(
+    """
 <p class="content camera-icon is-size-5 has-text-centered has-text-grey mb-1">Click the <span>
 <svg viewBox="0 0 1000 1000" class="icon" height="1em" width="1em"><path d="m500 450c-83 0-150-67-150-150 0-83 67-150 150-150 83 0 150 67 150 150 0 83-67 150-150 150z m400 150h-120c-16 0-34 13-39 29l-31 93c-6 15-23 28-40 28h-340c-16 0-34-13-39-28l-31-94c-6-15-23-28-40-28h-120c-55 0-100-45-100-100v-450c0-55 45-100 100-100h800c55 0 100 45 100 100v450c0 55-45 100-100 100z m-400-550c-138 0-250 112-250 250 0 138 112 250 250 250 138 0 250-112 250-250 0-138-112-250-250-250z m365 380c-19 0-35 16-35 35 0 19 16 35 35 35 19 0 35-16 35-35 0-19-16-35-35-35z" transform="matrix(1 0 0 -1 0 850)"></path></svg>
 </span> icon in the upper-right of the chart download it.</p>
-""")
+"""
+)
 
 graph_layout = html.Div(
-    className='container',
-    children=[
-        dcc.Graph(id='ccharts', config=config)
-    ]
+    className="container", children=[dcc.Graph(id="ccharts", config=config)]
 )
 
 form_container = html.Div(
-    className='form-input section',
+    className="form-input section",
     children=[
         html.Div(
-            className='container top',
+            className="container top",
             children=[
                 html.Div(
-                    className='columns',
-                    children=[
-                        form_inputs_left,
-                        form_inputs_right
-                    ]
+                    className="columns", children=[form_inputs_left, form_inputs_right]
                 )
-            ]
+            ],
         )
-    ]
+    ],
 )
 
 bottom_container = html.Div(
-    className='bottom mb-6',
+    className="bottom mb-6",
     children=[
         html.Div(
-            className='section',
+            className="section",
             children=[
                 camera_icon_text,
                 graph_layout,
                 download_single_csv,
-                explanations
-            ]
+                explanations,
+            ],
         )
-    ]
+    ],
 )
 
 layout = html.Div(
-    children=[
-        header_section,
-        intro_section,
-        form_container,
-        bottom_container,
-        footer
-    ]
+    children=[header_section, intro_section, form_container, bottom_container, footer]
 )
