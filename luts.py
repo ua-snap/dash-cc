@@ -114,6 +114,19 @@ baseline_lu = {
     'prism': 'PRISM'
 }
 
+axis_configs = {
+    'automargin': True,
+    'showgrid': False,
+    'showline': False,
+    'ticks': '',
+    'title': {'standoff': 20},
+    'zeroline': False,
+    'fixedrange': True,
+}
+
+xaxis_config = {**axis_configs, **{'tickformat': '%B %-d, %Y'}}
+xaxis_config['title']['text'] = 'Month'
+
 figure_layout = {
     'barmode': 'grouped',
     'titlefont': {
@@ -122,7 +135,7 @@ figure_layout = {
     'annotations': [
         {
             'x': 0.5,
-            'y': -0.4,
+            'y': -0.35,
             'xref': 'paper',
             'yref': 'paper',
             'showarrow': False,
@@ -130,7 +143,7 @@ figure_layout = {
         },
         {
             'x': 0.5,
-            'y': -0.48,
+            'y': -0.43,
             'xref': 'paper',
             'yref': 'paper',
             'showarrow': False,
@@ -138,7 +151,8 @@ figure_layout = {
         },
     ],
     'margin': dict(t=100, b=130),
-    'xaxis': dict(title='Month')
+    'xaxis': xaxis_config,
+    'yaxis': axis_configs
 }
 
 df_lu_full_temp = {
