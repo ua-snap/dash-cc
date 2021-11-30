@@ -33,12 +33,16 @@ with open("CommunityNames.json", "r") as community_file:
     communities = json.load(community_file)
 
 Months = luts.Months
-region_lu = luts.region_lu
 
 # Customize this layout to include Google Analytics
 app.index_string = luts.index_string
 
 app.layout = layout
+
+
+def filter_community_id(community_id):
+    """Strip invalid characters from community ID input"""
+    return re.sub("[^A-Z0-9]+", "", community_id)
 
 
 @app.callback(
@@ -57,9 +61,8 @@ def update_graph(community_raw, variable, scenario, units):
     if community_raw is None:
         community_raw = "AK124"
 
-    community_region_country = communities[community_raw].split(",")
-    region_full = community_region_country[1].strip()
-    community_id = re.sub("[^A-Z0-9]+", "", community_raw)
+    community_id = filter_community_id(community_raw)
+    community = communities[community_id]
     comm_file = data_prefix + "data/" + community_id + ".csv"
     df = pd.read_csv(comm_file)
 
@@ -70,14 +73,13 @@ def update_graph(community_raw, variable, scenario, units):
     variable_lu = luts.variable_lu
     # subset to the data we want to display using the callback variables
 
-    region = community_region_country[1].strip()
-    if region == "Northwest Territories":
+    if community["region"] == "Northwest Territories":
         baseline = "cru32"
     else:
         baseline = "prism"
 
     dff = df[
-        (df["community"] == community_region_country[0])
+        (df["community"] == community["name"])
         & (df["resolution"] == resolution_lu[baseline])
         & (df["type"] == variable_lu[variable])
         & (df["scenario"] == scenario)
@@ -85,7 +87,7 @@ def update_graph(community_raw, variable, scenario, units):
     cols = mean_cols + ["daterange", "region"]  # fun with list appending!
     dff = dff[cols]  # grab just the cols we need
     baseline_df = df[
-        (df["community"] == community_region_country[0])
+        (df["community"] == community["name"])
         & (df["resolution"] == resolution_lu[baseline])
         & (df["type"] == variable_lu[variable])
         & (df["scenario"] == baseline.lower())
@@ -111,8 +113,6 @@ def update_graph(community_raw, variable, scenario, units):
     # baseline lookup
     baseline_lu = luts.baseline_lu
     baseline_label = baseline_lu[baseline]
-
-    region_label = region_full
 
     # set the freezing line for TEMPERATURE based on imperial or metric
     tMod = 0
@@ -157,9 +157,9 @@ def update_graph(community_raw, variable, scenario, units):
         figure["layout"] = figure_layout
         figure["layout"]["title"] = (
             "<b>Average Monthly Temperature for "
-            + community_region_country[0]
+            + community["name"]
             + ", "
-            + region_label
+            + community["region"]
             + "</b><br>Historical "
             + baseline_label
             + " and 5-Model Projected Average at "
@@ -220,9 +220,9 @@ def update_graph(community_raw, variable, scenario, units):
     figure["layout"] = figure_layout
     figure["layout"]["title"] = (
         "<b>Average Monthly Precipitation for "
-        + community_region_country[0]
+        + community["name"]
         + ", "
-        + region_label
+        + community["region"]
         + "</b><br>Historical "
         + baseline_label
         + " and 5-Model Projected Average at "
@@ -244,8 +244,10 @@ def update_graph(community_raw, variable, scenario, units):
 )
 def update_download_link(comm):
     """Update CSV download button target and text"""
-    url = path_prefix + "dash/dlCSV?value={}".format(comm)
-    text = "Download CSV for " + communities[comm]
+    community_id = filter_community_id(comm)
+    community = communities[community_id]
+    url = path_prefix + "dash/dlCSV?value={}".format(community_id)
+    text = "Download CSV for " + community["name"] + ", " + community["region"]
     return url, text
 
 
@@ -254,7 +256,8 @@ def download_csv():
     """Send CSV to user using full community file name"""
     value = flask.request.args.get("value")
     value = h.unescape(value)
-    community_id = re.sub("[^A-Z0-9]+", "", value)
+    community_id = filter_community_id(value)
+    community = communities[community_id]
     pathname = data_prefix + "data/" + community_id + ".csv"
 
     if data_prefix.find("http") != -1:
@@ -264,12 +267,15 @@ def download_csv():
         with open(pathname, mode="r") as file_handle:
             csv = file_handle.read()
 
-    csv_filename = re.sub("[ ,]+", "_", communities[value])
+    community_with_region = community["name"] + ", " + community["region"]
+    csv_filename = re.sub("[ ,]+", "_", community_with_region)
 
     return Response(
         csv,
         mimetype="text/csv",
-        headers={"Content-disposition": "attachment; filename=" + csv_filename + ".csv"},
+        headers={
+            "Content-disposition": "attachment; filename=" + csv_filename + ".csv"
+        },
     )
 
 
