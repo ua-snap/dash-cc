@@ -8,6 +8,7 @@ import json
 import copy
 import os
 import urllib.request
+import urllib.parse
 import html as h
 import pandas as pd
 import dash
@@ -280,14 +281,13 @@ def download_csv():
 
     community_name = full_community_name(community)
     community_with_region = community_name + ", " + community["region"]
-    csv_filename = re.sub("[ ,]+", "_", community_with_region)
+    underscored_community = re.sub("[ ,]+", "_", community_with_region)
+    csv_filename = urllib.parse.quote(underscored_community) + ".csv"
 
     return Response(
         csv,
         mimetype="text/csv",
-        headers={
-            "Content-disposition": "attachment; filename=" + csv_filename + ".csv"
-        },
+        headers={"Content-disposition": "attachment; filename=" + csv_filename},
     )
 
 
