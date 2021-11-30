@@ -287,7 +287,13 @@ def download_csv():
     return Response(
         csv,
         mimetype="text/csv",
-        headers={"Content-disposition": "attachment; filename=" + csv_filename},
+        headers={
+            "Content-disposition": "attachment; filename="
+            + csv_filename
+            + "; filename*=utf-8''"
+            + csv_filename,
+            "Content-type": "text/csv;charset=utf-8",
+        },
     )
 
 
