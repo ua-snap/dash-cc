@@ -14,6 +14,18 @@ with open("CommunityNames.json", "r") as community_file:
 
 path_prefix = os.environ["DASH_REQUESTS_PATHNAME_PREFIX"]
 
+dropdown_options = []
+for key, community in communities.items():
+    name = community["name"]
+    region = community["region"]
+
+    if "alt_name" in community:
+        alt_name = community["alt_name"]
+        community_string = "{0} ({1}), {2}".format(name, alt_name, region)
+    else:
+        community_string = "{0}, {1}".format(name, region)
+
+    dropdown_options.append({"label": community_string, "value": key})
 
 community_selector = html.Div(
     className="field",
@@ -27,9 +39,7 @@ community_selector = html.Div(
             children=[
                 dcc.Dropdown(
                     id="community",
-                    options=[
-                        {"label": name, "value": id} for id, name in communities.items()
-                    ],
+                    options=dropdown_options,
                     value="AK124",
                 )
             ],

@@ -45,6 +45,13 @@ def filter_community_id(community_id):
     return re.sub("[^A-Z0-9]+", "", community_id)
 
 
+def full_community_name(community):
+    """Combine community name with alt_name if it exists"""
+    if "alt_name" in community:
+        return "{0} ({1})".format(community["name"], community["alt_name"])
+    return community["name"]
+
+
 @app.callback(
     Output("ccharts", "figure"),
     inputs=[
@@ -120,6 +127,9 @@ def update_graph(community_raw, variable, scenario, units):
     # Base Layout Item (for both variables)
     figure_layout = copy.deepcopy(luts.figure_layout)
 
+    # Include alternate community name if one exists
+    community_name = full_community_name(community)
+
     if variable == "temp":
         if units == "imperial":
             tMod = 32
@@ -157,7 +167,7 @@ def update_graph(community_raw, variable, scenario, units):
         figure["layout"] = figure_layout
         figure["layout"]["title"] = (
             "<b>Average Monthly Temperature for "
-            + community["name"]
+            + community_name
             + ", "
             + community["region"]
             + "</b><br>Historical "
@@ -220,7 +230,7 @@ def update_graph(community_raw, variable, scenario, units):
     figure["layout"] = figure_layout
     figure["layout"]["title"] = (
         "<b>Average Monthly Precipitation for "
-        + community["name"]
+        + community_name
         + ", "
         + community["region"]
         + "</b><br>Historical "
@@ -246,8 +256,9 @@ def update_download_link(comm):
     """Update CSV download button target and text"""
     community_id = filter_community_id(comm)
     community = communities[community_id]
+    community_name = full_community_name(community)
     url = path_prefix + "dash/dlCSV?value={}".format(community_id)
-    text = "Download CSV for " + community["name"] + ", " + community["region"]
+    text = "Download CSV for " + community_name + ", " + community["region"]
     return url, text
 
 
@@ -267,7 +278,8 @@ def download_csv():
         with open(pathname, mode="r") as file_handle:
             csv = file_handle.read()
 
-    community_with_region = community["name"] + ", " + community["region"]
+    community_name = full_community_name(community)
+    community_with_region = community_name + ", " + community["region"]
     csv_filename = re.sub("[ ,]+", "_", community_with_region)
 
     return Response(
