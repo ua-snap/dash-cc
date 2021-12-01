@@ -188,7 +188,7 @@ explanations_download = dcc.Markdown(
 )
 
 explanations = html.Div(
-    className="container is-size-5 content",
+    className="is-size-5 content explanations-wrapper",
     children=[
         explanation_interpret,
         explanation_key_changes,
