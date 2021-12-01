@@ -229,9 +229,16 @@ label.checkbox input, label.radio input {
   fill: #ccc;
 }
 
-.controls-wrapper {
+.controls-wrapper, .explanations-wrapper {
 	margin: 0 auto;
+}
+
+.controls-wrapper {
 	max-width: 60em;
+}
+
+.explanations-wrapper {
+	max-width: 50em;
 }
 
 @media (min-width: 769px) {
