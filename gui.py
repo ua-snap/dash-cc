@@ -128,11 +128,11 @@ rcp_blurb = ddsih.DangerouslySetInnerHTML(
 )
 
 form_inputs_left = html.Div(
-    className="no-print column is-half", children=[community_selector, rcp_blurb]
+    className="no-print column is-two-thirds", children=[community_selector, rcp_blurb]
 )
 
 form_inputs_right = html.Div(
-    className="no-print column is-half",
+    className="no-print column is-one-third form-inputs-right",
     children=[dataset_radio, rcp_radio, units_radio],
 )
 
@@ -338,7 +338,7 @@ form_container = html.Div(
             className="container top",
             children=[
                 html.Div(
-                    className="columns", children=[form_inputs_left, form_inputs_right]
+                    className="columns controls-wrapper", children=[form_inputs_left, form_inputs_right]
                 )
             ],
         )
