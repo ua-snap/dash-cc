@@ -229,6 +229,17 @@ label.checkbox input, label.radio input {
   fill: #ccc;
 }
 
+.controls-wrapper {
+	margin: 0 auto;
+	max-width: 60em;
+}
+
+@media (min-width: 769px) {
+	.form-inputs-right {
+		padding-left: 1em;
+	}
+}
+
 .footer p {
 	margin-bottom: 1em;
 	width: 90%;
