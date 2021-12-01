@@ -110,6 +110,18 @@ def update_graph(community_raw, variable, scenario, units):
         baseline_df[mean_cols] = (
             baseline_df[mean_cols] * imperial_conversion_lu[variable]
         )
+        if variable == "temp":
+            decimal_precision = 0
+        elif variable == "precip":
+            decimal_precision = 1
+    else:
+        if variable == "temp":
+            decimal_precision = 1
+        elif variable == "precip":
+            decimal_precision = 0
+
+    dff[mean_cols] = dff[mean_cols].round(decimal_precision)
+    baseline_df[mean_cols] = baseline_df[mean_cols].round(decimal_precision)
 
     # scenario lookup
     scenario_lu = luts.scenario_lu
@@ -185,6 +197,7 @@ def update_graph(community_raw, variable, scenario, units):
             "zerolinewidth": 0.5,
             "title": "Temperature (" + unit_lu["temp"][units] + ")",
         }
+        figure["layout"]["yaxis"]["tickformat"] = ".{0}f".format(decimal_precision)
         figure["layout"]["shapes"] = [
             {
                 "type": "line",
@@ -245,6 +258,7 @@ def update_graph(community_raw, variable, scenario, units):
     figure["layout"]["yaxis"] = {
         "title": "Precipitation (" + unit_lu["precip"][units] + ")"
     }
+    figure["layout"]["yaxis"]["tickformat"] = ".{0}f".format(decimal_precision)
     return figure
 
 
