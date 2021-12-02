@@ -2,6 +2,7 @@
 SNAP Community Charts / Community Climate
 """
 
+from datetime import datetime
 import os
 import json
 from dash import dcc
@@ -198,11 +199,12 @@ explanations = html.Div(
     ],
 )
 
+current_year = datetime.now().year
 footer = html.Footer(
     className="footer",
     children=[
         ddsih.DangerouslySetInnerHTML(
-            """
+            f"""
         <div class="container">
             <div class="columns">
                 <div class="logos column is-one-fifth">
@@ -217,7 +219,7 @@ footer = html.Footer(
                     <p>This tool is part of an ongoing collaboration between the <a href="https://uaf-snap.org">Scenarios Network for Alaska + Arctic Planning</a> and the Government of Northwest Territories. We are working to make a wide range of downscaled climate products that are easily accessible, flexibly usable, and fully interpreted and understandable to users in the Northwest Territories, while making these products relevant at a broad geographic scale.
                     </p>
                     <p>Please contact <a href="mailto:uaf-snap-data-tools@alaska.edu">uaf-snap-data-tools@alaska.edu</a> if you have questions or would like to provide feedback for this tool. <a href="https://uaf-snap.org/tools-overview/">Visit the SNAP Climate + Weather Tools page</a> to see our full suite of interactive web tools.</p>
-                    <p>Copyright © 2021 University of Alaska Fairbanks.  All rights reserved.</p>
+                    <p>Copyright © {current_year} University of Alaska Fairbanks.  All rights reserved.</p>
                     <p>UA is an AA/EO employer and educational institution and prohibits illegal discrimination against any individual.  <a href="https://www.alaska.edu/nondiscrimination/">Statement of Nondiscrimination</a> and <a href="https://www.alaska.edu/records/records/compliance/gdpr/ua-privacy-statement/">Privacy Statement</a>.</p>
                     <p>Photo © __________</p>
                 </div>
