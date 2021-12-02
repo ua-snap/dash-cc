@@ -149,6 +149,7 @@ figure_layout = {
     "margin": dict(t=100, b=130),
     "xaxis": xaxis_config,
     "yaxis": axis_configs,
+    "dragmode": False,
 }
 
 df_lu_full_temp = {
