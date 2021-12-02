@@ -271,6 +271,15 @@ footer {
 }
 
 @media print {
+	.header {
+		max-height: 60px;
+	}
+	.intro-text {
+		display: none;
+	}
+	.extent-map {
+		display: none;
+	}
 	.no-print * {
 		display: none;
 	}
