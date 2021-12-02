@@ -101,7 +101,7 @@ imperial_conversion_lu = {"temp": 1.8, "precip": 0.0393701}
 
 scenario_lu = {
     "rcp45": "Low Emissions (RCP 4.5)",
-    "rcp60": "Mid Emissions (RCP 6.0)",
+    "rcp60": "Medium Emissions (RCP 6.0)",
     "rcp85": "High Emissions (RCP 8.5)",
 }
 
@@ -174,7 +174,7 @@ units_radio_options = [
 ]
 
 rcp_radio_options = [
-    {"label": " Low Emissions (RCP4.5)", "value": "rcp45"},
-    {"label": " Medium Emissions (RCP6.0)", "value": "rcp60"},
-    {"label": " High Emissions (RCP8.5)", "value": "rcp85"},
+    {"label": " Low Emissions (RCP 4.5)", "value": "rcp45"},
+    {"label": " Medium Emissions (RCP 6.0)", "value": "rcp60"},
+    {"label": " High Emissions (RCP 8.5)", "value": "rcp85"},
 ]
