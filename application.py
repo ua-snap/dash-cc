@@ -82,7 +82,7 @@ def update_graph(community_raw, variable, scenario, units):
     # subset to the data we want to display using the callback variables
 
     if community["region"] == "Northwest Territories":
-        baseline = "cru32"
+        baseline = "cru322"
     else:
         baseline = "prism"
 

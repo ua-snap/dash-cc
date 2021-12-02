@@ -93,7 +93,7 @@ region_lu = {
     "Yukon": "YT",
 }
 
-resolution_lu = {"cru32": "10min", "prism": "2km"}
+resolution_lu = {"cru322": "10min", "prism": "2km"}
 
 variable_lu = {"temp": "Temperature", "precip": "Precipitation"}
 
@@ -110,7 +110,7 @@ unit_lu = {
     "precip": {"imperial": "in", "metric": "mm"},
 }
 
-baseline_lu = {"cru32": "CRU 3.2", "prism": "PRISM"}
+baseline_lu = {"cru322": "CRU TS 3.22", "prism": "PRISM"}
 
 axis_configs = {
     "automargin": True,
