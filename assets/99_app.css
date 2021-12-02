@@ -275,7 +275,21 @@ footer {
 }
 
 @media print {
+	.header {
+		max-height: 120px;
+	}
 	.no-print * {
+		display: none;
+	}
+	.extent.section {
+		padding-bottom: 0;
+	}
+	.intro-text {
+		text-align: center;
+		max-width: 100%;
+	}
+	/* Needed for Safari */
+	.extent-wrapper.desktop {
 		display: none;
 	}
 }
