@@ -237,6 +237,10 @@ label.checkbox input, label.radio input {
 	max-width: 60em;
 }
 
+.dash-graph .js-plotly-plot .plotly .cursor-ns-resize {
+	cursor: crosshair;
+}
+
 .explanations-wrapper {
 	max-width: 50em;
 }
