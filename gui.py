@@ -221,7 +221,7 @@ footer = html.Footer(
                     <p>Please contact <a href="mailto:uaf-snap-data-tools@alaska.edu">uaf-snap-data-tools@alaska.edu</a> if you have questions or would like to provide feedback for this tool. <a href="https://uaf-snap.org/tools-overview/">Visit the SNAP Climate + Weather Tools page</a> to see our full suite of interactive web tools.</p>
                     <p>Copyright © {current_year} University of Alaska Fairbanks.  All rights reserved.</p>
                     <p>UA is an AA/EO employer and educational institution and prohibits illegal discrimination against any individual.  <a href="https://www.alaska.edu/nondiscrimination/">Statement of Nondiscrimination</a> and <a href="https://www.alaska.edu/records/records/compliance/gdpr/ua-privacy-statement/">Privacy Statement</a>.</p>
-                    <p>Photo © __________</p>
+                    <p>Photo credit: Anne Kokko, used with permission.</p>
                 </div>
             </div>
         </div>
