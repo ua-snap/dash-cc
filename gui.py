@@ -151,8 +151,8 @@ explanation_key_changes = dcc.Markdown(
 
     For example, higher monthly temperatures in spring and fall may be particularly interesting. Higher temperature could mean any or all of these things:
 
-    * A longer growing season
-    * A loss of ice and/or frozen ground needed for travel or food storage
+    * A longer growing season.
+    * A loss of ice and/or frozen ground needed for travel or food storage.
     * Precipitation changes. A shift from snow to rain impacts water storage capacity and surface water availability. This tool reports precipitation in terms of rainwater equivalent, even though it could occur as rain or snow.
     * Increased fire risk. In many locations, winter temperatures are projected to increase dramatically.
     * Changes in species composition. Warmer winters may favor species that are less cold-hardy (including desirable crops and invasive species), or it may mean less snow and/or more rain-on-snow events that impact wildlife.
