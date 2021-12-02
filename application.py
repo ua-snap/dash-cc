@@ -162,6 +162,7 @@ def update_graph(community_raw, variable, scenario, units):
                     "base": tMod,
                     "marker": {"color": "#999999"},
                     "name": "Historical ",
+                    "hovertemplate": "%{y}" + luts.unit_lu[variable][units],
                 }
             ]
         }
@@ -175,6 +176,7 @@ def update_graph(community_raw, variable, scenario, units):
                     "base": tMod,
                     "marker": {"color": df_lu[key]["color"]},
                     "name": key + " ",
+                    "hovertemplate": "%{y}" + luts.unit_lu[variable][units],
                 }
             )
         figure["layout"] = figure_layout
@@ -196,8 +198,8 @@ def update_graph(community_raw, variable, scenario, units):
             "zerolinecolor": "#efefef",
             "zerolinewidth": 0.5,
             "title": "Temperature (" + unit_lu["temp"][units] + ")",
+            "tickformat": ".{0}f".format(decimal_precision),
         }
-        figure["layout"]["yaxis"]["tickformat"] = ".{0}f".format(decimal_precision)
         figure["layout"]["shapes"] = [
             {
                 "type": "line",
@@ -226,6 +228,7 @@ def update_graph(community_raw, variable, scenario, units):
                 "type": "bar",
                 "marker": {"color": "#999999"},
                 "name": "Historical ",
+                "hovertemplate": "%{y}" + luts.unit_lu[variable][units],
             }
         ]
     }
@@ -238,6 +241,7 @@ def update_graph(community_raw, variable, scenario, units):
                 "type": "bar",
                 "marker": {"color": df_lu[key]["color"]},
                 "name": key + " ",
+                "hovertemplate": "%{y}" + luts.unit_lu[variable][units],
             }
         )
 
@@ -256,9 +260,9 @@ def update_graph(community_raw, variable, scenario, units):
         + " Scenario &nbsp;"
     )
     figure["layout"]["yaxis"] = {
-        "title": "Precipitation (" + unit_lu["precip"][units] + ")"
+        "title": "Precipitation (" + unit_lu["precip"][units] + ")",
+        "tickformat": ".{0}f".format(decimal_precision),
     }
-    figure["layout"]["yaxis"]["tickformat"] = ".{0}f".format(decimal_precision)
     return figure
 
 
