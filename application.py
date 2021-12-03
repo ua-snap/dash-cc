@@ -277,7 +277,13 @@ def update_download_link(comm):
     community = communities[community_id]
     community_name = full_community_name(community)
     url = path_prefix + "dash/dlCSV?value={}".format(community_id)
-    text = "Download CSV for " + community_name + ", " + community["region"]
+    text = (
+        "Download data for "
+        + community_name
+        + ", "
+        + community["region"]
+        + " as spreadsheet (CSV)"
+    )
     return url, text
 
 

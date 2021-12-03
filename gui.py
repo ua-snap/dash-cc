@@ -110,7 +110,7 @@ download_single_csv = html.Div(
             children=[
                 html.A(
                     "Download Single Community (CSV)",
-                    className="button is-info",
+                    className="is-size-5",
                     id="download_single",
                     href="",
                 )
