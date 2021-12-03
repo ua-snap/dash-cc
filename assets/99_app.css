@@ -11,6 +11,14 @@ h1, h2, h3, h4, h5, h6 {
 	letter-spacing: .02em;
 }
 
+a {
+	color: #0033cc;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
 label.label:not(:last-child) {
 	margin: 1.5em 0 1ex;
 }
@@ -193,10 +201,6 @@ label.label:not(:last-child) {
 	.form-input.section {
 		padding: 0 150px;
 	}
-}
-
-.form-input a {
-	color: #0033cc;
 }
 
 .form label, .form input {
