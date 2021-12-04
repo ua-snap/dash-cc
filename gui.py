@@ -208,10 +208,10 @@ footer = html.Footer(
             <div class="columns">
                 <div class="logos column is-one-fifth">
                     <a href="https://www.gov.nt.ca/">
-                        <img src="assets/NWT.svg">
+                        <img class="nwt" src="assets/NWT.svg">
                     </a>
                     <a href="https://uaf.edu/uaf/">
-                        <img src="assets/UAF.svg">
+                        <img class="uaf" src="assets/UAF.svg">
                     </a>
                 </div>
                 <div class="column content is-size-5">
