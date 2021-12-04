@@ -207,12 +207,8 @@ footer = html.Footer(
         <div class="container">
             <div class="columns">
                 <div class="logos column is-one-fifth">
-                    <a href="https://www.gov.nt.ca/">
-                        <img src="assets/NWT.svg">
-                    </a>
-                    <a href="https://uaf.edu/uaf/">
-                        <img src="assets/UAF.svg">
-                    </a>
+                    <a href="https://www.gov.nt.ca/"><img class="nwt" src="assets/NWT.svg"></a>
+                    <a href="https://uaf.edu/uaf/"><img class="uaf" src="assets/UAF.svg"></a>
                 </div>
                 <div class="column content is-size-5">
                     <p>This tool is part of an ongoing collaboration between the <a href="https://uaf-snap.org">Scenarios Network for Alaska + Arctic Planning</a> and the Government of Northwest Territories. We are working to make a wide range of downscaled climate products that are easily accessible, flexibly usable, and fully interpreted and understandable to users in the Northwest Territories, while making these products relevant at a broad geographic scale.
