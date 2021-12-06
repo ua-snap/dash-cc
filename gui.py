@@ -271,7 +271,7 @@ header_section = ddsih.DangerouslySetInnerHTML(
 )
 
 intro_section = ddsih.DangerouslySetInnerHTML(
-    """
+    f"""
     <div class="extent section">
         <div class="intro-text">
             <div class="extent-wrapper desktop no-print">
