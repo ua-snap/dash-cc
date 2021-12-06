@@ -880,10 +880,6 @@
     "name": "Bear Creek",
     "region": "Yukon"
   },
-  "YT3": {
-    "name": "Bear Creek",
-    "region": "Yukon"
-  },
   "BC730": {
     "name": "Bear Flat",
     "region": "British Columbia"
@@ -950,10 +946,6 @@
     "region": "Saskatchewan"
   },
   "AB46": {
-    "name": "Beaver Lake",
-    "region": "Alberta"
-  },
-  "AB47": {
     "name": "Beaver Lake",
     "region": "Alberta"
   },
@@ -2004,10 +1996,6 @@
     "name": "Calling Lake",
     "region": "Alberta"
   },
-  "AB114": {
-    "name": "Calling Lake",
-    "region": "Alberta"
-  },
   "AB115": {
     "name": "Calmar",
     "region": "Alberta"
@@ -2516,10 +2504,6 @@
     "name": "Cherhill",
     "region": "Alberta"
   },
-  "BC38": {
-    "name": "Cherry Creek",
-    "region": "British Columbia"
-  },
   "BC372": {
     "name": "Cherry Creek",
     "region": "British Columbia"
@@ -2798,10 +2782,6 @@
     "region": "Manitoba"
   },
   "SK151": {
-    "name": "Clearwater River",
-    "region": "Saskatchewan"
-  },
-  "SK152": {
     "name": "Clearwater River",
     "region": "Saskatchewan"
   },
@@ -3422,10 +3402,6 @@
     "region": "British Columbia"
   },
   "MB118": {
-    "name": "Dauphin",
-    "region": "Manitoba"
-  },
-  "MB119": {
     "name": "Dauphin",
     "region": "Manitoba"
   },
@@ -4774,10 +4750,6 @@
     "name": "Fisher River",
     "region": "Manitoba"
   },
-  "MB167": {
-    "name": "Fisher River",
-    "region": "Manitoba"
-  },
   "SK277": {
     "name": "Fishing Lake",
     "region": "Saskatchewan"
@@ -4881,10 +4853,6 @@
   "AB269": {
     "name": "Fort Chipewyan",
     "region": "Alberta"
-  },
-  "AK437": {
-    "name": "Fort Davis",
-    "region": "Alaska"
   },
   "BC444": {
     "name": "Fort Fraser",
@@ -6940,6 +6908,10 @@
     "name": "Kannata Valley",
     "region": "Saskatchewan"
   },
+  "AK443": {
+    "name": "Kantishna",
+    "region": "Alaska"
+  },
   "AB386": {
     "name": "Kapasiwin",
     "region": "Alberta"
@@ -7348,10 +7320,6 @@
     "name": "Kitseguecla",
     "region": "British Columbia"
   },
-  "BC115": {
-    "name": "Kitselas",
-    "region": "British Columbia"
-  },
   "BC145": {
     "name": "Kitselas",
     "region": "British Columbia"
@@ -7595,10 +7563,6 @@
     "region": "Manitoba"
   },
   "SK427": {
-    "name": "La Ronge",
-    "region": "Saskatchewan"
-  },
-  "SK428": {
     "name": "La Ronge",
     "region": "Saskatchewan"
   },
@@ -9270,10 +9234,6 @@
     "name": "Moosehorn",
     "region": "Manitoba"
   },
-  "SK549": {
-    "name": "Moosomin",
-    "region": "Saskatchewan"
-  },
   "SK550": {
     "name": "Moosomin",
     "region": "Saskatchewan"
@@ -9618,10 +9578,6 @@
   },
   "MB355": {
     "name": "Neelin",
-    "region": "Manitoba"
-  },
-  "MB356": {
-    "name": "Neepawa",
     "region": "Manitoba"
   },
   "MB357": {
@@ -9996,10 +9952,6 @@
     "name": "Northway Junction",
     "region": "Alaska"
   },
-  "MB370": {
-    "name": "Norway House",
-    "region": "Manitoba"
-  },
   "MB371": {
     "name": "Norway House",
     "region": "Manitoba"
@@ -10200,12 +10152,12 @@
     "name": "Old Crow",
     "region": "Yukon"
   },
-  "BC31": {
+  "BC324": {
     "name": "Old Fort",
     "region": "British Columbia"
   },
-  "BC324": {
-    "name": "Old Fort",
+  "BC31": {
+    "name": "Old Fort St. John",
     "region": "British Columbia"
   },
   "AK293": {
@@ -10330,10 +10282,6 @@
   "SK596": {
     "name": "Osler",
     "region": "Saskatchewan"
-  },
-  "BC99": {
-    "name": "Osoyoos",
-    "region": "British Columbia"
   },
   "BC777": {
     "name": "Osoyoos",
@@ -10525,10 +10473,6 @@
     "name": "Pasqua Lake",
     "region": "Saskatchewan"
   },
-  "SK616": {
-    "name": "Pasqua Lake",
-    "region": "Saskatchewan"
-  },
   "AK301": {
     "name": "Pastolik",
     "region": "Alaska"
@@ -10630,10 +10574,6 @@
     "region": "Saskatchewan"
   },
   "MB402": {
-    "name": "Peguis",
-    "region": "Manitoba"
-  },
-  "MB403": {
     "name": "Peguis",
     "region": "Manitoba"
   },
@@ -11332,10 +11272,6 @@
     "region": "British Columbia"
   },
   "BC123": {
-    "name": "Quatsino",
-    "region": "British Columbia"
-  },
-  "BC357": {
     "name": "Quatsino",
     "region": "British Columbia"
   },
@@ -12322,10 +12258,6 @@
     "region": "Alaska",
     "alt_name": "Sivungaq"
   },
-  "AB604": {
-    "name": "Sawridge",
-    "region": "Alberta"
-  },
   "AB605": {
     "name": "Sawridge",
     "region": "Alberta"
@@ -12662,14 +12594,6 @@
     "region": "Alaska",
     "alt_name": "Isi\u014bnaq / Nuurviuraq"
   },
-  "BC44": {
-    "name": "Shuswap",
-    "region": "British Columbia"
-  },
-  "BC320": {
-    "name": "Shuswap",
-    "region": "British Columbia"
-  },
   "BC417": {
     "name": "Shuswap Falls",
     "region": "British Columbia"
@@ -12717,10 +12641,6 @@
   "AB620": {
     "name": "Silver Beach",
     "region": "Alberta"
-  },
-  "BC48": {
-    "name": "Silver Creek",
-    "region": "British Columbia"
   },
   "BC266": {
     "name": "Silver Creek",
@@ -12947,10 +12867,6 @@
   },
   "BC174": {
     "name": "Snuneymuxw",
-    "region": "British Columbia"
-  },
-  "BC243": {
-    "name": "Soda Creek",
     "region": "British Columbia"
   },
   "BC831": {
@@ -13183,10 +13099,6 @@
     "name": "Springside",
     "region": "Saskatchewan"
   },
-  "SK761": {
-    "name": "Springside",
-    "region": "Saskatchewan"
-  },
   "MB518": {
     "name": "Springstein",
     "region": "Manitoba"
@@ -13234,10 +13146,6 @@
   "AB636": {
     "name": "Sputinow",
     "region": "Alberta"
-  },
-  "BC202": {
-    "name": "Spuzzum",
-    "region": "British Columbia"
   },
   "BC820": {
     "name": "Spuzzum",
@@ -13408,10 +13316,6 @@
     "name": "St. Paul",
     "region": "Alberta",
     "alt_name": "St-Paul-de-M\u00e9tis"
-  },
-  "AB642": {
-    "name": "St. Paul",
-    "region": "Alberta"
   },
   "MB542": {
     "name": "St. Theresa Point",
@@ -13653,10 +13557,6 @@
     "name": "Sturdies Bay",
     "region": "British Columbia"
   },
-  "AB653": {
-    "name": "Sturgeon Lake",
-    "region": "Alberta"
-  },
   "AB654": {
     "name": "Sturgeon Lake",
     "region": "Alberta"
@@ -13709,12 +13609,12 @@
     "name": "Summit",
     "region": "Alaska"
   },
-  "BC15": {
+  "BC189": {
     "name": "Summit Lake",
     "region": "British Columbia"
   },
-  "BC189": {
-    "name": "Summit Lake",
+  "BC15": {
+    "name": "Summit Lake Provincial Park",
     "region": "British Columbia"
   },
   "BC267": {
@@ -13880,10 +13780,6 @@
   "YT61": {
     "name": "Swift River",
     "region": "Yukon"
-  },
-  "AB671": {
-    "name": "Sylvan Lake",
-    "region": "Alberta"
   },
   "AB672": {
     "name": "Sylvan Lake",
@@ -14769,10 +14665,6 @@
     "name": "Vedder Crossing",
     "region": "British Columbia"
   },
-  "AB704": {
-    "name": "Vegreville",
-    "region": "Alberta"
-  },
   "AB705": {
     "name": "Vegreville",
     "region": "Alberta"
@@ -15210,10 +15102,6 @@
   },
   "BC590": {
     "name": "West Popkum",
-    "region": "British Columbia"
-  },
-  "BC290": {
-    "name": "Westbank",
     "region": "British Columbia"
   },
   "BC752": {
@@ -15688,10 +15576,6 @@
     "name": "Yakutat",
     "region": "Alaska",
     "alt_name": "Yaakwd\u00e1at"
-  },
-  "BC119": {
-    "name": "Yale",
-    "region": "British Columbia"
   },
   "BC870": {
     "name": "Yale",
