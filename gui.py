@@ -207,8 +207,8 @@ footer = html.Footer(
         <div class="container">
             <div class="columns">
                 <div class="logos column is-one-fifth">
-                    <a href="https://www.gov.nt.ca/"><img class="nwt" src="assets/NWT.svg"></a>
-                    <a href="https://uaf.edu/uaf/"><img class="uaf" src="assets/UAF.svg"></a>
+                    <a href="https://www.gov.nt.ca/"><img class="nwt" src="{path_prefix}assets/NWT.svg"></a>
+                    <a href="https://uaf.edu/uaf/"><img class="uaf" src="{path_prefix}assets/UAF.svg"></a>
                 </div>
                 <div class="column content is-size-5">
                     <p>This tool is part of an ongoing collaboration between the <a href="https://uaf-snap.org">Scenarios Network for Alaska + Arctic Planning</a> and the Government of Northwest Territories. We are working to make a wide range of downscaled climate products that are easily accessible, flexibly usable, and fully interpreted and understandable to users in the Northwest Territories, while making these products relevant at a broad geographic scale.
@@ -275,7 +275,7 @@ intro_section = ddsih.DangerouslySetInnerHTML(
     <div class="extent section">
         <div class="intro-text">
             <div class="extent-wrapper desktop no-print">
-                <img class="extent-map" src="assets/akcanada.svg" />
+                <img class="extent-map" src="{path_prefix}assets/akcanada.svg" />
             </div>
             <h4 class="title is-4 mt-3 mb-5">What’s up — or down — in your corner&nbsp;of&nbsp;the&nbsp;North?</h4>
             <p class="my-3">See temperature and precipitation projections through 2099 for over 3,800 communities in Alaska&nbsp;and&nbsp;western&nbsp;Canada.</p>

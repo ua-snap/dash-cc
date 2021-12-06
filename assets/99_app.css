@@ -48,7 +48,7 @@ label.label:not(:last-child) {
 }
 
 .header {
-	background-image: url('/assets/header_background.jpg');
+	background-image: url('/tools/community-charts/assets/header_background.jpg');
 	height: 400px;
 	padding: 0;
 }
