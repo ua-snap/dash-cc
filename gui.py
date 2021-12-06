@@ -140,7 +140,7 @@ explanation_interpret = dcc.Markdown(
     """
     ## How to interpret climate outlooks for your community
 
-    Climate systems naturally change year to year, as do the models built to simulate them. Because of that, these charts are best for examining trends over time, and not for precise predictions.
+    Climate systems naturally change year to year, as do the models built to simulate them. Because of that, these charts are best for examining trends over time, and not for precise predictions.  This tool reports precipitation in terms of rainwater equivalent, even though it could occur as rain or snow.
     """,
     className="mb-5",
 )
@@ -153,8 +153,8 @@ explanation_key_changes = dcc.Markdown(
 
     * A longer growing season.
     * A loss of ice and/or frozen ground needed for travel or food storage.
-    * Precipitation changes. A shift from snow to rain impacts water storage capacity and surface water availability. This tool reports precipitation in terms of rainwater equivalent, even though it could occur as rain or snow.
-    * Increased fire risk. In many locations, winter temperatures are projected to increase dramatically.
+    * Precipitation changes. In many locations, winter temperatures are projected to increase dramatically. A shift from snow to rain impacts water storage capacity and surface water availability.
+    * Increased fire risk. Early snow-melt, warm springs, and hot summers may dry soils and vegetation.
     * Changes in species composition. Warmer winters may favor species that are less cold-hardy (including desirable crops and invasive species), or it may mean less snow and/or more rain-on-snow events that impact wildlife.
     * Thawing. Higher temperatures will impact permafrost and land-fast ice.
     """,
