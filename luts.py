@@ -20,15 +20,7 @@ index_string = f"""
 <!DOCTYPE html>
 <html>
     <head>
-        <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-3978613-12"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){{dataLayer.push(arguments);}}
-          gtag('js', new Date());
-
-          gtag('config', '{gtag_id}');
-        </script>
+        <script async defer data-website-id="cc69673a-a302-45ab-ad82-e382c46b0f26" src="https://umami.snap.uaf.edu/umami.js" data-do-not-track="true"></script>
         {{%metas%}}
         <title>{{%title%}}</title>
 
