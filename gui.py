@@ -216,36 +216,14 @@ footer = html.Footer(
                     <p>Please contact <a href="mailto:uaf-snap-data-tools@alaska.edu">uaf-snap-data-tools@alaska.edu</a> if you have questions or would like to provide feedback for this tool. <a href="https://uaf-snap.org/tools-overview/">Visit the SNAP Climate + Weather Tools page</a> to see our full suite of interactive web tools.</p>
                     <p>Copyright © {current_year} University of Alaska Fairbanks.  All rights reserved.</p>
                     <p>UA is an AA/EO employer and educational institution and prohibits illegal discrimination against any individual.  <a href="https://www.alaska.edu/nondiscrimination/">Statement of Nondiscrimination</a> and <a href="https://www.alaska.edu/records/records/compliance/gdpr/ua-privacy-statement/">Privacy Statement</a>.</p>
-                    <p>About the photo: Springtime comes to Ulukhaktok, NWT. Formerly known as Holman, this Inuvialuit community—whose name translates to “where there is ulu material”—is famous for exquisite Inuit prints. Credit: Anne Kokko, used with permission.</p>
+                    <p>About the photo: Springtime comes to Ulukhaktok, NWT. Formerly known as Holman, this Inuvialuit community&mdash;whose name translates to &ldquo;where there is ulu material&rdquo;&mdash;is famous for exquisite Inuit prints. Credit: Anne Kokko, used with permission.</p>
+                    <p>UA is committed to providing accessible websites. <a href="https://www.alaska.edu/webaccessibility/">Learn more about UA&rsquo;s notice of web accessibility</a>.  If we can help you access this website&rsquo;s content, <a href="mailto:uaf-snap-data-tools@alaska.edu">email us</a>!
                 </div>
             </div>
         </div>
         """
         )
     ],
-)
-
-
-header_section = ddsih.DangerouslySetInnerHTML(
-    """
-<div class="header">
-    <div class="page-bar">
-        <div class="page-bar-container container">
-            <div class="page-bar-row has-text-centered">
-                UNIVERSITY OF ALASKA FAIRBANKS&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;SCENARIOS NETWORK FOR ALASKA + ARCTIC PLANNING
-            </div>
-        </div>
-    </div>
-    <div class="container">
-        <div class="section">
-                <div class="header--titles has-text-centered">
-                    <h1 class="title is-1">Community Climate Charts</h1>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-"""
 )
 
 header_section = ddsih.DangerouslySetInnerHTML(
