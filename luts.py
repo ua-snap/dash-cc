@@ -20,7 +20,7 @@ index_string = f"""
 <!DOCTYPE html>
 <html>
     <head>
-        <script async defer data-website-id="cc69673a-a302-45ab-ad82-e382c46b0f26" src="https://umami.snap.uaf.edu/umami.js" data-do-not-track="true"></script>
+        <script async defer data-website-id="cc69673a-a302-45ab-ad82-e382c46b0f26" src="https://umami.snap.uaf.edu/umami.js" data-do-not-track="true" data-domains="snap.uaf.edu"></script>
         {{%metas%}}
         <title>{{%title%}}</title>
 
