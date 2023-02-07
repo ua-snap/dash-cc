@@ -7,6 +7,7 @@ To run the application locally, install [pipenv](https://pipenv.readthedocs.io/e
 ```bash
 cd /path/to/this/repo
 pipenv install
+export FLASK_APP=application.py
 export DASH_REQUESTS_PATHNAME_PREFIX='/' # see below for more info
 export DATA_PREFIX='https://s3-us-west-2.amazonaws.com/community-charts/' # see below for more info
 pipenv run flask run
