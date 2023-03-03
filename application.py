@@ -10,6 +10,7 @@ import os
 import urllib.request
 import urllib.parse
 import html as h
+from io import StringIO
 import pandas as pd
 import dash
 from dash.dependencies import Input, Output
@@ -72,7 +73,16 @@ def update_graph(community_raw, variable, scenario, units):
     community_id = filter_community_id(community_raw)
     community = communities[community_id]
     comm_file = data_prefix + "data/" + community_id + ".csv"
-    df = pd.read_csv(comm_file)
+
+    # Strip out metadata lines starting with #
+    csv_content = ""
+    with open(comm_file, "r") as file:
+        for line in file:
+            if not line.startswith("#"):
+                csv_content += line
+
+    csv_content_io = StringIO(csv_content)
+    df = pd.read_csv(csv_content_io)
 
     # [ML] maybe hardwire these? Not a huge time sink, but it could be made cleaner
     mean_cols = [col for col in df.columns if "Mean" in col]
