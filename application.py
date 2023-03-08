@@ -10,6 +10,7 @@ import os
 import urllib.request
 import urllib.parse
 import html as h
+from io import StringIO
 import pandas as pd
 import dash
 from dash.dependencies import Input, Output
@@ -53,6 +54,17 @@ def full_community_name(community):
     return community["name"]
 
 
+def get_csv(pathname):
+    """Read remote or local CSV file into a string"""
+    if data_prefix.find("http") != -1:
+        with urllib.request.urlopen(pathname) as response:
+            csv = response.read().decode("utf-8")
+    else:
+        with open(pathname, mode="r") as file_handle:
+            csv = file_handle.read()
+    return csv
+
+
 @app.callback(
     Output("ccharts", "figure"),
     inputs=[
@@ -72,7 +84,16 @@ def update_graph(community_raw, variable, scenario, units):
     community_id = filter_community_id(community_raw)
     community = communities[community_id]
     comm_file = data_prefix + "data/" + community_id + ".csv"
-    df = pd.read_csv(comm_file)
+    csv = get_csv(comm_file)
+
+    # Strip out metadata lines starting with #
+    csv_data = ""
+    for line in csv.splitlines():
+        if not line.startswith("#"):
+            csv_data += line + "\n"
+
+    csv_data_io = StringIO(csv_data)
+    df = pd.read_csv(csv_data_io)
 
     # [ML] maybe hardwire these? Not a huge time sink, but it could be made cleaner
     mean_cols = [col for col in df.columns if "Mean" in col]
@@ -295,13 +316,7 @@ def download_csv():
     community_id = filter_community_id(value)
     community = communities[community_id]
     pathname = data_prefix + "data/" + community_id + ".csv"
-
-    if data_prefix.find("http") != -1:
-        with urllib.request.urlopen(pathname) as response:
-            csv = response.read().decode("utf-8")
-    else:
-        with open(pathname, mode="r") as file_handle:
-            csv = file_handle.read()
+    csv = get_csv(pathname)
 
     community_name = full_community_name(community)
     community_with_region = community_name + ", " + community["region"]
