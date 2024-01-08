@@ -3,8 +3,6 @@
 Common shared text strings, formatting defaults and lookup tables.
 """
 
-gtag_id = "UA-3978613-1"
-
 # Core page components
 title = "SNAP Community Climate Charts"
 description = "Explore temperature and precipitation projections for communities across Alaska and Western Canada"
@@ -20,7 +18,7 @@ index_string = f"""
 <!DOCTYPE html>
 <html>
     <head>
-        <script async defer data-website-id="cc69673a-a302-45ab-ad82-e382c46b0f26" src="https://umami.snap.uaf.edu/umami.js" data-do-not-track="true" data-domains="snap.uaf.edu"></script>
+        <script async defer data-website-id="cc69673a-a302-45ab-ad82-e382c46b0f26" src="https://umami.snap.uaf.edu/script.js" data-do-not-track="true" data-domains="snap.uaf.edu"></script>
         {{%metas%}}
         <title>{{%title%}}</title>
 
