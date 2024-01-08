@@ -3,8 +3,6 @@
 Common shared text strings, formatting defaults and lookup tables.
 """
 
-gtag_id = "UA-3978613-1"
-
 # Core page components
 title = "SNAP Community Climate Charts"
 description = "Explore temperature and precipitation projections for communities across Alaska and Western Canada"
